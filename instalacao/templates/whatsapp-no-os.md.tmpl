@@ -1,0 +1,69 @@
+<!-- MODELO DO KIT: textos para ligar o WhatsApp (Uazapi) no segundo cérebro do cliente.
+     Use as partes que o diagnóstico aprovou, troque cada {{...}} e apague estes comentários.
+     {{DONO}}: nome do cliente (dono do número). {{NUMERO}}: número conectado, formato 55DDD...
+     {{CANAL_CONTRATO}}: por onde o contrato sai (ex.: "link de assinatura do PandaDoc", "e-mail").
+     Nada de travessão nos textos gerados. -->
+
+## 1. Roteador raiz (CLAUDE.md do OS), na regra de fonte da verdade
+
+**WhatsApp:** o de {{DONO}} é lido por `python3 bin/whatsapp.py` (Uazapi; `conversas`,
+`mensagens <numero>`), e mensagem só sai com `--confirmo`, depois do "pode mandar" para aquela
+mensagem, nunca em lote ([decisão](memory/decisoes/{{DATA}}-whatsapp-ligado-ao-os.md)).
+<!-- Só se a proposta sai pelo WhatsApp (resposta 13b do bloco 5): -->
+**Propostas** saem por esse número, com o PDF (`bin/whatsapp.py enviar-arquivo ... --confirmo`), e
+cada envio é registrado no mesmo passo no estado do cliente, com data, canal e destinatário, e
+ganha um registro em `inbox/propostas/` com `status: enviada` (modelo em
+`registro-proposta.md.tmpl`), que é o que a tela Gestão do painel conta.
+**Contratos** saem por {{CANAL_CONTRATO}}.
+
+## 2. Ritual de abrir o dia, na coleta
+
+**WhatsApp:** rode `python3 bin/whatsapp.py conversas --nao-lidas --limite 15`. Traz quem mandou
+mensagem e está esperando. Fique com o que é de cliente, prospect ou combinado de trabalho (cruze
+com a área de clientes) e, para essas, abra `python3 bin/whatsapp.py mensagens <numero> --limite 10`
+só se precisar entender o pedido. Só leitura neste ritual: nunca responda nem envie. Se falhar
+(desconectado, chave ausente), diga que a fonte falhou e siga.
+
+## 3. Ritual de abrir o dia, no formato da saída
+
+WhatsApp esperando resposta
+- {contato}: {o que pede, em meia linha} -> {sugestão}. Rascunho? (s/n)
+
+## 4. Ritual de abrir o dia, nas regras
+
+- **WhatsApp é só leitura aqui.** Mensagem esperando resposta vira sugestão de rascunho; enviar é
+  outro passo (`bin/whatsapp.py enviar ... --confirmo`), só depois do "pode mandar" para aquela
+  mensagem.
+
+## 5. Decisão: memory/decisoes/{{DATA}}-whatsapp-ligado-ao-os.md
+<!-- Crie com: python3 bin/brain.py nota --pasta memory/decisoes --tipo decisao --datado ... --corpo - -->
+
+**Data:** {{DATA}} · **Frente:** memory
+
+### Contexto
+O WhatsApp é onde {{DONO}} combina boa parte do trabalho com os clientes, e o OS não via. O número
+{{NUMERO}} foi conectado a uma instância do Uazapi em {{DATA}} e o `bin/whatsapp.py` foi testado:
+status, leitura de conversas, envio de uma mensagem de teste para o próprio número e leitura de
+volta.
+
+### Alternativas consideradas
+- **A, continuar sem WhatsApp no OS:** o que importa é trazido para o chat.
+- **B, API oficial da Meta:** sem risco de bloqueio, mas pede número dedicado, aprovação de modelos
+  de mensagem e cobrança por conversa.
+- **C, Uazapi no número de {{DONO}}:** liga hoje e lê as conversas que já existem; não é API
+  oficial (simula o WhatsApp Web).
+
+### Decisão
+**C**, com estas travas:
+- **Leitura livre:** `status`, `conversas`, `mensagens <numero>`.
+- **Envio só com `--confirmo`**, depois do "pode mandar" para aquela mensagem. Sem `--confirmo` o
+  script só mostra a prévia.
+- **Nunca em lote, nunca automático.** Uso automatizado demais pode bloquear o número (risco
+  aceito por {{DONO}} ao conectar).
+- **No OS fica o combinado** (decisão, valor, prazo, próximo passo) no estado do cliente, não a
+  conversa inteira.
+- **Credencial:** só o token da instância, em `~/.uazapi.env`. O Admin Token do servidor não fica
+  nesta máquina.
+
+### O que faria mudar de ideia
+Aviso ou bloqueio do número, necessidade de envio em volume, ou de atendimento automático.

@@ -1,0 +1,205 @@
+{
+  "_note": "Copie para config/apps.json e deixe só as ferramentas que o cliente usa de fato (entrevista). 'status': 'live' quando está ligada e testada, 'sugerido' quando o cliente ainda vai adotar, 'a-definir' quando a solução ainda não foi escolhida. 'detalhes' alimenta o painel que abre ao clicar no ícone; troque todo *(preencher)* pelo que o cliente respondeu e apague o que não se aplica. 'chave' é só o caminho do arquivo: o painel confere se existe, nunca lê. 'notas' são caminhos de notas DENTRO do segundo cérebro do cliente, que precisam existir. 'painel' (cobrancas, whatsapp, agenda, clientes, propostas ou tarefas) faz o clique no ícone abrir essa seção da tela Gestão, dentro do próprio painel.",
+  "apps": [
+    {
+      "id": "app:gcal",
+      "label": "Google Calendar",
+      "kind": "mcp",
+      "access": "claude",
+      "status": "live",
+      "desc": "Agenda do dia",
+      "links": [],
+      "iconSlug": "googlecalendar",
+      "detalhes": {
+        "papel": "Fonte da agenda do dia. O OS lê os compromissos de hoje e marca se são de cliente, venda ou internos.",
+        "acesso": "Só leitura",
+        "conexao": "Conector do Claude (MCP). Não usa chave nesta máquina.",
+        "usadoPor": [
+          "Ritual de abrir o dia: agenda de hoje",
+          "Rotina Morning Brief: bloco Agenda do Mission Control"
+        ],
+        "regras": [
+          "Nunca cria, altera ou responde convite sem o \"pode\" do cliente."
+        ],
+        "notas": [],
+        "links": [
+          {
+            "label": "Abrir o Google Calendar",
+            "url": "https://calendar.google.com"
+          }
+        ],
+        "painel": "agenda"
+      }
+    },
+    {
+      "id": "app:gmail",
+      "label": "Gmail",
+      "kind": "mcp",
+      "access": "claude",
+      "status": "live",
+      "desc": "E-mails que pedem resposta",
+      "links": [],
+      "iconSlug": "gmail",
+      "detalhes": {
+        "papel": "Mostra o que pede resposta e os follow-ups parados.",
+        "acesso": "Só leitura",
+        "conexao": "Conector do Claude (MCP). Não usa chave nesta máquina.",
+        "usadoPor": [
+          "Ritual de abrir o dia: seção E-mail",
+          "Rotina Morning Brief: blocos E-mails e Follow-ups"
+        ],
+        "regras": [
+          "Nunca responde, arquiva nem marca como lido.",
+          "Resposta só como rascunho, enviada depois do \"pode mandar\"."
+        ],
+        "notas": [],
+        "links": [
+          {
+            "label": "Abrir o Gmail",
+            "url": "https://mail.google.com"
+          }
+        ],
+        "painel": "agenda"
+      }
+    },
+    {
+      "id": "app:tldv",
+      "label": "tl;dv",
+      "kind": "web",
+      "access": "claude",
+      "status": "sugerido",
+      "desc": "Grava e transcreve as reuniões",
+      "links": [],
+      "iconSlug": "",
+      "detalhes": {
+        "papel": "Grava e transcreve as reuniões com clientes. O /reuniao transforma cada reunião em nota do cliente ou do prospect no segundo cérebro.",
+        "acesso": "Só leitura",
+        "conexao": "*(preencher: como a reunião chega ao OS. Transcrição colada no chat, exportação do tl;dv para o Notion, ou link da reunião)*",
+        "usadoPor": [
+          "/reuniao: guarda no OS o que foi dito, decidido e combinado"
+        ],
+        "regras": [
+          "No plano gratuito, a gravação é arquivada depois de 2 dias e a transcrição deixa de abrir: guardar no OS antes disso.",
+          "Separar o que o cliente disse (com o minuto) da leitura de quem conduziu a reunião.",
+          "Avisar os participantes de que a reunião está sendo gravada."
+        ],
+        "notas": [],
+        "links": [
+          {
+            "label": "Abrir as reuniões no tl;dv",
+            "url": "https://tldv.io/app/meetings"
+          }
+        ],
+        "painel": "clientes"
+      }
+    },
+    {
+      "id": "app:asaas",
+      "label": "Asaas",
+      "kind": "cli",
+      "access": "claude",
+      "status": "sugerido",
+      "desc": "Cobranças e recebimentos",
+      "links": [],
+      "iconSlug": "",
+      "detalhes": {
+        "papel": "Fonte da verdade de cobranças e recebimentos. O Mission Control mostra o que venceu, o que vai vencer e o que entrou, e cria cobrança com prévia e confirmação.",
+        "acesso": "Lê; cria cobrança só pelo Mission Control, com confirmação",
+        "conexao": "Mission Control do painel (tecla C e botão Nova cobrança)",
+        "chave": "~/.asaas.env",
+        "usadoPor": [
+          "Mission Control: tecla C (ver cobranças) e botão Nova cobrança",
+          "Rotina Morning Brief, se ligada ao financeiro"
+        ],
+        "regras": [
+          "Começa no sandbox (config/asaas.json); produção só liga editando o arquivo à mão.",
+          "Só o dono cria cobrança, pelo painel, depois da prévia.",
+          "Nada cancela, estorna, edita ou transfere.",
+          "Limite por cobrança em config/asaas.json."
+        ],
+        "notas": [],
+        "acoes": [
+          "cobrancas",
+          "nova-cobranca"
+        ],
+        "links": [
+          {
+            "label": "Abrir o Asaas",
+            "url": "https://www.asaas.com/login"
+          }
+        ],
+        "painel": "cobrancas"
+      }
+    },
+    {
+      "id": "app:whatsapp",
+      "label": "WhatsApp",
+      "kind": "cli",
+      "access": "claude",
+      "status": "sugerido",
+      "desc": "Conversas e mensagens confirmadas (Uazapi)",
+      "links": [],
+      "iconSlug": "whatsapp",
+      "detalhes": {
+        "papel": "Canal onde o cliente fala com os clientes dele. O OS lê as conversas e manda mensagem só com confirmação, pelo Uazapi.",
+        "acesso": "Lê; envia só com --confirmo, depois do \"pode mandar\"",
+        "conexao": "Script bin/whatsapp.py do segundo cérebro, falando com a instância do Uazapi",
+        "chave": "~/.uazapi.env",
+        "usadoPor": [
+          "Ritual de abrir o dia: quem está esperando resposta (conversas --nao-lidas)",
+          "Pedidos no chat: \"o que o cliente X falou essa semana?\""
+        ],
+        "regras": [
+          "Envio só com --confirmo, depois do \"pode mandar\" para aquela mensagem.",
+          "Nunca em lote: o Uazapi não é a API oficial e uso automatizado demais pode bloquear o número.",
+          "No OS fica o que foi combinado, não a conversa inteira (LGPD).",
+          "O Admin Token do servidor Uazapi nunca fica nesta máquina."
+        ],
+        "notas": [],
+        "links": [
+          {
+            "label": "Abrir o WhatsApp Web",
+            "url": "https://web.whatsapp.com"
+          },
+          {
+            "label": "Documentação do Uazapi",
+            "url": "https://docs.uazapi.com"
+          }
+        ],
+        "painel": "whatsapp"
+      }
+    },
+    {
+      "id": "app:pandadoc",
+      "label": "PandaDoc",
+      "kind": "api",
+      "access": "claude",
+      "status": "sugerido",
+      "desc": "Orçamentos e propostas automatizados",
+      "links": [],
+      "iconSlug": "",
+      "detalhes": {
+        "papel": "Monta orçamentos e propostas a partir de um modelo, com os dados do cliente e os itens preenchidos pelo OS, e coleta a assinatura.",
+        "acesso": "Cria rascunho; envia só com o \"pode mandar\"",
+        "conexao": "*(preencher: API do PandaDoc com chave em ~/.pandadoc.env, ou integração pronta)*",
+        "chave": "~/.pandadoc.env",
+        "usadoPor": [
+          "*(preencher: comando de orçamento, quando for criado)*"
+        ],
+        "regras": [
+          "O OS cria o documento como rascunho a partir do modelo aprovado; quem envia é o dono.",
+          "Todo orçamento enviado é registrado no estado do cliente no mesmo passo.",
+          "Preço e condição vêm da tabela do cliente, nunca estimados."
+        ],
+        "notas": [],
+        "links": [
+          {
+            "label": "Abrir o PandaDoc",
+            "url": "https://app.pandadoc.com"
+          }
+        ],
+        "painel": "propostas"
+      }
+    }
+  ]
+}

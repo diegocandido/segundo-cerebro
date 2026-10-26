@@ -1,0 +1,4 @@
+{
+  "_note": "Copie para config/agents.json. Só preencha se o cliente tiver um agente rodando fora desta máquina (servidor, VPS) que lê parte do OS. Formato: { \"id\": \"agent:nome\", \"name\": \"Nome\", \"kind\": \"vps\", \"access\": \"synced\", \"color\": \"#808AFF\", \"desc\": \"o que ele faz\" }.",
+  "agents": []
+}

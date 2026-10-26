@@ -1,0 +1,100 @@
+# Convenções
+
+Padrões de nome, metadado e link que fazem este OS se correlacionar. Objetivo: qualquer nota
+"sabe" a que {entidade}, tema ou decisão ela se conecta.
+
+> Regra de ouro: **baixa manutenção**. Frontmatter e wikilink só onde agregam. Melhor uma nota
+> simples e verdadeira que metadado decorativo.
+
+## 1. Nome de arquivo
+- Datado: `AAAA-MM-DD-{entidade}-{assunto}.md` para evento, decisão, captura.
+  O `{assunto}` não é enfeite: dois eventos da mesma {entidade} no mesmo dia são rotina, e nome
+  só de data colide entre {entidades} e não pode ser wikilinkado.
+- Perene: `kebab-case.md`.
+- Uma unidade por arquivo.
+- **Sem espaço em nome de pasta.** Markdown e script não resolvem: o link precisaria de `%20`.
+
+## 2. Frontmatter
+
+Em notas que se beneficiam de filtro e busca. Opcional em nota trivial.
+
+```yaml
+---
+tipo: {ENUM FECHADO, derivado das áreas e entidades reais deste OS}
+{entidade}: {Nome}          # se aplicável
+area: {area}
+status: ativo | pausado | entregue | arquivado
+atualizado: AAAA-MM-DD      # obrigatório onde há estado
+resumo: uma frase do que esta nota responde
+tags: [a, b]
+relacionados: [[nome-unico]]
+---
+```
+
+Assim dá para achar por `grep`: `grep -rl "tipo: decisao"`.
+
+> **O enum de `tipo:` é fechado e validado.** `python3 bin/brain.py doctor` acusa valor fora da
+> lista. Tipo descritivo livre quebra o `grep` que esta convenção promete: o que é descrição vai
+> em `tags:`, não em `tipo:`.
+
+> **`resumo:` é o campo de maior retorno do OS.** É o que os índices mostram ao lado do link.
+> Sem ele o gerador extrai a primeira frase de prosa, o que funciona mas dá resultado pior.
+
+> **`atualizado:` é a única medida de frescor confiável.** Data de modificação do arquivo não
+> serve: uma edição em lote faz o OS inteiro parecer atualizado hoje. Backup usa `cp -Rp` ou
+> `rsync -a`, senão a data se perde de vez.
+
+## 3. Links: as duas naturezas
+
+- **Wikilink `[[nome]]` resolve por nome de arquivo, não por caminho.** Só para nome **único**
+  neste OS: hub de {entidade}, nota datada, oferta. Nome genérico repetido (`perfil.md`,
+  `estado.md`) linkaria para todos ao mesmo tempo.
+- **Link relativo `[texto](caminho/arquivo.md)`** para tudo que tem nome genérico. Resolve por
+  caminho, não é ambíguo. Atenção: **link relativo quebrado não aparece no grafo do Obsidian**,
+  só falha no clique. Por isso a checagem é do `doctor`, não do olho.
+- **Nunca linke para fora deste OS** por wikilink ou caminho relativo. Cite como texto puro.
+
+**Hub por {entidade}.** Cada {entidade} tem `{entidades}/{Nome}/{Nome}.md`, alvo único de
+`[[Nome]]`. Notas de fora citam via `[[Nome]]`; arquivos internos apontam de volta via
+`relacionados: [[Nome]]`.
+
+> **Aresta de saída não é aresta de entrada.** `relacionados: [[Nome]]` na nota liga na direção
+> saída (backlink, grafo). Não coloca a linha na lista do hub, que é a aresta de entrada, a que
+> se lê ao abrir a {entidade}. Quem escreve a de entrada é `bin/brain.py indexar`.
+
+## 4. Bloco gerado versus curadoria
+
+```markdown
+<!-- AUTO:conteudo -->
+(gerado por bin/brain.py indexar, a partir do filesystem)
+<!-- /AUTO:conteudo -->
+```
+
+- **Dentro dos marcadores:** gerado. Editar à mão é perda garantida.
+- **Fora dos marcadores:** curadoria humana. O gerador nunca toca.
+- Criou nota em área indexada? Rodar `indexar` **no mesmo passo**. Quem cria o arquivo é
+  responsável por fechar o índice.
+
+## 5. Estado compilado e timeline
+
+`{entidades}/{Nome}/estado.md` tem duas camadas separadas por `---`:
+
+- **Acima:** o estado de hoje. `## Estado` (um parágrafo), `## Threads abertas` (checklist com
+  dono e data de abertura), campo `atualizado:`. **Sempre reescrito.**
+- **Abaixo:** `## Timeline`, append-only, mais recente primeiro, uma linha por evento que
+  **mudou o estado**, com link para o registro. **Nunca reescrito.**
+
+Thread resolvida **desce** para o timeline com a resolução, não é apagada. Evento que não mudou
+nada não precisa entrar no timeline: já está indexado no hub.
+
+`doctor` acusa quando o `atualizado:` fica mais de {N} dias atrás do último evento.
+
+## 6. Seção "Relacionados"
+
+Em nota de contexto, decisão ou conteúdo, quando fizer sentido:
+
+```markdown
+## Relacionados
+- [[nota-a]]: por quê
+- [texto](caminho/nota-b.md)
+```

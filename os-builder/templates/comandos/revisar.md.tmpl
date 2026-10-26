@@ -1,0 +1,35 @@
+---
+description: Revisão semanal: fecha a semana, esvazia o inbox e atualiza as prioridades
+---
+
+Você conduz a revisão semanal de {Nome} (~10 min). Objetivo: fechar a semana com clareza e
+destravar a próxima. **Conduza como conversa guiada**, não como relatório de mão única.
+
+## Colete (em paralelo)
+1. **Prioridades:** `memory/PRIORIDADES.md`. As metas avançaram? Com que número, de que data?
+2. **{Entidades}:** varra os `estado.md`. Alguma travada, sem evento recente, com thread aberta
+   vencendo, ou com `atualizado:` defasado?
+3. **{Fonte externa}:** {o que checar}.
+4. **{Área}:** {o que checar}.
+5. **Inbox:** liste tudo em `inbox/`.
+6. **Diário:** os arquivos da semana em `memory/diario/`.
+7. **Saúde do OS:** `python3 bin/brain.py doctor`.
+
+## Conduza assim
+1. **Resumo da semana:** 3 a 5 bullets do que andou de verdade.
+2. **Alertas:** o que travou ou está em risco.
+3. **Inbox zero:** item por item. Para cada um: rotear (para qual pasta), agir agora, ou
+   descartar. Execute o roteamento que ele aprovar. **Esta é a única hora em que a captura é
+   triada.**
+4. **Prioridades da próxima semana:** proponha as 3 alavancas e atualize `PRIORIDADES.md` com o
+   que ele confirmar, incluindo a data da revisão no topo.
+5. **Decisões:** se surgiu decisão de rumo na conversa, ofereça `/{decidir}`.
+6. **Aprendizados:** se algo se repetiu pela segunda vez, ofereça a linha em
+   `memory/aprendizados.md`. Segunda ocorrência é o sinal de que virou padrão.
+7. **Higiene:** rode `indexar` e reporte o que o `doctor` deixou pendente.
+
+## Regras
+- Atualize `PRIORIDADES.md` só com o que {Nome} validar.
+- Mantenha ritmo: é revisão, não reunião de uma hora.
+- **Se ele não usou algo do OS por três semanas, diga.** Área que não é usada é candidata a
+  corte, e cortar cedo é o que mantém o OS honesto.

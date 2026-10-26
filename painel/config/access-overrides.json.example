@@ -1,0 +1,4 @@
+{
+  "_note": "Template for access overrides. Copy this file to config/access-overrides.json.",
+  "overrides": []
+}

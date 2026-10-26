@@ -1,0 +1,45 @@
+---
+tipo: {entidade}
+{entidade}: {Nome}
+status: ativo
+atualizado: AAAA-MM-DD
+resumo: (uma frase do estado de hoje; é o que aparece nos índices)
+relacionados: [[{Nome}]]
+---
+
+# Estado: {Nome}
+
+<!-- DUAS CAMADAS, separadas pelo `---` mais abaixo.
+     ACIMA: o estado de hoje. SEMPRE reescrito.
+     ABAIXO: o timeline, append-only. NUNCA reescrito.
+     Quem reescreve o topo é o ritual que registra o evento, no mesmo passo, porque é o
+     único momento em que a informação está fresca. Regra completa em CONVENCOES.md. -->
+
+## Estado
+*(um parágrafo respondendo "e aí, como está isso?". O que está no ar, o que está sendo
+construído, onde está travado. Sem repetir o registro do evento, sem inventar: se o evento não
+deixou claro o estado de uma frente, deixe como estava.)*
+
+**Fase:** *(descoberta | construção | entrega | operação | pausado)*
+**Próximo marco:** *(o que precisa acontecer, e de quem depende)*
+**Risco ativo:** *(só se houver)*
+**Atualizado:** AAAA-MM-DD, a partir de [assunto](eventos/arquivo.md)
+
+## Threads abertas
+<!-- Uma linha por pendência viva, com DONO e DATA DE ABERTURA. Resolvida desce para o
+     timeline com a resolução, não é apagada. -->
+- [ ] **Título curto.** O que falta e por quê. Dono: *(nome)*. Aberta em DD/MM.
+
+## Escopo
+*(o que foi combinado)*
+
+## Regras que valem para {Nome}
+*(caso de borda conhecido, decisão que não se revisita)*
+
+---
+
+## Timeline
+Log append-only, mais recente primeiro. Só o que **mudou o estado** entra aqui: evento que só
+reportou andamento já está indexado no hub [{Nome}]({Nome}.md).
+
+- **AAAA-MM-DD** [assunto](eventos/arquivo.md): o que mudou.

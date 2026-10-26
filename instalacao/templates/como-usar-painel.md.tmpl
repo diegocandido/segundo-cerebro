@@ -1,0 +1,28 @@
+<!-- MODELO DO KIT: seção para acrescentar ao COMO-USAR.md do cliente. Troque os {{...}},
+     apague as linhas das ferramentas que não entraram e este comentário. -->
+
+## O painel
+
+O painel mostra o seu segundo cérebro como um mapa e tem uma tela de comando para o dia.
+
+- **Abrir:** com o servidor ligado (`node {{PAINEL}}/server.js`), acesse http://127.0.0.1:5210
+  no navegador. Sem o servidor ligado, a página não abre.
+- **O mapa:** no centro, o roteador do OS; em volta, as suas áreas, as rotinas e as ferramentas.
+  Clique numa ferramenta para ver o que ela faz no OS, quem usa, as regras e se a chave está
+  gravada.
+- **Tecla M:** abre o Mission Control (tarefas e o resumo da manhã).
+- **Tecla C:** abre as cobranças do Asaas (vencidas, a vencer e recebidas). Só leitura.
+- **Tecla G:** abre a Gestão: cobranças, propostas, WhatsApp, clientes, agenda e tarefas em
+  números, e o detalhe de cada um dentro do painel. No painel de uma ferramenta, "Abrir no
+  painel" leva direto para a seção dela.
+- **Nova cobrança:** botão no Mission Control. Mostra uma prévia e só cria depois da sua
+  confirmação. Ambiente atual: {{AMBIENTE_ASAAS}}.
+- **Resumo da manhã:** a rotina roda {{DIAS_HORARIO}} com o app do Claude aberto. Se o app estiver
+  fechado no horário, ela roda quando você abrir.
+- **Reuniões:** depois de uma reunião gravada no tl;dv, rode `/reuniao` para guardar no OS o que
+  foi dito e combinado. No plano gratuito do tl;dv, faça isso em até 2 dias.
+
+### No que o painel ainda não ajuda
+- **WhatsApp:** {{SITUACAO_WHATSAPP}} (ligado pelo Uazapi: o OS lê as conversas e envia só com a sua
+  confirmação; ou ainda não ligado: traga o que importa para o chat).
+- **Orçamentos automáticos (PandaDoc):** {{SITUACAO_PANDADOC}}.

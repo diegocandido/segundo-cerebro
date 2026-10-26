@@ -1,0 +1,51 @@
+# Como usar: {NOME DO OS}
+
+Guia de operação. Complementa o [CLAUDE.md](CLAUDE.md) (roteia a IA) e o
+[CONVENCOES.md](CONVENCOES.md) (regras de nome e link).
+
+## O que é
+Um cérebro de arquivos `.md` que a IA lê para te ajudar em **{as frentes}**. Filosofia:
+**{pull-based / alimentado por captura}**. Nível **{Advisor}**: a IA sugere e confirma antes de
+qualquer ação externa.
+
+## Estrutura
+| Camada | Onde | Papel |
+|---|---|---|
+| **Roteador** | `CLAUDE.md` (raiz + por pasta) | Explica a área e aponta arquivos. É o que a IA lê primeiro. |
+| **Regras** | `CONVENCOES.md` | Nomes, frontmatter, links. |
+| **Contexto pessoal** | `memory/` | Quem você é, o que importa agora, decisões, diário. |
+| **Captura crua** | `inbox/` | Ideias soltas, triadas na revisão. |
+| **Trabalho** | {as áreas} | O dia a dia. |
+| **Correlação** | hubs + índices | Ligam as notas entre si. |
+| **Higiene** | `bin/brain.py` | Diagnostica e regenera os índices sem gastar modelo. |
+
+## Comandos
+| Comando | Quando | O que faz |
+|---|---|---|
+| `/{abrir}` | {horário} | Briefing: {o que entrega}. |
+| `/{fechar}` | {horário} | Registra o diário e as pendências de amanhã. |
+| `/{revisar}` | {dia} | Fecha a semana, esvazia o inbox, atualiza as prioridades. |
+| `/{capturar}` | Qualquer hora | Joga uma ideia no `inbox/` sem triar. |
+| `/{decidir}` | Decisão de rumo | Registra em `memory/decisoes/`. |
+
+> Se um documento citar comando que não está nesta lista, o documento está errado, não o
+> sistema. `python3 bin/brain.py doctor` acusa isso.
+
+## Boas práticas do dia a dia
+1. **Não tente preencher tudo.** O OS fica bom por uso, não por mutirão de preenchimento.
+2. **Captura é captura.** Não decida para onde vai; o `/{revisar}` faz isso.
+3. **Consulta simples fica no chat.** Só vira arquivo o que tem valor de reuso.
+4. **Entregável final vai para {onde}.** O OS guarda contexto, não entregável.
+5. **Wikilink só para nome único.** Nome genérico usa link relativo.
+6. **`resumo:` no frontmatter** de toda nota que vale ser achada. É a linha que aparece no índice.
+7. **Rodou uma reunião ou um evento?** Atualize o topo do `estado.md` no mesmo momento. É o
+   único instante em que a informação está fresca.
+
+## No que ele já ajuda
+- {frente}: {o que resolve}
+
+## No que ainda NÃO ajuda
+- {limitação honesta}: {por quê, e o que faltaria}
+
+> Esta seção não é desculpa, é o roteiro das próximas ondas. Mantê-la honesta é o que impede a
+> frustração de "achei que ele fazia isso".

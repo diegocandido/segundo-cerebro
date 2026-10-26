@@ -1,0 +1,26 @@
+<!-- MODELO DO KIT: registro de proposta, que a tela Gestão (tecla G) conta.
+     Um arquivo por proposta, na pasta de missionControl.propostasDir do painel (padrão
+     inbox/propostas), nome AAAA-MM-DD-{cliente-em-minusculas-com-hifens}.md.
+     - Pedido ainda não enviado: status pendente (aparece em "Propostas esperando o seu ok").
+     - Depois do envio com o "pode mandar": status enviada, com enviado_em e id.
+     - Descartado pelo dono: status descartado.
+     Escreva esta regra no roteador do OS do cliente, junto da regra de envio de proposta.
+     Apague este comentário no arquivo real. -->
+---
+tipo: pedido-proposta
+status: pendente
+origem: claude
+pedido_em: AAAA-MM-DD HH:MM
+cliente: Nome do cliente ou prospect, como está na pasta de clientes
+whatsapp: 55DDDNUMERO
+arquivo: caminho do PDF dentro do OS (vazio se ainda é rascunho)
+enviado_em:
+id:
+---
+
+## Mensagem
+O texto que vai junto com o PDF.
+
+## Rascunho da proposta
+Só se ainda não houver PDF: escopo, itens, valores e prazos combinados. O que o dono não disse fica
+*(preencher)*.

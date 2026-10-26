@@ -1,0 +1,101 @@
+# {NOME DO OS}
+
+## Quem opera este OS
+{Nome} é {papel em uma linha}. Usa este OS para **{as frentes reais, separadas por vírgula}**.
+{O que este OS NÃO é para, se a pessoa foi explícita.}
+Ler [SOBRE-MIM](memory/SOBRE-MIM.md) e [PRIORIDADES](memory/PRIORIDADES.md) em trabalhos relevantes.
+
+## Comandos do dia a dia
+`/{abrir}` · `/{fechar}` · `/{revisar}` · `/{capturar}` · `/{decidir}`
+{Só listar o que existe de fato. Roteador que promete comando inexistente gasta turno.}
+
+---
+
+## Como navegar este OS
+
+**Índice primeiro, arquivo depois.** Todo índice daqui carrega uma frase do que cada nota
+responde, então dá para decidir onde a resposta mora **sem abrir nada**. Abrir três arquivos
+"por garantia" é o desperdício que essa hierarquia existe para evitar.
+
+1. **Este arquivo** roteia para a área.
+2. **`{area}/CLAUDE.md`** explica a pasta, as regras dela e o tom.
+3. **`{area}/{area}.md`** é o índice: lista o que existe, com uma frase por nota.
+4. **{Entidade}:** `{entidades}/{Nome}/{Nome}.md` é o hub e indexa tudo dela. Para saber **o
+   estado**, ler só a parte acima do `---` em `{entidades}/{Nome}/estado.md`. Não é preciso ler
+   os eventos.
+5. **Frontmatter + wikilinks** dão a correlação transversal.
+6. **`grep`** recupera por `tipo:`, `tags:` ou termo. Ex.: `grep -rl "tipo: decisao"`.
+
+Só depois de esgotar o índice vale varrer arquivo. E ao responder, citar o caminho de onde a
+informação saiu.
+
+> **Regra de link que mais importa.** Wikilink resolve por nome de arquivo, não por caminho.
+> Só use `[[ ]]` quando o nome for **único** neste OS. Nome genérico que se repete
+> (`perfil.md`, `estado.md`, `CLAUDE.md`) linkaria para todos ao mesmo tempo: nesses, use link
+> relativo `[texto](contexto/perfil.md)`. Detalhe em [CONVENCOES](CONVENCOES.md).
+
+## Mapa de áreas
+
+| Pasta | O que vive lá | Entrada rápida |
+|---|---|---|
+| `memory/` | Contexto pessoal, prioridades, decisões, diário, aprendizados | `PRIORIDADES.md`, `SOBRE-MIM.md` |
+| `{entidades}/` | Uma pasta por {entidade}, com contexto, eventos e estado | `{entidades}.md` |
+| `{area}/` | {o que vive lá} | `{area}.md` |
+| `inbox/` | Captura crua. Fica intocada até o `/{revisar}` | |
+
+**Estrutura de {entidade}.** Cada {entidade} tem `{entidades}/{Nome}/{Nome}.md`, o **hub**, que
+é o alvo canônico de `[[Nome]]` e indexa tudo dela. Notas de outras áreas que citam a {entidade}
+linkam para o hub; arquivos internos apontam de volta via `relacionados: [[Nome]]`.
+
+**Estado compilado e timeline.** `{entidades}/{Nome}/estado.md` tem duas camadas separadas por
+`---`. **Acima:** o estado de hoje, reescrito a cada evento, com Estado, Threads abertas e o
+campo `atualizado:`. **Abaixo:** timeline append-only, só o que mudou o estado, nunca reescrito.
+Quem pergunta "como está" lê acima. Quem pergunta "o que aconteceu" lê abaixo.
+
+**Precedência de fonte** quando duas coisas se contradizem: fala do {Nome} > estado compilado >
+timeline > fonte externa. E se o estado compilado está velho (o `atualizado:` é anterior ao
+último evento), **dizer isso na resposta** em vez de responder por ele.
+
+**Fonte da verdade fora do OS:** {sistema} manda em {domínio}. O OS guarda o **contexto**, não
+o **estado**.
+
+## A camada determinística: `bin/brain.py`
+
+O que não precisa de inteligência não gasta modelo. Rodar em vez de fazer à mão:
+
+```bash
+python3 bin/brain.py doctor      # link quebrado, órfã, índice defasado, estado velho
+python3 bin/brain.py indexar     # regenera os índices a partir do filesystem
+python3 bin/brain.py nota ...    # cria nota com frontmatter válido E fecha o índice, num passo
+python3 bin/brain.py bench       # tokens do caminho ingênuo vs caminho do índice
+```
+
+> **Bloco `<!-- AUTO:x -->` é gerado. Nunca editar à mão**, é sobrescrito. Curadoria vive fora
+> dos marcadores e nunca é tocada. Criou nota em área indexada? Rodar `indexar` no mesmo passo
+> (ou usar `nota`, que já faz), senão o índice mente até a próxima manutenção.
+
+---
+
+## Regras de ouro
+- **Ações externas** (e-mail, mensagem, publicação, alteração em sistema externo): confirmar
+  antes de executar. Sempre. {Ajustar se a pessoa escolheu outro nível de autonomia.}
+- Entregável final vai para {onde é consumido}. Efêmero fica em `.tmp/`, nunca versionado.
+- `memory/` é documento vivo: atualizar com aprendizados.
+- Consulta simples fica no chat. Só vira arquivo o que tem valor de reuso.
+- Este arquivo é **roteador**: deve caber a estrutura, não o detalhe de cada área. Detalhe desce
+  para o `CLAUDE.md` da área ou para o índice.
+- Não entra neste OS: {o que a pessoa marcou como fora}.
+
+## Anti-padrões
+- ❌ Nota sem `relacionados:` → ✅ toda nota se conecta a uma {entidade}, tema ou decisão
+- ❌ Wikilink genérico (`[[perfil]]`) → ✅ link relativo; `[[ ]]` só para nome único
+- ❌ Triar captura fora do `/{revisar}` → ✅ `inbox/` fica cru até a revisão
+- ❌ Renomear em lote sem varrer quem apontava para o nome antigo → ✅ toda renomeação termina
+  com a varredura
+- ❌ Editar dentro do bloco `<!-- AUTO:x -->` → ✅ mexer na fonte e reindexar
+- ❌ Criar arquivo e deixar o índice para depois → ✅ criar e fechar o índice no mesmo passo
+- ❌ Roteador citando comando ou arquivo que não existe → ✅ só citar o que existe
+- ❌ Timeline crescendo sem ninguém reescrever o estado compilado → ✅ atualizar o topo do
+  `estado.md` a cada evento
+- ❌ Responder por estado compilado velho como se fosse de hoje → ✅ avisar a data
+- ❌ Entregável final parado no OS → ✅ final vai para onde é consumido

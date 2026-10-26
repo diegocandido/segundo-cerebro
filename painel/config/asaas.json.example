@@ -1,0 +1,6 @@
+{
+  "_note": "Criacao de cobranca pelo Mission Control. 'ambiente': 'sandbox' ou 'producao'. Producao so liga editando aqui, a mao. Chaves: ~/.asaas-sandbox.env e ~/.asaas.env.",
+  "ambiente": "sandbox",
+  "valorMaximo": 20000,
+  "formas": ["PIX", "BOLETO", "UNDEFINED"]
+}

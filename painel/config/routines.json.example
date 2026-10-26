@@ -1,0 +1,13 @@
+{
+  "_note": "Copie para config/routines.json. As rotinas locais aparecem sozinhas a partir de ~/.claude/scheduled-tasks (uma pasta por tarefa). Aqui só se ajusta: 'discovery.hidden' esconde pastas que não são deste OS; 'discovery.overrides' (pela pasta) melhora nome e horário; 'cloud' registra rotinas que rodam fora desta máquina (n8n, webhook).",
+  "discovery": {
+    "enabled": true,
+    "dir": "~/.claude/scheduled-tasks",
+    "hidden": [],
+    "overrides": {
+      "morning-brief-mission-control": { "label": "Morning Brief do Mission Control", "schedule": "dias úteis · 6h30", "links": [] }
+    }
+  },
+  "cloud": [],
+  "routines": []
+}

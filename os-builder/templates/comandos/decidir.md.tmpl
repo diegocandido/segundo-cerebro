@@ -1,0 +1,29 @@
+---
+description: Registra uma decisão que muda o rumo de algo
+argument-hint: [o que foi decidido]
+---
+
+Registre uma decisão de {Nome} em `memory/decisoes/`.
+
+## Passos
+1. Entenda a decisão a partir de `$ARGUMENTS` e do contexto da conversa. Se faltar contexto,
+   alternativa ou motivo, faça no máximo 2 ou 3 perguntas curtas. Não interrogue.
+2. Crie o arquivo. O caminho mais seguro é o comando que já nasce com metadado válido e fecha o
+   índice no mesmo passo:
+   ```bash
+   python3 bin/brain.py nota --pasta memory/decisoes --tipo decisao --datado \
+     --titulo "..." --resumo "..." --corpo -
+   ```
+   Estrutura do corpo em `templates/decisao.md.tmpl`.
+3. Confirme e mostre o caminho do arquivo.
+
+## Regras
+- Só registre o que **muda o rumo** de algo. Tarefa do dia a dia não é decisão, vai pro diário.
+- **Não invente alternativas** que não foram consideradas. Se ele decidiu no feeling, registre
+  isso honestamente.
+- O campo que mais vale seis meses depois é **"o que faria mudar de ideia"**. Insista nele.
+- Se a decisão muda uma condição que vive em mais de um lugar (preço, prazo, nome, escopo),
+  **liste os outros lugares** e ofereça varrer todos hoje. Mudança que não desce por todas as
+  camadas não está feita.
+- **Wikilink só para nome único.** Nome genérico usa link relativo. Nunca linke para algo que
+  vive fora deste OS: cite como texto puro.

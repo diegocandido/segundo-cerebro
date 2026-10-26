@@ -1,0 +1,34 @@
+{
+  "_note": "Copie para config/departments.json. Um departamento por área do segundo cérebro do cliente (as que o os-builder criou), com os nomes que o cliente usa. 'pathRules' liga cada pasta ao seu departamento; 'memoryKeywords' classifica as notas de memory/ por palavra no nome do arquivo. Cores: use a paleta abaixo (combina com o tema escuro do painel).",
+  "departments": [
+    { "key": "clientes", "label": "Clientes", "color": "#43C07A", "icon": "coin" },
+    { "key": "comercial", "label": "Comercial", "color": "#808AFF", "icon": "pulse" },
+    { "key": "financeiro", "label": "Financeiro", "color": "#EEB154", "icon": "coin" },
+    { "key": "operacao", "label": "Operação", "color": "#E5533D", "icon": "build" },
+    { "key": "memoria", "label": "Memória & Decisões", "color": "#4FB3FF", "icon": "book" },
+    { "key": "infra", "label": "OS & Infra", "color": "#A8AEBB", "icon": "api" }
+  ],
+  "layers": [
+    { "key": "A", "label": "Aplicações", "color": "#808AFF", "shape": "hex", "blurb": "MCPs, CLIs e APIs conectados" },
+    { "key": "R", "label": "Rotinas", "color": "#EEB154", "shape": "ringdot", "blurb": "Tarefas agendadas e automações" },
+    { "key": "M", "label": "Memória", "color": "#E5E8EF", "shape": "chip", "blurb": "Contexto agrupado por área" },
+    { "key": "S", "label": "Skills", "color": "#4F44E8", "shape": "diamond", "blurb": "Comandos e skills dos agentes" }
+  ],
+  "projectPrefixes": {},
+  "pathRules": [
+    { "prefix": "Clientes", "dept": "clientes" },
+    { "prefix": "Comercial", "dept": "comercial" },
+    { "prefix": "Financeiro", "dept": "financeiro" },
+    { "prefix": "Operacao", "dept": "operacao" },
+    { "prefix": "inbox", "dept": "memoria" },
+    { "prefix": "bin", "dept": "infra" },
+    { "prefix": ".claude", "dept": "infra" }
+  ],
+  "memoryKeywords": [
+    { "match": ["cliente", "contrato", "proposta"], "dept": "clientes" },
+    { "match": ["venda", "lead", "funil", "orcamento"], "dept": "comercial" },
+    { "match": ["cobranca", "pagamento", "financeiro"], "dept": "financeiro" },
+    { "match": ["os", "infra", "config"], "dept": "infra" }
+  ],
+  "default": "memoria"
+}

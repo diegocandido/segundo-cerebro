@@ -1,0 +1,36 @@
+---
+description: Fecha o dia: registra o diário de trabalho e as pendências de amanhã
+---
+
+Feche o dia de {Nome} gravando o diário. Rápido e de alto sinal. É o par de fechamento do
+`/{abrir}`: o que você escrever aqui é o que ele vai ler amanhã de manhã.
+
+## Passos
+
+### 1. Reunir o que aconteceu
+- O contexto desta conversa.
+- {Se a plataforma permitir listar as outras sessões do dia, some elas: o dia de trabalho
+  raramente cabe em um chat só.}
+- Foque no que interessa ao diário: **o que foi pedido, o que foi entregue ou decidido, o que
+  ficou pendente.** Ignore raciocínio intermediário e conversa descartável.
+
+### 2. Escrever `memory/diario/AAAA-MM-DD.md`
+Agrupando **por tema ou projeto**, não por conversa, e deduplicando o que apareceu mais de uma
+vez. Formato em `templates/diario.md.tmpl`.
+
+### 3. Propagar o que não é do diário
+- Decisão que **muda o rumo** de algo: ofereça registrar via `/{decidir}`.
+- Padrão que se repetiu ou erro que ensinou algo: ofereça uma linha em `memory/aprendizados.md`.
+- Evento com {entidade}: **reescreva o topo do `estado.md` dela agora**, não depois. É o único
+  momento em que a informação está fresca.
+
+### 4. Fechar o índice
+```bash
+python3 bin/brain.py indexar
+```
+
+## Regras
+- Diário não é obrigatório todo dia. Dia sem entrada é normal, o sistema não quebra por isso.
+- A seção **Pendências pra amanhã** é a razão de o arquivo existir. Se ela sair vazia, pergunte
+  antes de gravar assim.
+- Não inflar: três bullets verdadeiros valem mais que dez inventados.

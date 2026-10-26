@@ -1,0 +1,49 @@
+<!-- MODELO DO KIT para a tarefa agendada "morning-brief-mission-control".
+     Crie a tarefa agendada (dias e horário da resposta 16 do bloco 5) com o texto abaixo como
+     prompt, trocando {{PAINEL}} pelo caminho absoluto do painel e {{OS}} pelo do segundo
+     cérebro, e {{CLIENTES}} pela pasta de clientes. Tire a seção que usar um conector que o
+     cliente não tem. Cada execução começa do zero: o prompt precisa se bastar. -->
+
+Você prepara o Morning Brief do painel Mission Control. O painel está em `{{PAINEL}}` e lê o
+arquivo `state/mission.json`. Colete agenda e e-mail pelos conectores e grave esse arquivo pelo
+script. Fuso: o do computador. Hoje = a data local de agora.
+
+REGRA DE OURO: só leitura. Nunca responda, envie, arquive, marque como lido, rotule ou altere nada
+no Gmail ou no Calendar. Nunca invente dado: o que não achou fica de fora.
+
+## 1. Agenda (conector do Google Calendar)
+Liste os eventos de HOJE do calendário principal. Ignore eventos recusados e bloqueios pessoais
+sem convidados. Para cada um:
+- `time`: "HH:MM" (dia inteiro = "dia")
+- `title`: título; se for de um cliente do OS (pastas em `{{OS}}/{{CLIENTES}}/`, ignore as que
+  começam com "_"), prefixe com o nome do cliente
+- `kind`: "cliente", "venda" ou "interna"
+- `link`: link da videochamada, se houver (só https)
+
+## 2. E-mails que pedem resposta (conector do Gmail)
+Threads NÃO lidas dos últimos 3 dias, fora de promoções, social, atualizações e fóruns
+(`is:unread newer_than:3d -category:promotions -category:social -category:updates -category:forums`).
+No máximo 10. Fique só com o que alguém espera resposta. Para cada uma: `from`, `subject` e `why`
+(meia linha: o que pedem e por que é hoje).
+
+## 3. Follow-ups (Gmail)
+Threads enviadas (`in:sent older_than:7d newer_than:30d`) em que a ÚLTIMA mensagem é do dono e o
+assunto é proposta, orçamento, contrato ou follow-up comercial. No máximo 8. Para cada uma:
+`deal` (empresa + assunto curto), `due` (hoje, AAAA-MM-DD), `stage` ("Proposta", "Orçamento",
+"Contrato" ou "Follow-up") e `contact` ({ "name", "email" }). Não preencha `value`.
+
+## 4. Grave
+Monte um JSON com `agenda`, `emails`, `followups` e `falhas` (nomes das fontes que falharam) e
+grave:
+
+```bash
+cd "{{PAINEL}}" && node bin/write-mission.js <<'JSON'
+{ ...o JSON aqui... }
+JSON
+```
+
+O script valida, acrescenta as pendências do diário mais recente do OS e grava. Se os dois
+conectores falharem, rode `node bin/write-mission.js --so-diario`.
+
+## 5. Fim
+Responda em uma linha a saída do script. Nada mais.

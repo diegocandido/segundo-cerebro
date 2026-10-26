@@ -1,0 +1,37 @@
+{
+  "_comentario": "Configuracao do brain.py. Preenchida na construcao do OS, a partir da entrevista. Nada aqui e generico: os nomes sao os da pessoa.",
+
+  "entidade_pasta": "clientes",
+  "entidade_label": "cliente",
+  "entidade_estado": "estado.md",
+  "entidade_eventos": "eventos",
+
+  "areas_indexadas": ["comercial", "conteudo", "memory"],
+  "area_titulos": {
+    "comercial": "Comercial",
+    "conteudo": "Conteudo",
+    "memory": "Memory"
+  },
+
+  "tipos_validos": [
+    "indice", "decisao", "diario", "prioridades", "processo",
+    "cliente", "evento", "conteudo", "recurso", "snapshot"
+  ],
+
+  "exige_frontmatter": ["clientes/", "memory/decisoes/", "memory/diario/", "conteudo/"],
+  "exige_preenchimento": ["/contexto/"],
+
+  "ignore_dirs": [".git", ".tmp", ".obsidian", "node_modules", "__pycache__", "bin", ".claude"],
+  "docs_de_convencao": ["CLAUDE.md", "CONVENCOES.md", "COMO-USAR.md"],
+  "dias_defasagem_ok": 14,
+  "nome_datado_escopo": ["/eventos/", "/reunioes/"],
+  "sem_resumo_ok": ["_arquivados", "diario", "snapshots"],
+
+  "falsos_positivos": {
+    "_exemplo/caminho/nota.md": ["alvo-que-ja-foi-julgado-como-nao-defeito"]
+  },
+
+  "bench_perguntas": [
+    { "pergunta": "As tres perguntas do teste de aceitacao vao aqui", "termos": ["termo", "outro"] }
+  ]
+}

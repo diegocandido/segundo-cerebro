@@ -1,0 +1,49 @@
+---
+description: Guarda no OS o que foi dito e combinado numa reunião gravada no tl;dv
+argument-hint: "[empresa, link da reunião ou transcrição]"
+---
+
+<!-- MODELO DO KIT. Ao instalar, troque cada {{...}} e apague este comentário.
+     {{FONTE}}: de onde a reunião chega (transcrição colada no chat, página do Notion da
+     integração do tl;dv, ou link). {{AREA_CLIENTES}}: pasta de clientes do OS.
+     {{PROSPECTS}}: onde ficam os prospects (pasta ou subpasta). -->
+
+Guarde no OS os detalhes de uma reunião gravada no tl;dv.
+Pedido: $ARGUMENTS
+
+## 1. Achar a reunião
+- Fonte deste OS: {{FONTE}}.
+- Se o pedido não trouxer a reunião, peça a transcrição ou o link. Nunca invente reunião.
+- **Já está no OS?** Procure o link ou o id da reunião dentro de `{{AREA_CLIENTES}}/` com
+  `grep -rl`. Achou: diga onde está e pergunte se é para atualizar.
+
+## 2. Ler
+- Leia a reunião inteira: data, duração, participantes, o que foi dito, o que foi combinado,
+  próximos passos.
+- Plano gratuito do tl;dv: a gravação é arquivada em 2 dias. Se a transcrição não abrir, diga isso
+  e peça o texto.
+
+## 3. Decidir onde guarda
+Liste as pastas de `{{AREA_CLIENTES}}/` (do filesystem, nunca de memória).
+- **Já é cliente:** crie o evento da reunião na pasta do cliente, no formato de evento do OS, e
+  no mesmo passo reescreva o topo do estado do cliente e acrescente a linha no histórico.
+- **Prospect:** crie ou complete a nota em `{{PROSPECTS}}`, com quem é, dores, o que foi
+  apresentado e situação. Se a nota já existir, **mescle**: acrescente o que é novo, não apague
+  nada.
+
+## 4. Como escrever
+- Fonte no topo: data, duração, "gravada no tl;dv" e o link.
+- Separe **o que o cliente disse** (com o minuto, ex.: "(06:35)") da **leitura de quem conduziu,
+  não confirmada**.
+- Números, datas, valores e nomes exatamente como foram ditos. O que não foi dito fica
+  `*(preencher)*`. Nunca estime.
+- Tarefa de execução não fica no OS: ofereça criá-la onde o OS guarda tarefas, só com o "pode".
+
+## 5. Fechar
+- Rode `python3 bin/brain.py indexar` e `python3 bin/brain.py doctor`; corrija o que for seu.
+- Responda em até 5 linhas: o que foi guardado, em quais arquivos (com link) e o que ficou
+  `*(preencher)*`.
+
+## Regras
+- Nada sai para o cliente da reunião. Enviar resumo, proposta ou orçamento é outro passo, com
+  rascunho e "pode mandar".

@@ -1,0 +1,37 @@
+{
+  "_note": "Copie para config/workspace.json. 'root' é o caminho ABSOLUTO da pasta do segundo cérebro do cliente (o mission.js resolve pelo diretório atual, então caminho relativo quebra). 'visibleRoots' são as pastas que aparecem abertas no grafo: troque CLIENTES/AREA pelos nomes das áreas que o os-builder criou. 'missionControl' aponta para o diário, a pasta de clientes, o espelho das tarefas e a pasta dos registros de proposta (que a tela Gestão conta) dentro do OS.",
+  "root": "/CAMINHO/ABSOLUTO/DO/SEGUNDO-CEREBRO",
+  "memoryDir": "memory",
+  "memoryIndex": "memory/memory.md",
+  "skillDirs": [
+    ".claude/commands",
+    ".claude/skills"
+  ],
+  "projectsDir": "Projetos",
+  "sharedPrefixes": [],
+  "excludeDirs": [
+    ".git",
+    ".venv"
+  ],
+  "visibleRoots": [
+    "",
+    "memory",
+    "memory/decisoes",
+    ".claude",
+    ".claude/commands",
+    "bin",
+    "Clientes"
+  ],
+  "routing": {
+    "CLAUDE.md": ["regra", "regras", "area", "areas", "mapa", "pasta", "pastas"],
+    "memory/PRIORIDADES.md": ["prioridade", "prioridades", "foco", "meta", "metas"],
+    "memory/SOBRE-MIM.md": ["perfil", "preferencia", "preferencias", "tom"]
+  },
+  "missionControl": {
+    "diaryDir": "memory/diario",
+    "clientsDir": "Clientes",
+    "mirrorPath": "inbox/todos.md",
+    "propostasDir": "inbox/propostas",
+    "pendingHeadingPattern": "pend[eê]ncias|pending"
+  }
+}

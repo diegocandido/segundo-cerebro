@@ -1,0 +1,37 @@
+{
+  "_comment": "CONTRATO de exemplo do Mission Control. Valores sao placeholders, nao dados reais. Um agente ou cron externo reescreve state/mission.json neste formato. O server nunca chama API externa: ele so le este arquivo.",
+  "generated_at": "2026-08-11T07:00:00-03:00",
+  "brief": {
+    "agenda": [
+      {
+        "time": "14:00",
+        "title": "Nome do lead ou cliente",
+        "kind": "venda | interna | cliente",
+        "link": "https://meet.google.com/xxx"
+      }
+    ],
+    "followups": [
+      {
+        "deal": "Empresa #000",
+        "due": "2026-08-11",
+        "value": 0,
+        "stage": "Proposta",
+        "contact": {
+          "name": "Nome do contato",
+          "email": "contato@exemplo.com",
+          "phone": "+55 00 00000-0000"
+        }
+      }
+    ],
+    "emails": [
+      {
+        "from": "Remetente",
+        "subject": "Assunto",
+        "why": "por que exige resposta hoje"
+      }
+    ],
+    "onde_parei": [
+      "Pendencia que ficou do dia anterior, vinda do memory/diario"
+    ]
+  }
+}

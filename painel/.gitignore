@@ -1,0 +1,10 @@
+.cache/
+node_modules/
+config/*.json
+!config/*.json.example
+baked/
+state/*.json
+!state/*.example.json
+.DS_Store
+state/*.log
+state/*.jsonl

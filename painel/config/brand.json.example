@@ -1,0 +1,8 @@
+{
+  "_note": "Copie para config/brand.json. Marca que aparece no topo do painel, no Mission Control e na aba do navegador. 'logo' é um arquivo dentro de public/ (PNG quadrado, 256px basta). Campo vazio volta para o padrão do OS do Cara da IA.",
+  "nome": "Cara da IA",
+  "sufixo": "OS",
+  "subtitulo": "segundo cérebro · NOME DA EMPRESA",
+  "tituloAba": "OS do Cara da IA · NOME DA EMPRESA",
+  "logo": "logo.png"
+}
