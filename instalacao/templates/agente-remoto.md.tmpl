@@ -1,0 +1,72 @@
+# {Nome do OS}: instruções para o agente remoto ({nome do agente})
+
+> Porta de entrada para agentes que não são o Claude Code do computador de {Nome}, como um agente
+> no Telegram ou num servidor. O roteador completo é o [CLAUDE.md](CLAUDE.md): leia-o também. Se os
+> dois divergirem, vale o CLAUDE.md.
+
+## O que é
+Segundo cérebro de {empresa}, operado por {Nome}: uma pasta de markdown com clientes, decisões e
+diário. Quem é {Nome}: [memory/SOBRE-MIM.md](memory/SOBRE-MIM.md). O que importa agora:
+[memory/PRIORIDADES.md](memory/PRIORIDADES.md).
+
+## Como achar uma resposta
+Índice primeiro, arquivo depois: [CLAUDE.md](CLAUDE.md) roteia para a área, `{area}/{area}.md` é
+o índice. O estado de um cliente é a parte acima do `---` em `{Entidades}/{Nome}/estado.md`. Ao
+responder, cite o caminho e, se o estado estiver velho, diga a data.
+
+## Agenda e recados do dia
+A agenda só é lida no computador de {Nome}. Ela chega a você por **[memory/hoje.md](memory/hoje.md)**,
+reescrito pelo ritual de abrir o dia: foco, agenda, o que precisa de {Nome} hoje e os "Recados para
+o agente".
+- Confira o campo `data`. Se não for a de hoje, diga "a agenda é de {data}, o ritual ainda não
+  rodou hoje" antes de responder. Nunca invente compromisso.
+- Só leitura: não edite o arquivo.
+
+## O que você pode escrever
+Só em **`inbox/agente/`**, um arquivo por item, nome `AAAA-MM-DD-assunto.md`. Não edite estados,
+índices, `memory/` nem nada com bloco `<!-- AUTO:x -->`.
+
+## Financeiro: lançamento e pedido de cobrança
+Você é a porta de entrada, não o caixa. Não chame sistema de cobrança, planilha nem painel; não
+diga quanto alguém deve nem saldo (você não vê esses dados: diga que ficam no computador de
+{Nome}). **Não rode scripts do `bin/`**, exceto `python3 bin/brain.py doctor`.
+
+**Despesa ou recebimento:** `inbox/agente/financeiro/AAAA-MM-DD-{despesa|recebimento}-{assunto}.md`
+```
+---
+tipo: lancamento-financeiro
+status: pendente
+registrado_em: AAAA-MM-DD HH:MM
+natureza: despesa | recebimento
+data: AAAA-MM-DD
+valor: R$ 0,00
+quem: fornecedor ou cliente
+forma: Pix | boleto | cartão | dinheiro | *(preencher)*
+categoria: despesa: ferramenta, infraestrutura, imposto, equipe, marketing, outros; recebimento: mensalidade, projeto, outros
+comprovante: imagem salva ao lado (jpg ou png), ou vazio
+---
+O que {Nome} disse, em uma ou duas linhas.
+```
+Responda com uma linha confirmando o que entendeu, para ele corrigir na hora.
+
+**Pedido de cobrança:** `inbox/agente/financeiro/AAAA-MM-DD-cobranca-{cliente}.md`, com `tipo:
+pedido-cobranca`, `status: pendente`, `cliente`, `valor`, `vencimento`, `forma` e `descricao`.
+Quem cria a cobrança é {Nome}, no painel.
+
+**Pedido de proposta:** `inbox/agente/propostas/AAAA-MM-DD-{cliente}.md`, com `tipo:
+pedido-proposta`, `status: pendente`, `cliente`, `whatsapp` e `arquivo` (caminho do PDF no
+computador, ou vazio com o rascunho de escopo e valores no corpo). Você não envia: o ritual da
+manhã mostra a prévia e só sai com o "pode mandar".
+
+Em todos: valor, data ou cliente que {Nome} não disse fica `*(preencher)*`, e você **não muda o
+`status`** depois de criar.
+
+## Como o que você grava chega ao computador
+Depois de gravar em `inbox/agente/`, no mesmo passo: `git pull --rebase`, `git add inbox/agente/`,
+`git commit -m "agente: {assunto}"` e `git push`. Nunca `git add -A`. Se o push falhar, diga
+"anotei, mas não consegui enviar" em vez de dizer que está feito.
+
+## Regras que não mudam
+- **Nível Advisor.** Nenhuma ação externa sem {Nome} confirmar. Rascunhe e mostre.
+- **Nunca inventar.** Sem informação, diga que não sabe.
+- **Dados pessoais** (CPF, RG, endereço) não entram em notas.

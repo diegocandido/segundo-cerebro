@@ -1,0 +1,28 @@
+/* Voz: botão 🎙 e painel de conversa. Acima dos painéis (70/72), abaixo dos modais (90) e do viewer (95). */
+#fab-voz { right: 18px; bottom: 118px; z-index: 85; }
+#fab-voz[data-estado="gravando"] { border-color: #FF5C5C; color: #FF5C5C; box-shadow: 4px 4px 0 rgba(255,92,92,.85); animation: vz-pulso 1.2s ease-in-out infinite; }
+#fab-voz[data-estado="pensando"] { opacity: .75; cursor: progress; }
+@keyframes vz-pulso { 50% { box-shadow: 4px 4px 0 rgba(255,92,92,.35); } }
+@media (prefers-reduced-motion: reduce) { #fab-voz[data-estado="gravando"] { animation: none; } }
+
+#voz-painel { position: fixed; right: 18px; bottom: 166px; z-index: 85; width: min(380px, calc(100vw - 36px));
+  max-height: min(56vh, 520px); display: none; flex-direction: column;
+  background: rgba(21,24,34,.97); border: 2px solid #E5E8EF; box-shadow: 4px 4px 0 rgba(128,138,255,.9);
+  color: #E5E8EF; font: 14px/1.5 'DM Sans', sans-serif; }
+#voz-painel.on { display: flex; }
+.vz-topo { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-bottom: 1px solid rgba(229,232,239,.18); }
+.vz-titulo { flex: 1; font: 600 11px 'DM Sans', sans-serif; letter-spacing: 1.6px; color: #808AFF; }
+.vz-acao { background: none; border: 1px solid rgba(229,232,239,.3); color: #E5E8EF; font: 500 11px 'DM Sans', sans-serif;
+  padding: 3px 8px; cursor: pointer; }
+.vz-acao:hover { border-color: #808AFF; color: #808AFF; }
+.vz-x { font-size: 16px; line-height: 1; padding: 1px 8px; }
+.vz-lista { flex: 1; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 10px; }
+.vz-msg b { display: block; font: 600 10.5px 'DM Sans', sans-serif; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 2px; }
+.vz-eu b { color: #989FAB; }
+.vz-assistente b { color: #808AFF; }
+.vz-aviso { font-size: 12.5px; color: #989FAB; font-style: italic; }
+.vz-erro { color: #FF8A8A; font-style: normal; }
+.vz-form { border-top: 1px solid rgba(229,232,239,.18); padding: 8px 10px; }
+.vz-form input { width: 100%; box-sizing: border-box; background: rgba(229,232,239,.06); border: 1px solid rgba(229,232,239,.25);
+  color: #E5E8EF; font: 13.5px 'DM Sans', sans-serif; padding: 7px 9px; outline: none; }
+.vz-form input:focus { border-color: #808AFF; }

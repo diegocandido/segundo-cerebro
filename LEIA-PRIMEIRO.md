@@ -3,7 +3,8 @@
 Instala, num cliente que ainda não tem segundo cérebro, o mesmo sistema do OS do Cara da IA:
 o segundo cérebro em markdown (construído pela skill os-builder, a partir de uma entrevista) e o
 painel visual com grafo, Mission Control, a tela Gestão (os números da operação), cobranças do
-Asaas e o painel de cada ferramenta.
+Asaas e o painel de cada ferramenta. Opcionais: conversa por voz com o segundo cérebro, livro-caixa
+e um agente remoto (Telegram) com backup no GitHub.
 
 ## Como usar com um cliente
 
@@ -30,6 +31,9 @@ O segundo cérebro e o painel são criados **fora** da pasta do kit, no lugar qu
 | Asaas | Cobrar por Pix, boleto ou cartão; tecla C e botão Nova cobrança no painel | Sugerido; começa sempre no sandbox |
 | WhatsApp (Uazapi) | Ler conversas e mandar mensagem com confirmação, pelo `bin/whatsapp.py` | Sugerido; só liga se o cliente aceitar o risco de bloqueio (API não oficial) |
 | PandaDoc | Orçamentos e propostas automatizados a partir de modelo | Sugerido; o comando de orçamento ainda não vem pronto |
+| Voz (Whisper local + ElevenLabs ou voz do macOS) | Perguntar ao OS falando, pelo botão 🎙 do painel ou mãos livres | Opcional; só Mac com chip Apple |
+| Livro-caixa | Despesas e recebimentos do dia a dia, tecla L no painel | Opcional; CSV local, fora do segundo cérebro |
+| Agente remoto + GitHub | Agenda do dia e anotações pelo Telegram, backup automático | Opcional; repositório privado |
 
 ## O que tem dentro
 
@@ -42,15 +46,11 @@ Kit-OS-Cara-da-IA/
 │   ├── 01-perguntas-extras.md  bloco 5 da entrevista: painel e ferramentas
 │   ├── 02-ferramentas.md   guia de cada ferramenta (ligar, testar, como fica no painel)
 │   ├── 03-painel.md        como copiar, configurar e subir o painel
-│   ├── scripts/whatsapp.py  WhatsApp pelo Uazapi (ler e enviar com confirmação)
+│   ├── scripts/            whatsapp.py (Uazapi), voz (conversar, falar, ouvir, falar_resposta,
+│   │                       assistente.json.example), livro_caixa.py e sync-github.sh
 │   ├── comandos/reuniao.md.tmpl
-│   └── templates/          rotina Morning Brief, seção do painel no COMO-USAR e o WhatsApp no OS
+│   └── templates/          rotina Morning Brief, seção do painel no COMO-USAR, o WhatsApp no OS
+│                           e as instruções do agente remoto
 ├── os-builder/             a skill que entrevista e constrói o segundo cérebro
 └── painel/                 o painel (Node, sem dependências), sem dados de nenhum cliente
 ```
-
-## Para atualizar o kit
-
-A fonte fica em `DCS TECH/Kit-OS-Cara-da-IA/`. Edite ali e gere o zip de novo. O painel do kit é
-uma cópia do painel do OS do Cara da IA com a marca configurável e as configs zeradas; melhoria
-feita no seu painel não chega aqui sozinha.

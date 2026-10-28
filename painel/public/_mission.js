@@ -470,6 +470,66 @@
     box.querySelector('[data-new]').onclick = () => openCobranca();
   }
 
+  // ---------- livro-caixa (opcional): visao so leitura (tecla L) ----------
+  const MESES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+  const nomeMes = ym => { const [a, m] = ym.split('-'); return MESES[Number(m) - 1] + ' de ' + a; };
+  const somaMes = (ym, n) => { const d = new Date(Number(ym.slice(0, 4)), Number(ym.slice(5)) - 1 + n, 1); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
+
+  function caixaLinha(l) {
+    const sai = l.natureza === 'despesa';
+    return '<div class="mc-row"><div class="mc-row-time">' + esc(ddmm(l.data).slice(0, 5)) + '</div>'
+      + '<div class="mc-row-main"><div class="mc-row-t">' + esc(l.quem) + ' · <span class="mc-cx-' + (sai ? 'sai' : 'entra') + '">'
+      + (sai ? '−' : '+') + brl(l.valor) + '</span></div>'
+      + '<div class="mc-row-s">' + esc([l.categoria, l.forma, l.origem === 'agente' ? 'via agente' : '', l.obs].filter(Boolean).join(' · ')) + '</div></div></div>';
+  }
+
+  async function openCaixa(mes) {
+    if (!$('#mc-root').classList.contains('on')) open();
+    let box = $('#mc-cob .mc-modal-box');
+    if (!box) { cobModal('<div class="mc-modal-h">Livro-caixa</div><div class="mc-empty">lendo o livro-caixa...</div>'); box = $('#mc-cob .mc-modal-box'); }
+    box.classList.add('wide');
+    let d;
+    try { d = await api('GET', '/api/caixa' + (mes ? '?mes=' + mes : '')); }
+    catch (e) {
+      box.innerHTML = '<div class="mc-modal-h">Livro-caixa</div><div class="mc-warn"><div>&#9888;</div><div>' + esc(e.message) + '</div></div>'
+        + '<div class="mc-modal-act"><button class="act" data-x>Fechar</button></div>';
+      box.querySelector('[data-x]').onclick = closeCobranca;
+      return;
+    }
+    const aviso = d.pendentesAgente
+      ? '<div class="mc-warn"><div>&#9888;</div><div><b>' + d.pendentesAgente + (d.pendentesAgente === 1 ? ' lançamento' : ' lançamentos')
+        + ' do agente esperando o seu ok.</b> Aparecem no próximo ritual de abertura do dia, ou peça ao Claude para lançar.</div></div>' : '';
+    if (!d.existe) {
+      box.innerHTML = '<div class="mc-modal-h">Livro-caixa</div>' + aviso
+        + '<div class="mc-warn"><div>&#9888;</div><div>Livro-caixa não encontrado em <code>' + esc(d.arquivo) + '</code>.</div></div>'
+        + '<div class="mc-modal-act"><button class="mc-primary" data-x>Fechar</button></div>';
+      box.querySelector('[data-x]').onclick = closeCobranca;
+      return;
+    }
+    const cats = d.porCategoria.map(([c, v]) => '<div class="mc-row"><div class="mc-row-main"><div class="mc-row-t">' + esc(c)
+      + ' · ' + brl(v) + '</div></div></div>').join('');
+    const primeiro = d.meses[0];
+    box.innerHTML = '<div class="mc-modal-h mc-cx-top"><button class="act" data-prev title="mês anterior"' + (d.mes <= primeiro ? ' disabled' : '') + '>&#9666;</button>'
+      + '<span>Livro-caixa · ' + esc(nomeMes(d.mes)) + '</span>'
+      + '<button class="act" data-next title="próximo mês">&#9656;</button></div>'
+      + aviso
+      + '<div class="mc-cx-tot"><div><span>Entradas</span><b class="mc-cx-entra">' + brl(d.entradas) + '</b></div>'
+      + '<div><span>Saídas</span><b class="' + (d.saidas > 0 ? 'mc-cx-sai' : '') + '">' + brl(d.saidas) + '</b></div>'
+      + '<div><span>Saldo</span><b class="' + (d.saldo < 0 ? 'mc-cx-sai' : '') + '">' + brl(d.saldo) + '</b></div></div>'
+      + (cats ? '<div class="mc-cob-sec"><div class="mc-cob-h">Despesas por categoria</div>' + cats + '</div>' : '')
+      + '<div class="mc-cob-sec"><div class="mc-cob-h">Lançamentos do mês<span>' + d.lancamentos.length + '</span></div>'
+      + (d.lancamentos.map(caixaLinha).join('') || '<div class="mc-empty">nada lançado neste mês</div>') + '</div>'
+      + '<div class="mc-cob-sec"><div class="mc-cob-h">Últimos 10 lançamentos</div>'
+      + (d.ultimos.map(caixaLinha).join('') || '<div class="mc-empty">livro-caixa vazio</div>') + '</div>'
+      + '<div class="mc-form-note">Só leitura. Lançar é com o Claude ("lança R$ 89 do ChatGPT de hoje"), sempre com o seu ok. '
+      + 'Recebimentos do Asaas entram quando lançados aqui. Tecla L abre esta tela; Esc fecha.</div>'
+      + '<div class="mc-modal-act"><button class="act" data-cob>Cobranças</button><button class="mc-primary" data-x>Fechar</button></div>';
+    box.querySelector('[data-x]').onclick = closeCobranca;
+    box.querySelector('[data-cob]').onclick = () => { closeCobranca(); openCobrancas(); };
+    box.querySelector('[data-prev]').onclick = () => openCaixa(somaMes(d.mes, -1));
+    box.querySelector('[data-next]').onclick = () => openCaixa(somaMes(d.mes, 1));
+  }
+
   // ---------- render ----------
   function render() {
     const inner = $('#mc-inner');
@@ -481,7 +541,7 @@
     const top = el('div', 'mc-top');
     const back = el('button', 'mc-back');
     back.innerHTML = '<span class="mc-back-arrow">&#9666;</span>'
-      + '<div><div><span class="mc-back-name">' + esc((window.BRAND || {}).nome || 'Cara da IA') + '</span><span class="mc-back-os">' + esc((window.BRAND || {}).sufixo || 'OS') + '</span></div>'
+      + '<div><div><span class="mc-back-name">Cara da IA</span><span class="mc-back-os">OS</span></div>'
       + '<div class="mc-back-sub">voltar pro grafo do cérebro</div></div>';
     back.onclick = close;
     top.appendChild(back);
@@ -504,7 +564,10 @@
     const bVer = el('button', 'act', 'Cobranças');
     bVer.title = 'ver cobranças do Asaas (tecla C)';
     bVer.onclick = () => openCobrancas();
-    right.appendChild(bVer); right.appendChild(bCob); right.appendChild(bIng); right.appendChild(bRef); right.appendChild(clock);
+    const bCx = el('button', 'act', 'Livro-caixa');
+    bCx.title = 'entradas, saídas e saldo do mês (tecla L)';
+    bCx.onclick = () => openCaixa();
+    right.appendChild(bCx); right.appendChild(bVer); right.appendChild(bCob); right.appendChild(bIng); right.appendChild(bRef); right.appendChild(clock);
     top.appendChild(right);
     inner.appendChild(top);
 
@@ -605,6 +668,9 @@
       if (!typing && !e.metaKey && !e.ctrlKey && !e.altKey && (e.key === 'c' || e.key === 'C')) {
         e.preventDefault(); e.stopPropagation(); openCobrancas();
       }
+      if (!typing && !e.metaKey && !e.ctrlKey && !e.altKey && (e.key === 'l' || e.key === 'L')) {
+        e.preventDefault(); e.stopPropagation(); openCaixa();
+      }
     }, true);
 
     const repaintIfOpen = () => { if ($('#mc-root').classList.contains('on')) paintBackdrop(); };
@@ -613,5 +679,5 @@
     document.addEventListener('visibilitychange', () => { if (!document.hidden) repaintIfOpen(); });
   });
 
-  window.MissionControl = { open, close, toggle, load, openCobrancas, openCobranca: () => openCobranca(), get data() { return data; } };
+  window.MissionControl = { open, close, toggle, load, openCobrancas, openCaixa: m => openCaixa(m), openCobranca: () => openCobranca(), get data() { return data; } };
 })();

@@ -249,6 +249,18 @@ body.mc-open #brain-canvas { opacity: 0; transform: scale(1.04); transition: opa
 .mc-cob-h span { letter-spacing: .3px; text-transform: none; font-size: 11.5px; color: var(--muted); font-weight: 600; }
 .mc-cob-sec .mc-row-s a { color: var(--accent); }
 
+/* livro-caixa (tecla L) */
+.mc-cx-top span { flex: 1; text-align: center; }
+.mc-cx-top .act { padding: 4px 10px; }
+.mc-cx-top .act:disabled { opacity: .35; cursor: default; }
+.mc-cx-tot { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+.mc-cx-tot > div { border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; background: var(--input-bg); min-width: 0; }
+.mc-cx-tot span { display: block; font-size: 9.5px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--faint); font-weight: 700; }
+.mc-cx-tot b { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 20px; margin-top: 4px; overflow-wrap: anywhere; }
+.mc-cx-entra { color: #43C07A; }
+.mc-cx-sai { color: #E5533D; }
+@media (max-width: 520px) { .mc-cx-tot { grid-template-columns: 1fr; } }
+
 /* ---------- Gestão (tecla G) ---------- */
 #gs-root { position: fixed; inset: 0; z-index: 72; display: none; opacity: 0; transition: opacity .22s ease;
   font-family: 'DM Sans', sans-serif; color: var(--ink); background: var(--bg); }

@@ -143,3 +143,72 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
      modelo; o envio é do dono, depois do "pode mandar", e fica registrado no estado do cliente.
 - **Hoje no kit:** não há script do PandaDoc pronto. Registre a ferramenta como `sugerido` e o
   comando como pendência no `COMO-USAR.md` ("no que ainda não ajuda").
+
+---
+
+## Voz: conversar com o segundo cérebro (opcional, só Mac com chip Apple)
+
+- **O que resolve:** perguntar ao OS falando ("Oi, {nome}, o que tenho hoje?") e ouvir a
+  resposta, pelo botão 🎙 do painel, pelo terminal ou em modo mãos livres. Só consulta.
+- **Ligar:**
+  1. Copie para o `bin/` do segundo cérebro: [scripts/conversar.py](scripts/conversar.py),
+     [scripts/falar.py](scripts/falar.py), [scripts/ouvir.py](scripts/ouvir.py) e, se o cliente
+     quiser ouvir toda resposta do Claude, [scripts/falar_resposta.py](scripts/falar_resposta.py).
+  2. Copie [scripts/assistente.json.example](scripts/assistente.json.example) para
+     `bin/assistente.json` e preencha com as respostas da pergunta 17 (nome, ativação sem acento,
+     como chamar o dono, siglas que o Whisper costuma errar em `vocabulario_extra`).
+  3. Ambiente de voz, com o "pode" do cliente: `ffmpeg` (Homebrew) e um venv em
+     `~/.local/share/conversar/.venv` com `mlx-whisper sounddevice numpy` (Python 3.11 ou mais).
+     O modelo do Whisper baixa na primeira transcrição.
+  4. ElevenLabs (se escolhida): o cliente grava `ELEVENLABS_API_KEY=...` em `~/.elevenlabs.env`
+     pelo terminal; a voz vai em `voz_elevenlabs`. Sem chave, fala com a voz do macOS.
+  5. Opcional: o alias `cerebro` (`python3 .../bin/conversar.py --maos-livres`) e, para ouvir
+     cada resposta do Claude, o hook Stop com `falar_resposta.py` no `.claude/settings.json`.
+- **Testar:** `python3 bin/falar.py --checar`; `python3 bin/conversar.py --listar-mics`; uma
+  pergunta pelo walkie-talkie (`python3 bin/conversar.py`, Enter grava, Enter para) e uma pelo
+  botão 🎙 do painel no Chrome ou Safari.
+- **Privacidade:** o áudio é transcrito no Mac e apagado; só o texto da pergunta vai ao Claude e,
+  com ElevenLabs, o texto da resposta vai à ElevenLabs.
+
+---
+
+## Livro-caixa (opcional)
+
+- **O que resolve:** despesas e recebimentos do dia a dia num lugar só, lançados pelo Claude
+  ("lança R$ 89 do ChatGPT de hoje") e vistos no painel (tecla L).
+- **Ligar:** copie [scripts/livro_caixa.py](scripts/livro_caixa.py) para o `bin/` do segundo
+  cérebro e crie a pasta `Financeiro/comprovantes/` **ao lado** do segundo cérebro (fora dele,
+  para não ir a backup nem a agente). O primeiro uso cria o `livro-caixa.csv`.
+- **Regra para o OS:** no roteador, "lançar só depois do ok do dono"; o Claude nunca estima valor.
+- **Testar:** `python3 bin/livro_caixa.py lancar --data AAAA-MM-DD --natureza despesa --quem Teste
+  --valor 1 --categoria outros`, depois `mes` e a tecla L no painel. Apague a linha de teste do CSV.
+
+---
+
+## Agente remoto e backup no GitHub (opcional)
+
+- **O que resolve:** um agente fora do computador (Telegram, servidor) que sabe a agenda do dia e
+  anota despesas, recebimentos, pedidos de cobrança e de proposta, para o dono aprovar no ritual
+  da manhã. Nada sai sem o "pode mandar".
+- **Ligar:**
+  1. Repositório **privado** no GitHub para o segundo cérebro, com `.gitignore` que tira PDFs,
+     contratos, `.env` e chaves.
+  2. Chave só para ele: `ssh-keygen -t ed25519 -f ~/.ssh/os_cofre`; o cliente cola a parte
+     pública em Settings → Deploy keys do repositório, com escrita.
+  3. Copie [scripts/sync-github.sh](scripts/sync-github.sh) para `bin/` e configure, dentro do
+     segundo cérebro: `git config os.syncRemote git@github.com:USUARIO/REPO.git` e
+     `git config os.syncKey ~/.ssh/os_cofre`.
+  4. Hook Stop no `.claude/settings.json`: `nohup bash "$CLAUDE_PROJECT_DIR/bin/sync-github.sh"
+     >/dev/null 2>&1 & exit 0`. Envia e traz ao fim de cada resposta do Claude.
+  5. Crie o `AGENTS.md` do segundo cérebro a partir de
+     [templates/agente-remoto.md.tmpl](templates/agente-remoto.md.tmpl) e a pasta
+     `inbox/agente/` (com `financeiro/` e `propostas/`).
+  6. No ritual de abrir o dia, ligue os passos opcionais do agente (agenda em `memory/hoje.md`,
+     lançamentos e pedidos do agente).
+  7. No painel, aponte `missionControl.propostasDir` para `inbox/agente/propostas` e
+     `agenteFinanceiroDir` para `inbox/agente/financeiro`.
+  8. O agente precisa de chave própria para enviar ao repositório (outra deploy key com escrita).
+- **Testar:** mande ao agente uma despesa de teste; confira que o arquivo chegou ao `inbox/` do
+  computador e apareceu no ritual; descarte.
+- **Cuidado:** o agente não roda scripts do `bin/` (o livro-caixa, por exemplo, não existe no
+  servidor e responderia "zero").

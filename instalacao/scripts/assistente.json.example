@@ -1,0 +1,13 @@
+{
+  "_leia": "Copie para bin/assistente.json do segundo cérebro e preencha na instalação da voz. conversar.py, falar.py e o botão 🎙 do painel leem daqui. Campo que o cliente não escolheu fica como está.",
+  "nome": "Assistente",
+  "ativacao": ["assistente"],
+  "usuario": "",
+  "mics_preferidos": [],
+  "pasta_entidades": "Clientes",
+  "vocabulario_extra": [],
+  "consultas_extras": [],
+  "voz_elevenlabs": "",
+  "voz_mac": "Luciana (Enhanced)",
+  "piper_dir": "~/.local/share/piper"
+}

@@ -76,7 +76,7 @@ ENT_EVENTOS = CFG["entidade_eventos"]
 NOME_DATADO_ESCOPO = tuple(CFG["nome_datado_escopo"])
 
 # pastas dentro da pasta de entidades que nao sao entidades
-NAO_ENTIDADE = {"_templates", "_arquivados", "directives", "_assets"}
+NAO_ENTIDADE = {"_templates", "_arquivados", "_prospects", "directives", "_assets"}
 PLACEHOLDER = re.compile(
     r"^(\{|nome|outra|nota-[ab]|caminho|alvo|texto|slug|wikilink|exemplo|Nome$|X$)", re.I)
 RE_AUTO = r"<!-- AUTO:{k} -->.*?<!-- /AUTO:{k} -->"

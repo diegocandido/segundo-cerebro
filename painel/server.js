@@ -14,6 +14,14 @@
      PATCH /api/todo            muda status / prazo / adiamento
      DELETE /api/todo?id=       descarta tarefa
      POST /api/mission/ingest   ingere pendencias do diario (idempotente)
+   Voz:
+     POST /api/conversar        audio (audio/*) ou {texto}; transcreve no computador, pergunta
+                                ao Claude no segundo cerebro (so consulta) e fala a resposta
+     GET  /api/conversar/nome   nome da assistente (bin/assistente.json)
+     POST /api/conversar/nova   zera a conversa
+     POST /api/conversar/parar  para a voz que esta tocando
+   Livro-caixa:
+     GET  /api/caixa[?mes=AAAA-MM]  entradas, saidas, saldo e lancamentos do mes (so leitura)
 */
 'use strict';
 const http = require('http');
@@ -25,6 +33,7 @@ const mission = require('./mission');
 const ingest = require('./ingest');
 const asaas = require('./asaas');
 const gestao = require('./gestao');
+const caixa = require('./caixa');
 
 // Rede de segurança: ferramenta pessoal always-on não deve morrer por um erro
 // isolado (ex.: falha ao abrir um arquivo). Loga e segue de pé.
@@ -125,6 +134,61 @@ function trustedRequest(req) {
 // .env, chaves e credenciais nunca abrem pelo viewer nem pelo /api/open
 function isSecretAbs(abs) {
   return scan.isSecret(path.relative(ROOT, abs).split(path.sep).join('/'));
+}
+
+// ---------- voz ----------
+/* O botao de microfone do painel. Quem transcreve e pergunta e o bin/conversar.py do segundo cerebro
+   (Whisper local + Claude Code em modo so consulta); quem fala e o bin/falar.py. O audio
+   gravado no navegador vira arquivo temporario e e apagado assim que a resposta volta. */
+const os = require('os');
+const CONVERSAR = path.join(ROOT, 'bin', 'conversar.py');
+const FALAR = path.join(ROOT, 'bin', 'falar.py');
+const AUDIO_MAX = 15 * 1024 * 1024;
+let conversando = false;
+let voz = null; // processo do falar.py tocando agora
+
+function readRaw(req, max) {
+  return new Promise((resolve, reject) => {
+    const partes = []; let total = 0;
+    req.on('data', c => {
+      total += c.length;
+      if (total > max) { reject(new Error('audio grande demais')); req.destroy(); return; }
+      partes.push(c);
+    });
+    req.on('end', () => resolve(Buffer.concat(partes)));
+    req.on('error', reject);
+  });
+}
+
+function rodarConversar(args) {
+  return new Promise((resolve) => {
+    const child = spawn('python3', [CONVERSAR, '--painel', ...args], { cwd: ROOT });
+    let out = '';
+    child.stdout.on('data', c => out += c);
+    const limite = setTimeout(() => child.kill('SIGKILL'), 240 * 1000);
+    child.once('error', e => { clearTimeout(limite); resolve({ erro: 'nao consegui rodar o conversar.py: ' + e.message }); });
+    child.once('close', () => {
+      clearTimeout(limite);
+      try { resolve(JSON.parse(out.trim().split('\n').pop())); }
+      catch { resolve({ erro: 'Resposta inesperada do conversar.py.' }); }
+    });
+  });
+}
+
+function pararVoz() {
+  if (!voz) return false;
+  try { process.kill(-voz.pid, 'SIGTERM'); } catch { } // grupo inteiro: o falar.py e o afplay dele
+  voz = null;
+  return true;
+}
+
+function falarResposta(texto) {
+  pararVoz();
+  const child = spawn('python3', [FALAR], { cwd: ROOT, detached: true, stdio: ['pipe', 'ignore', 'ignore'] });
+  child.once('error', () => { if (voz === child) voz = null; });
+  child.once('exit', () => { if (voz === child) voz = null; });
+  child.stdin.end(texto);
+  voz = child;
 }
 
 // ---------- server ----------
@@ -251,6 +315,56 @@ const handle = async (req, res) => {
         if (p === '/api/asaas/confirmar' && req.method === 'POST') return sendJSON(res, await asaas.confirmar(body.token));
       } catch (e) { return sendJSON(res, { error: e.message }, 400); }
       return sendJSON(res, { error: 'Not found' }, 404);
+    }
+
+    // ---------- livro-caixa (só leitura) ----------
+    if (p === '/api/caixa' && req.method === 'GET') {
+      try { return sendJSON(res, caixa.resumo(url.searchParams.get('mes'))); }
+      catch (e) { return sendJSON(res, { error: e.message }, 500); }
+    }
+
+    // ---------- voz ----------
+    if (p === '/api/conversar/nome' && req.method === 'GET') {
+      let nome = 'Assistente';
+      try { nome = JSON.parse(fs.readFileSync(path.join(ROOT, 'bin', 'assistente.json'), 'utf8')).nome || nome; } catch { }
+      return sendJSON(res, { nome });
+    }
+    if (p === '/api/conversar/parar' && req.method === 'POST') return sendJSON(res, { ok: true, parou: pararVoz() });
+    if (p === '/api/conversar/nova' && req.method === 'POST') {
+      pararVoz();
+      return sendJSON(res, await rodarConversar(['--nova']));
+    }
+    if (p === '/api/conversar' && req.method === 'POST') {
+      const tipo = req.headers['content-type'] || '';
+      if (!/^(audio\/|application\/json)/i.test(tipo)) return sendJSON(res, { error: 'Content-Type precisa ser audio/* ou application/json' }, 415);
+      if (conversando) return sendJSON(res, { erro: 'Ainda estou respondendo a pergunta anterior.' }, 409);
+      conversando = true;
+      let tmp = null;
+      try {
+        pararVoz();
+        let args;
+        if (/^audio\//i.test(tipo)) {
+          const audio = await readRaw(req, AUDIO_MAX);
+          const ext = /mp4|m4a|aac/i.test(tipo) ? '.m4a' : /wav/i.test(tipo) ? '.wav' : /ogg/i.test(tipo) ? '.ogg' : '.webm';
+          tmp = path.join(os.tmpdir(), `foundersos-voz-${process.pid}-${Date.now()}${ext}`);
+          fs.writeFileSync(tmp, audio);
+          args = ['--arquivo', tmp];
+        } else {
+          let body = {};
+          try { body = JSON.parse(await readBody(req)); } catch { return sendJSON(res, { error: 'Bad JSON' }, 400); }
+          const texto = String(body.texto || '').trim();
+          if (!texto) return sendJSON(res, { erro: 'Pergunta vazia.' }, 400);
+          args = ['--texto', texto.slice(0, 2000)];
+        }
+        const r = await rodarConversar(args);
+        if (r.fala) falarResposta(r.fala);
+        return sendJSON(res, r);
+      } catch (e) {
+        return sendJSON(res, { erro: e.message }, 400);
+      } finally {
+        conversando = false;
+        if (tmp) fs.rm(tmp, { force: true }, () => { });
+      }
     }
 
     // Gestão (tecla G): só leitura, cada bloco falha sozinho

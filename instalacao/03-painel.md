@@ -1,7 +1,8 @@
 # Instalar o painel
 
 O painel é um servidor Node sem dependências que lê a pasta do segundo cérebro e mostra o grafo
-(Aplicações, Rotinas, Memória e Skills) e o Mission Control (tarefas, Morning Brief e cobranças).
+(Aplicações, Rotinas, Memória e Skills) e o Mission Control (tarefas, Morning Brief, cobranças e,
+se o cliente quis, livro-caixa e o botão de voz).
 Ele só aceita acesso da própria máquina.
 
 ## 1. Copiar para fora do segundo cérebro
@@ -50,6 +51,16 @@ Confira junto com o cliente:
   clientes, agenda e tarefas; clicar num card abre o detalhe dentro do painel. No painel de cada
   ferramenta, o botão "Abrir no painel" leva para a seção dela (campo `painel` do `apps.json`).
   Card de ferramenta que não está ligada aparece com o aviso de indisponível, e os outros seguem.
+
+Se entraram os opcionais:
+- **Voz:** o botão 🎙 FALAR (tecla V) aparece sempre; ele só responde se o segundo cérebro tiver
+  `bin/conversar.py` e `bin/assistente.json` (guia da voz em 02-ferramentas.md). Teste digitando
+  uma pergunta no quadro; o navegador pede o microfone na primeira gravação (no Chrome ou Safari;
+  painéis embutidos costumam bloquear o microfone).
+- **Livro-caixa:** tecla **L** (ou botão Livro-caixa no Mission Control). Em `workspace.json`,
+  `missionControl.livroCaixa` aponta para o CSV (relativo ao segundo cérebro) e
+  `agenteFinanceiroDir` para os lançamentos do agente remoto. Sem livro-caixa, a tela só avisa
+  que não encontrou o arquivo.
 
 ## 4. Deixar fácil de abrir
 

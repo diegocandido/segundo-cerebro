@@ -47,6 +47,8 @@ Acrescente, se o cliente aprovou:
 - O comando `/reuniao` a partir de [comandos/reuniao.md.tmpl](comandos/reuniao.md.tmpl).
 - O script `bin/whatsapp.py` a partir de [scripts/whatsapp.py](scripts/whatsapp.py), se o WhatsApp pelo
   Uazapi entrou.
+- A voz (pergunta 17), o livro-caixa (18) e o agente remoto com backup (19), cada um pelo guia
+  dele em [02-ferramentas.md](02-ferramentas.md).
 - No ritual de abrir o dia, a seção de cobranças do Asaas (modelo no guia do Asaas em
   [02-ferramentas.md](02-ferramentas.md)), só se o Asaas estiver ligado.
 - No roteador raiz (`CLAUDE.md` do OS), a linha de cada ferramenta ligada na regra de fonte da

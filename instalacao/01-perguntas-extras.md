@@ -73,5 +73,27 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
     follow-ups e pendências de ontem. Em que dias e horário (antes do horário sagrado de abrir o
     dia, do bloco 3).
 
+## Rodada 7: voz, livro-caixa e agente remoto (opcionais)
+
+17. **Quer conversar com o segundo cérebro falando?** Botão 🎙 no painel (tecla V), modo mãos
+    livres no terminal com palavra de ativação ("Oi, {nome}") e respostas lidas em voz alta.
+    Só consulta: a voz não cria, edita nem envia nada.
+    - Precisa de **Mac com chip Apple** (a transcrição roda no próprio Mac, o áudio não sai dele).
+      Em Windows ou Mac Intel, a voz fica `a-definir`.
+    - Qual o **nome da assistente** e a **palavra de ativação**? Como ela chama o dono?
+    - Voz: a do macOS (grátis, local) ou a **ElevenLabs** (mais natural, paga, o texto falado vai
+      para a ElevenLabs)?
+18. **Quer um livro-caixa do dia a dia?** Despesas e recebimentos num CSV local (abre no Numbers e
+    no Excel), lançados pelo Claude com o seu ok, e a tecla **L** do painel com entradas, saídas e
+    saldo do mês. Não substitui contador nem o sistema de cobrança.
+19. **Você usa (ou quer usar) um agente fora do computador**, por exemplo no Telegram, num
+    servidor? Se sim:
+    - O segundo cérebro passa a ter **backup automático num repositório privado** (GitHub), que é
+      por onde o agente lê e grava.
+    - O agente pode receber a **agenda do dia**, anotar **despesas, recebimentos e pedidos de
+      cobrança** e pedidos de proposta, sempre no inbox, para o dono aprovar no ritual da manhã.
+    - Explique antes: o que vai para o repositório fica fora do computador. Clientes e decisões
+      vão; livro-caixa, PDFs, contratos e chaves não vão.
+
 > Fecho do bloco: liste as ferramentas em três grupos, **liga hoje**, **fica sugerida** e
 > **fica fora**, e confirme com o cliente. Essa lista entra no diagnóstico.
