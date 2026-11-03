@@ -119,12 +119,21 @@ def avisar_reserva(erro: Exception) -> None:
 
 def checar() -> None:
     """Confere a voz de reserva, a que tem de funcionar sempre."""
+    global VOZ_MAC
     if VOZ_MAC:
         vozes = subprocess.run(["say", "-v", "?"], capture_output=True, text=True).stdout
-        if not any(linha.startswith(VOZ_MAC + " ") for linha in vozes.splitlines()):
-            sys.exit(f"Voz {VOZ_MAC} não instalada. Baixe em Ajustes do Sistema > Acessibilidade > "
-                     "Conteúdo Falado > Voz do Sistema > Gerenciar Vozes.")
-        return
+        instalada = lambda v: any(linha.startswith(v + " ") for linha in vozes.splitlines())
+        if instalada(VOZ_MAC):
+            return
+        # Sem a versão Enhanced (Mac novo), usa a comum, que vem com o macOS, em vez de calar tudo
+        comum = VOZ_MAC.split(" (")[0]
+        if comum != VOZ_MAC and instalada(comum):
+            print(f"(Voz {VOZ_MAC} não instalada; a reserva usa {comum}. Para a melhor, baixe em Ajustes do "
+                  "Sistema > Acessibilidade > Conteúdo Falado > Voz do Sistema > Gerenciar Vozes.)", file=sys.stderr)
+            VOZ_MAC = comum
+            return
+        sys.exit(f"Voz {VOZ_MAC} não instalada. Baixe em Ajustes do Sistema > Acessibilidade > "
+                 "Conteúdo Falado > Voz do Sistema > Gerenciar Vozes.")
     faltando = [str(p) for p in (PIPER, VOZ, VOZ.with_suffix(".onnx.json")) if not p.exists()]
     if faltando:
         sys.exit("Piper incompleto, falta: " + ", ".join(faltando))
