@@ -1,18 +1,22 @@
 ---
-description: Guarda no OS o que foi dito e combinado numa reunião gravada no tl;dv
+description: Guarda no OS o que foi dito e combinado numa reunião gravada ({{GRAVADOR}})
 argument-hint: "[empresa, link da reunião ou transcrição]"
 ---
 
 <!-- MODELO DO KIT. Ao instalar, troque cada {{...}} e apague este comentário.
-     {{FONTE}}: de onde a reunião chega (transcrição colada no chat, página do Notion da
-     integração do tl;dv, ou link). {{AREA_CLIENTES}}: pasta de clientes do OS.
-     {{PROSPECTS}}: onde ficam os prospects (pasta ou subpasta). -->
+     {{GRAVADOR}}: o gravador de reuniões do cliente (tl;dv, Granola ou outro).
+     {{FONTE}}: de onde a reunião chega (transcrição colada no chat, um banco de reuniões no
+     Notion alimentado pelo gravador, ou link). {{AREA_CLIENTES}}: pasta de clientes do OS.
+     {{PROSPECTS}}: onde ficam os prospects (pasta ou subpasta).
+     Se a fonte NÃO for um banco no Notion com coluna Status, apague as linhas marcadas (banco). -->
 
-Guarde no OS os detalhes de uma reunião gravada no tl;dv.
+Guarde no OS os detalhes de uma reunião gravada no {{GRAVADOR}}.
 Pedido: $ARGUMENTS
 
 ## 1. Achar a reunião
 - Fonte deste OS: {{FONTE}}.
+- (banco) No banco de reuniões, as que faltam guardar estão com Status **Nova**. Sem argumento,
+  liste essas e pergunte qual guardar.
 - Se o pedido não trouxer a reunião, peça a transcrição ou o link. Nunca invente reunião.
 - **Já está no OS?** Procure o link ou o id da reunião dentro de `{{AREA_CLIENTES}}/` com
   `grep -rl`. Achou: diga onde está e pergunte se é para atualizar.
@@ -20,8 +24,10 @@ Pedido: $ARGUMENTS
 ## 2. Ler
 - Leia a reunião inteira: data, duração, participantes, o que foi dito, o que foi combinado,
   próximos passos.
-- Plano gratuito do tl;dv: a gravação é arquivada em 2 dias. Se a transcrição não abrir, diga isso
-  e peça o texto.
+- Guarde o link da gravação que a fonte citar. Não abra o gravador se a fonte já traz o texto.
+- Se o gravador for o tl;dv no plano gratuito, a gravação é arquivada em 2 dias. Se a transcrição
+  não abrir, diga isso e peça o texto.
+- Reunião interna, de conteúdo ou sem cliente pode não ter o que guardar: diga isso e não crie nota.
 
 ## 3. Decidir onde guarda
 Liste as pastas de `{{AREA_CLIENTES}}/` (do filesystem, nunca de memória).
@@ -32,7 +38,7 @@ Liste as pastas de `{{AREA_CLIENTES}}/` (do filesystem, nunca de memória).
   nada.
 
 ## 4. Como escrever
-- Fonte no topo: data, duração, "gravada no tl;dv" e o link.
+- Fonte no topo: data, duração, "gravada no {{GRAVADOR}}" e o link.
 - Separe **o que o cliente disse** (com o minuto, ex.: "(06:35)") da **leitura de quem conduziu,
   não confirmada**.
 - Números, datas, valores e nomes exatamente como foram ditos. O que não foi dito fica
@@ -45,5 +51,7 @@ Liste as pastas de `{{AREA_CLIENTES}}/` (do filesystem, nunca de memória).
   `*(preencher)*`.
 
 ## Regras
+- (banco) Só leitura no Notion, com uma exceção: depois de guardar, mude o **Status** da reunião
+  para **No OS** (ou **Arquivada**, se não havia o que guardar). Não edite nem comente a página.
 - Nada sai para o cliente da reunião. Enviar resumo, proposta ou orçamento é outro passo, com
   rascunho e "pode mandar".

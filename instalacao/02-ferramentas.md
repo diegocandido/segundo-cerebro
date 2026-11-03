@@ -184,7 +184,7 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
     [--marcar conta] [--titulo nome] [--confirmo] [--repetir]`: sem `--confirmo` só mostra a
     prévia; `--colaborador` convida outra conta como coautora (ela aceita no app); `--marcar`
     marca a conta no slide 01; `--repetir` deixa sair de novo uma legenda que já consta no histórico.
-- **Histórico:** cada post publicado entra em `Social/publicados-instagram.jsonl` do segundo
+- **Histórico:** cada post publicado entra em `Social/instagram/publicados-instagram.jsonl` do segundo
   cérebro, com data, conta, link e uma assinatura da legenda. Se a área de redes sociais do cliente
   tiver outro nome, o arquivo continua nesse caminho; cite-o no índice da área.
 - **No painel:** `live` depois do `status` passar, com o item `app:instagram` do

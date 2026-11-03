@@ -23,7 +23,7 @@ Publicação só com --confirmo, e só depois do "pode postar" do dono para AQUE
 As imagens precisam ser JPEG em link público (a API busca a imagem pelo endereço), de 2 a 20.
 --colaborador manda o convite de colaboração (aceito no app da outra conta); --marcar marca a conta
 no primeiro slide. O script só publica: não apaga, não edita e não responde comentário.
-Cada publicação entra em Social/publicados-instagram.jsonl; a mesma legenda não sai duas vezes sem --repetir.
+Cada publicação entra em Social/instagram/publicados-instagram.jsonl; a mesma legenda não sai duas vezes sem --repetir.
 """
 import argparse
 import json
@@ -35,7 +35,7 @@ import urllib.request
 from pathlib import Path
 
 ENV = Path.home() / ".instagram.env"
-HISTORICO = Path(__file__).resolve().parent.parent / "Social" / "publicados-instagram.jsonl"
+HISTORICO = Path(__file__).resolve().parent.parent / "Social" / "instagram" / "publicados-instagram.jsonl"
 BASE = "https://graph.facebook.com"
 VERSAO = "v25.0"
 LIMITE_LEGENDA, LIMITE_HASHTAGS, LIMITE_MENCOES = 2200, 30, 20

@@ -15,14 +15,16 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
 3. **O painel fica em qual computador?** É o mesmo onde o Claude Code roda e onde o segundo
    cérebro mora. O painel só abre nessa máquina (endereço local).
 
-## Rodada 2: reuniões (tl;dv)
+## Rodada 2: reuniões (gravador)
 
 4. **Você grava as reuniões com clientes?** Com o quê?
    - Se não grava: sugira o **tl;dv** (grava Google Meet, Zoom e Teams, transcreve em português e
-     resume). Avise do plano gratuito: a gravação é arquivada em 2 dias, então a reunião precisa
-     entrar no OS antes disso.
+     resume) ou o **Granola** (grava pelo computador, sem robô entrando na chamada). Avise do plano
+     gratuito do tl;dv: a gravação é arquivada em 2 dias, então a reunião precisa entrar no OS
+     antes disso. O nome do gravador entra no `{{GRAVADOR}}` do `/reuniao`.
 5. **Depois da reunião, para onde vai o que foi combinado hoje?** Isso define a fonte do
-   `/reuniao`: transcrição colada no chat, exportação do tl;dv para o Notion, ou o link.
+   `/reuniao`: transcrição colada no chat, um banco de reuniões no Notion alimentado pelo gravador
+   (com a coluna Status: Nova, No OS, Arquivada), ou o link.
 6. **Que tipo de reunião importa guardar?** Venda, cliente ativo, interna. Define onde a nota cai
    no OS (prospect, cliente, decisão).
 
