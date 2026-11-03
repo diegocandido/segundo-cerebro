@@ -1,0 +1,63 @@
+<!-- MODELO DO KIT: textos para ligar a publicação no Instagram (API oficial da Meta) no segundo cérebro do cliente.
+     Use as partes que o diagnóstico aprovou, troque cada {{...}} e apague estes comentários.
+     {{DONO}}: nome do cliente. {{CONTA}}: usuário do Instagram que publica, sem @.
+     {{PAGINA}}: Página do Facebook ligada à conta. {{APP}}: nome do app na Meta.
+     {{HOSPEDAGEM}}: onde as imagens ficam públicas (ex.: "o site da empresa", "a Vercel").
+     {{AREA_SOCIAL}}: pasta de redes sociais do OS (ex.: Social, Marketing).
+     Nada de travessão nos textos gerados. -->
+
+## 1. Roteador raiz (CLAUDE.md do OS), na regra de fonte da verdade
+
+**Instagram:** o @{{CONTA}} publica pelo `python3 bin/instagram.py` (API oficial da Meta, token da
+Página em `~/.instagram.env`). Carrossel só sai com `--confirmo`, depois do "pode postar" de
+{{DONO}} para aquele post; sem `--confirmo` o script só mostra a prévia. Cada post publicado entra
+em `Social/publicados-instagram.jsonl` ([decisão](memory/decisoes/{{DATA}}-instagram-ligado-ao-os.md)).
+
+## 2. Nota da área de redes sociais: {{AREA_SOCIAL}}/instagram-publicacao.md
+<!-- Crie com: python3 bin/brain.py nota --pasta {{AREA_SOCIAL}} --tipo memoria ... --corpo - -->
+
+# Publicação no Instagram pelo OS
+
+## Passo a passo
+1. **Slides em JPEG.** De 2 a 20 imagens, no formato do primeiro slide (1080×1350 no carrossel),
+   até 8 MB cada.
+2. **Hospedar.** As imagens sobem para {{HOSPEDAGEM}}, num link https público. Só com o ok de
+   {{DONO}}, porque é publicação.
+3. **Legenda.** Num arquivo de texto: até 2.200 caracteres, 30 hashtags e 20 menções.
+4. **Prévia.** `python3 bin/instagram.py publicar --imagens <links> --legenda-arquivo <legenda.txt>`
+   confere imagens e legenda e mostra o post. Não publica nada.
+5. **Publicar.** O mesmo comando com `--confirmo`, depois do "pode postar".
+6. **Agendado?** A API não agenda. No "pode postar" para outro dia, o Claude cria uma tarefa de uma
+   vez só que roda o passo 5 no dia e horário combinados.
+
+## Credencial
+Conta @{{CONTA}}, ligada à Página "{{PAGINA}}", pelo app "{{APP}}". O token gravado é o da Página e
+não vence. Se a API recusar o token, gere um novo token de usuário estendido e rode
+`python3 bin/instagram.py gravar-token --conta {{CONTA}}` no terminal. O token nunca vai para o chat.
+
+## 3. Decisão: memory/decisoes/{{DATA}}-instagram-ligado-ao-os.md
+<!-- Crie com: python3 bin/brain.py nota --pasta memory/decisoes --tipo decisao --datado ... --corpo - -->
+
+**Data:** {{DATA}} · **Frente:** memory
+
+### Contexto
+{{DONO}} publica no Instagram (@{{CONTA}}) e montar e subir cada carrossel à mão toma tempo. A conta
+foi ligada à API oficial da Meta em {{DATA}}, pelo app "{{APP}}", e o `bin/instagram.py` foi testado:
+status (conta, token que não vence, cota) e prévia de um carrossel.
+
+### Alternativas consideradas
+- **A, publicar à mão no app:** o OS entrega os slides e a legenda prontos.
+- **B, ferramenta de agendamento (Meta Business Suite e similares):** agenda sozinha, mas fica fora
+  do OS e sem histórico nele.
+- **C, API oficial pelo `bin/instagram.py`:** o OS publica depois do "pode postar" e guarda o que saiu.
+
+### Decisão
+**C**, com estas travas:
+- **Publicação só com `--confirmo`**, depois do "pode postar" para aquele post.
+- **O script só publica:** não apaga, não edita, não responde comentário nem manda direct.
+- **Sem repetição:** a mesma legenda não sai duas vezes sem `--repetir`.
+- **Credencial:** só o token da Página, em `~/.instagram.env`, com permissão só do usuário.
+
+### O que faria mudar de ideia
+A Meta exigir revisão do app para publicar, necessidade de agendar em volume, ou de responder
+comentários e directs (outra ferramenta, outra decisão).

@@ -60,6 +60,17 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
 13b. **Se o WhatsApp entrar: a proposta sai pelo seu número?** O OS pode mandar o PDF da proposta
     com a mensagem, pelo WhatsApp dele, sempre com prévia e "pode mandar", e registrar o envio no
     estado do cliente. Contrato continua no canal de assinatura (PandaDoc, e-mail ou o que ele usa).
+13c. **Quer que o OS publique no seu Instagram?** Carrossel pronto, publicado pela API oficial
+    da Meta só depois do seu "pode postar" para aquele post. Para ligar: conta profissional e
+    pública, ligada a uma Página do Facebook, e um app na Meta (o guia em
+    [02-ferramentas.md](02-ferramentas.md) mostra os cliques). As imagens precisam ficar num link
+    público. Sem a Página ou sem o app, fica `sugerido`, com o que falta registrado.
+13d. **Quer que o OS monte as imagens dos seus posts no seu padrão visual?** O card de mapa
+    (um tema no centro e 8 pontos em volta, 1080x1350) serve para LinkedIn e Instagram. **Peça um
+    exemplo:** uma ou duas imagens de post que ele já usa ou gosta, o logo e, se souber, as cores e a
+    fonte da marca. Pergunte também onde ele quer ver as peças prontas, todas juntas (um canvas de
+    design, uma pasta). Sem exemplo, fica `a definir`, com o modelo como está. Guia em
+    [templates/card-mapa-no-os.md.tmpl](templates/card-mapa-no-os.md.tmpl).
 14. **Como você monta um orçamento ou proposta hoje?** Modelo no Word, Canva, PDF, sistema.
     Quanto tempo leva. Quem aprova o preço.
     - Se é manual e repetitivo: sugira o **PandaDoc** (modelo com campos, preenchido

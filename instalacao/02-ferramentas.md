@@ -128,6 +128,70 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
 
 ---
 
+## Instagram (API oficial da Meta)
+
+- **O que resolve:** o OS publica carrossel no Instagram do cliente pela API oficial, depois do
+  "pode postar" dele para aquele post, e guarda o histórico do que saiu, para a mesma legenda não
+  sair duas vezes.
+- **O que NÃO faz neste kit:** agendar sozinho (a API não agenda; o agendamento é uma tarefa do
+  Claude que roda o comando no dia), apagar, editar, responder comentário ou mandar direct.
+  Publicar sem o "pode postar" também não.
+- **Antes, com o cliente (resposta 13c do bloco 5):**
+  - A conta do Instagram é **profissional** (Criador ou Empresa) e **pública**? No app: Configurações
+    > Tipo de conta.
+  - Ela está **ligada a uma Página do Facebook**? No app: Central de Contas, ou nas configurações da
+    Página. Sem Página, ligue primeiro; sem isso a API não alcança a conta.
+  - Ele tem (ou pode criar) um **app na Meta**, em developers.facebook.com? Se já usa uma ferramenta
+    de atendimento com app próprio na Meta, esse app costuma servir, se tiver a permissão de
+    publicar aprovada.
+- **Ligar (o cliente faz os cliques e cola o token; o Claude não cria conta nem digita token):**
+  1. **App.** Em [developers.facebook.com/apps](https://developers.facebook.com/apps), **Criar app**,
+     caso de uso **Outro**, tipo **Empresa**, ligado ao portfólio empresarial do cliente. Nome
+     sugerido: "OS" e o nome da empresa. Com o app em modo de desenvolvimento, quem administra o app
+     publica nas contas dele sem passar por revisão da Meta.
+  2. **Token de usuário.** Em [developers.facebook.com/tools/explorer](https://developers.facebook.com/tools/explorer/),
+     escolha o app, "Token do usuário", e marque as permissões `instagram_basic`,
+     `instagram_content_publish`, `pages_show_list` e `pages_read_engagement`. **Generate Access
+     Token** e marque a Página ligada ao Instagram.
+  3. **Estender.** Ícone ⓘ ao lado do token > **Abrir na Ferramenta de Token de Acesso** >
+     **Estender token de acesso**. Copie o token estendido. **Nunca cole no chat.**
+  4. **Script no OS:** copie [scripts/instagram.py](scripts/instagram.py) para `bin/instagram.py`
+     do segundo cérebro.
+  5. **Gravar, pelo terminal** (numa aba de terminal, não pelo "!"):
+     `python3 bin/instagram.py gravar-token --conta <usuario.do.instagram>`, e o cliente cola o
+     token. Ele não aparece na tela. O script troca pelo **token da Página**, que não vence, grava em
+     `~/.instagram.env` só com permissão do usuário e descarta o token colado. Sem `--conta`, só
+     grava se o token alcançar uma conta só; se alcançar várias, lista e pede para escolher.
+     Se o cliente já tem um token de Página guardado, o mesmo comando aceita ele direto.
+  6. **Regras e decisão no OS:** use [templates/instagram-no-os.md.tmpl](templates/instagram-no-os.md.tmpl):
+     o trecho do roteador raiz, a decisão e o passo a passo de publicação.
+- **Testar, com o cliente olhando:**
+  1. `python3 bin/instagram.py status`: a conta certa, "Token: não vence" e a cota do dia.
+  2. Prévia sem publicar: `publicar --imagens <2 links https de JPEG> --legenda-arquivo legenda.txt`.
+     Ela confere se as imagens abrem, se são JPEG e se a legenda cabe, e não publica nada.
+  3. Publicar de verdade só se o cliente quiser um post de teste agora, com `--confirmo`, depois do
+     "pode postar". Ele confere no app e apaga, se quiser, pelo próprio Instagram.
+- **O que a API exige:** imagens **só em JPEG**, até 8 MB, em **link público https** (a Meta busca
+  a imagem pelo endereço; arquivo no computador não serve). De 2 a 20 slides, no formato do
+  primeiro (carrossel do Instagram costuma ser 1080×1350). Legenda de até 2.200 caracteres, 30
+  hashtags e 20 menções. Até 3 colaboradores por post e 100 posts pela API em 24 horas.
+- **Onde hospedar as imagens:** qualquer endereço público que o cliente já tenha (site, Vercel,
+  Netlify, armazenamento em nuvem com link público). Subir imagem é publicação: só com o ok dele.
+- **Comandos do script:**
+  - `gravar-token [--conta usuario]`: grava o token, escondido.
+  - `status`: conta, validade do token e cota do dia.
+  - `publicar --imagens URL1 URL2 ... --legenda-arquivo legenda.txt [--colaborador conta]
+    [--marcar conta] [--titulo nome] [--confirmo] [--repetir]`: sem `--confirmo` só mostra a
+    prévia; `--colaborador` convida outra conta como coautora (ela aceita no app); `--marcar`
+    marca a conta no slide 01; `--repetir` deixa sair de novo uma legenda que já consta no histórico.
+- **Histórico:** cada post publicado entra em `Social/publicados-instagram.jsonl` do segundo
+  cérebro, com data, conta, link e uma assinatura da legenda. Se a área de redes sociais do cliente
+  tiver outro nome, o arquivo continua nesse caminho; cite-o no índice da área.
+- **No painel:** `live` depois do `status` passar, com o item `app:instagram` do
+  `config/apps.json.example`.
+
+---
+
 ## PandaDoc (orçamentos automatizados)
 
 - **O que resolve:** orçamento ou proposta montada a partir de um modelo com campos (cliente,

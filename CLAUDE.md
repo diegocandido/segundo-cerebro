@@ -21,7 +21,7 @@ Quando a pessoa disser "instalar", "começar", "montar o OS" ou parecida, siga o
 1. **Entrevista antes de tudo.** Nada é criado, nem o segundo cérebro nem o painel, antes do
    diagnóstico aprovado pelo cliente. As perguntas extras do kit entram **dentro** da entrevista
    do os-builder, como o último bloco.
-2. **Ferramenta sugerida não é ferramenta adotada.** tl;dv, Asaas, PandaDoc e o WhatsApp pelo
+2. **Ferramenta sugerida não é ferramenta adotada.** tl;dv, Asaas, PandaDoc, o Instagram pela API da Meta e o WhatsApp pelo
    Uazapi são sugestões do Cara da IA. Só entram como `live` no painel as que o cliente usa ou
    decidiu adotar e que foram testadas. As outras ficam `sugerido` ou `a-definir`, ou saem.
 3. **Chave nunca passa pelo chat.** Nenhuma chave de API é pedida, colada ou exibida na conversa.

@@ -170,6 +170,43 @@
       }
     },
     {
+      "id": "app:instagram",
+      "label": "Instagram",
+      "kind": "cli",
+      "access": "claude",
+      "status": "sugerido",
+      "desc": "Publica carrossel com confirmação (API oficial da Meta)",
+      "links": [],
+      "iconSlug": "instagram",
+      "detalhes": {
+        "papel": "Onde o cliente publica conteúdo. O OS publica o carrossel aprovado pela API oficial da Meta e guarda o histórico do que saiu.",
+        "acesso": "Publica só com --confirmo, depois do \"pode postar\"",
+        "conexao": "Script bin/instagram.py do segundo cérebro, com o token da Página ligada à conta",
+        "chave": "~/.instagram.env",
+        "usadoPor": [
+          "Pedidos no chat: \"pode postar o carrossel de segunda\"",
+          "Histórico em Social/publicados-instagram.jsonl"
+        ],
+        "regras": [
+          "Publicação só com --confirmo, depois do \"pode postar\" para aquele post.",
+          "Não apaga, não edita, não responde comentário nem manda direct.",
+          "Imagens em JPEG num link público; subir as imagens também é publicação e pede o ok do cliente.",
+          "O token nunca vai para o chat: é colado no terminal, no gravar-token."
+        ],
+        "notas": [],
+        "links": [
+          {
+            "label": "Abrir o Instagram",
+            "url": "https://www.instagram.com"
+          },
+          {
+            "label": "Apps na Meta",
+            "url": "https://developers.facebook.com/apps"
+          }
+        ]
+      }
+    },
+    {
       "id": "app:pandadoc",
       "label": "PandaDoc",
       "kind": "api",

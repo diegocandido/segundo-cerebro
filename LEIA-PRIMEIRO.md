@@ -30,6 +30,8 @@ O segundo cérebro e o painel são criados **fora** da pasta do kit, no lugar qu
 | tl;dv | Gravar e transcrever reuniões; o comando `/reuniao` guarda no OS o que foi combinado | Sugerida na entrevista; ligada se o cliente adotar |
 | Asaas | Cobrar por Pix, boleto ou cartão; tecla C e botão Nova cobrança no painel | Sugerido; começa sempre no sandbox |
 | WhatsApp (Uazapi) | Ler conversas e mandar mensagem com confirmação, pelo `bin/whatsapp.py` | Sugerido; só liga se o cliente aceitar o risco de bloqueio (API não oficial) |
+| Instagram (API oficial da Meta) | Publicar carrossel depois do "pode postar", pelo `bin/instagram.py` | Sugerido; precisa de conta profissional ligada a Página do Facebook e de um app na Meta |
+| Padrão visual das peças | Imagens de post (card de mapa, 1080x1350) no visual do cliente, a partir de um exemplo que ele manda na entrevista | Opcional, pergunta 13d; sem exemplo fica a definir |
 | PandaDoc | Orçamentos e propostas automatizados a partir de modelo | Sugerido; o comando de orçamento ainda não vem pronto |
 | Voz (Whisper local + ElevenLabs ou voz do macOS) | Perguntar ao OS falando, pelo botão 🎙 do painel ou mãos livres | Opcional; só Mac com chip Apple |
 | Livro-caixa | Despesas e recebimentos do dia a dia, tecla L no painel | Opcional; CSV local, fora do segundo cérebro |
@@ -46,10 +48,11 @@ Kit-OS-Cara-da-IA/
 │   ├── 01-perguntas-extras.md  bloco 5 da entrevista: painel e ferramentas
 │   ├── 02-ferramentas.md   guia de cada ferramenta (ligar, testar, como fica no painel)
 │   ├── 03-painel.md        como copiar, configurar e subir o painel
-│   ├── scripts/            whatsapp.py (Uazapi), voz (conversar, falar, ouvir, falar_resposta,
+│   ├── scripts/            whatsapp.py (Uazapi), instagram.py (Meta), voz (conversar, falar, ouvir, falar_resposta,
 │   │                       assistente.json.example), livro_caixa.py e sync-github.sh
 │   ├── comandos/reuniao.md.tmpl
-│   └── templates/          rotina Morning Brief, seção do painel no COMO-USAR, o WhatsApp no OS
+│   └── templates/          rotina Morning Brief, seção do painel no COMO-USAR, o WhatsApp e o Instagram no OS,
+│                           card de mapa no padrão visual do cliente (card-mapa.html)
 │                           e as instruções do agente remoto
 ├── os-builder/             a skill que entrevista e constrói o segundo cérebro
 └── painel/                 o painel (Node, sem dependências), sem dados de nenhum cliente

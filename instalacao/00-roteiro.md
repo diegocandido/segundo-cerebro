@@ -47,6 +47,12 @@ Acrescente, se o cliente aprovou:
 - O comando `/reuniao` a partir de [comandos/reuniao.md.tmpl](comandos/reuniao.md.tmpl).
 - O script `bin/whatsapp.py` a partir de [scripts/whatsapp.py](scripts/whatsapp.py), se o WhatsApp pelo
   Uazapi entrou.
+- O script `bin/instagram.py` a partir de [scripts/instagram.py](scripts/instagram.py), se a
+  publicação no Instagram entrou (pergunta 13c), pelo guia em [02-ferramentas.md](02-ferramentas.md).
+- O padrão visual das peças (pergunta 13d): o card de mapa a partir de
+  [templates/card-mapa.html](templates/card-mapa.html), com as cores e a fonte tiradas do exemplo
+  que o cliente mandou, pelo guia [templates/card-mapa-no-os.md.tmpl](templates/card-mapa-no-os.md.tmpl).
+  Um card de teste com tema real, aprovado por ele, vira o modelo.
 - A voz (pergunta 17), o livro-caixa (18) e o agente remoto com backup (19), cada um pelo guia
   dele em [02-ferramentas.md](02-ferramentas.md).
 - No ritual de abrir o dia, a seção de cobranças do Asaas (modelo no guia do Asaas em

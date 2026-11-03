@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Card de mapa</title>
+<!-- MODELO DO KIT: card de mapa (8 pontos em volta de um centro), 1080x1350, para LinkedIn ou Instagram.
+     O visual vem do exemplo que o cliente mandou na instalação (pergunta 13d): troque as cores em :root,
+     a fonte no <link> e em --fonte, e confira o resultado com ele antes de salvar como modelo.
+     O conteúdo de cada card: troque só o <h1> (trecho de destaque no <span>), o .sub, o .cta, o .foot e a
+     lista N no script. Cada ponto: ic (mail, form, bag, apps, clock, shop, nochat, ask), t (etiqueta, até
+     ~16 letras), c (2 frases de até ~30 letras) e no:true nos pontos da virada (os 2 últimos).
+     Guia: card-mapa-no-os.md.tmpl. Nada de travessão nos textos. -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* CORES DO CLIENTE: fundo, texto, destaque, borda dos cartões, cartão, texto secundário, brilho do centro, linhas */
+  :root{--bg:#0B1224;--ink:#FFFFFF;--or:#FF6B2C;--orl:#26314F;--card:#161E36;--sec:#A9B4C8;--glow:#173A8C;--linha:#3E4A68;--fonte:Poppins;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1350px;background:radial-gradient(circle at 50% 52%,var(--glow) 0,var(--bg) 46%);background-color:var(--bg);overflow:hidden}
+  body{font-family:var(--fonte),"Helvetica Neue",Arial,sans-serif;color:var(--ink);position:relative}
+  h1{position:absolute;top:44px;left:0;width:100%;text-align:center;font-family:var(--fonte),"Arial Black",sans-serif;font-weight:900;font-size:50px;letter-spacing:-.5px}
+  h1 span{color:var(--or)}
+  .sub{position:absolute;top:128px;left:0;width:100%;text-align:center;font-size:25px;color:var(--sec)}
+  svg.lines{position:absolute;inset:0}
+  .node{position:absolute;width:96px;height:96px;margin:-48px 0 0 -48px;border-radius:50%;background:var(--card);border:3px solid var(--or);display:flex;align-items:center;justify-content:center;box-shadow:0 0 22px rgba(255,107,44,.25)}
+  .node svg{width:50px;height:50px;stroke:var(--or);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .num{position:absolute;width:34px;height:34px;margin:-100px 0 0 -17px;border-radius:50%;background:var(--or);color:#fff;font-weight:800;font-size:19px;display:flex;align-items:center;justify-content:center}
+  .label{position:absolute;transform:translate(-50%,0);margin-top:56px;background:var(--or);color:#fff;font-weight:700;font-size:19px;padding:5px 16px;border-radius:10px;white-space:nowrap}
+  .stack{position:absolute;width:240px;margin-top:-71px;display:flex;flex-direction:column;gap:14px}
+  .stack div{background:var(--card);border:2px solid var(--orl);border-radius:12px;padding:10px 14px;font-size:19px;line-height:1.25;min-height:64px;color:var(--ink);opacity:.88;display:flex;align-items:center;box-shadow:none}
+  .stack div.no{border-color:var(--or);font-weight:600;color:#fff}
+  .cta{position:absolute;top:1206px;left:120px;width:840px;height:74px;border-radius:16px;background:var(--or);color:#fff;font-family:var(--fonte),"Arial Black",sans-serif;font-weight:800;font-size:25px;display:flex;align-items:center;justify-content:center;text-align:center;letter-spacing:.3px;white-space:nowrap}
+  .foot{position:absolute;top:1298px;left:0;width:100%;text-align:center;font-size:16px;color:var(--sec)}
+</style>
+</head>
+<body>
+<h1>O QUE UM AGENTE DE IA <span>FAZ POR VOCÊ</span></h1>
+<div class="sub">O que ele resolve sozinho e o que ainda depende da sua empresa</div>
+<svg class="lines" width="1080" height="1350" id="lines"></svg>
+<div id="map"></div>
+<div class="cta">COMENTE "PALAVRA" PARA RECEBER O MATERIAL</div>
+<div class="foot">@seuperfil · Fontes: [preencher]</div>
+<script>
+const C = {x:540, y:700};
+const I = {
+  mail:'<rect x="4" y="9" width="40" height="30" rx="4"/><path d="M5 11l19 15 19-15"/>',
+  form:'<rect x="9" y="6" width="30" height="38" rx="4"/><path d="M17 6v-2h14v2M16 18h16M16 26h16M16 34h10"/>',
+  bag:'<path d="M9 16h30l-2 26H11z"/><path d="M17 16v-4a7 7 0 0114 0v4"/>',
+  apps:'<rect x="6" y="6" width="15" height="15" rx="3"/><rect x="27" y="6" width="15" height="15" rx="3"/><rect x="6" y="27" width="15" height="15" rx="3"/><rect x="27" y="27" width="15" height="15" rx="3"/>',
+  clock:'<circle cx="24" cy="24" r="18"/><path d="M24 13v11l8 5"/>',
+  shop:'<path d="M6 18l4-10h28l4 10M6 18h36M6 18a6 6 0 0012 0 6 6 0 0012 0 6 6 0 0012 0M9 22v20h30V22M20 42V31h8v11"/>',
+  nochat:'<path d="M8 10h32v22H22l-8 7v-7H8z"/><path d="M6 42L42 6"/>',
+  ask:'<circle cx="24" cy="24" r="18"/><path d="M18.5 19a5.5 5.5 0 1110 3c-2 1.6-4.5 2.6-4.5 6M24 34v.5"/>'
+};
+const N = [
+  {x:420,y:330,ic:'mail', t:'E-mail', c:['Resume a caixa de entrada','Rascunha a resposta']},
+  {x:660,y:330,ic:'form', t:'Formulários', c:['Preenche cadastro','Confere os campos']},
+  {x:735,y:547,ic:'bag',  t:'Compras', c:['Compara orçamentos','Prepara o pedido']},
+  {x:735,y:853,ic:'apps', t:'Seus apps', c:['Lê agenda e planilhas','Permissão de ler e de escrever']},
+  {x:660,y:1070,ic:'clock',t:'Segundo plano', c:['Trabalha enquanto você atende','Avisa quando precisa de você']},
+  {x:420,y:1070,ic:'shop', t:'Para empresas', c:['Organiza a rotina do time','Ajuda a planejar a semana']},
+  {x:345,y:853,ic:'nochat',t:'O que não faz', c:['Não conhece sua empresa sozinho','Depende do que foi escrito'], no:true},
+  {x:345,y:547,ic:'ask',  t:'Pergunte antes', c:['Quem escreve o conhecimento?','Se trocar, o que eu levo?'], no:true},
+];
+const svg = document.getElementById('lines'), map = document.getElementById('map');
+let s = '';
+// explosão central
+const spikes = 26;
+let pts = [];
+for (let i = 0; i < spikes * 2; i++) {
+  const a = (Math.PI * i) / spikes, r = i % 2 ? 46 : (i % 4 ? 150 : 135);
+  pts.push((C.x + r * Math.cos(a)).toFixed(1) + ',' + (C.y + r * Math.sin(a)).toFixed(1));
+}
+N.forEach((n, i) => {
+  const right = n.x > C.x, sx = right ? 820 : 20;
+  s += `<line x1="${C.x}" y1="${C.y}" x2="${n.x}" y2="${n.y}" stroke="var(--linha)" stroke-width="2.5" stroke-dasharray="9 7"/>`;
+  s += `<path d="M${n.x} ${n.y} H${right ? sx : sx + 240}" stroke="var(--linha)" stroke-width="2.5" stroke-dasharray="9 7" fill="none"/>`;
+  map.insertAdjacentHTML('beforeend',
+    `<div class="node" style="left:${n.x}px;top:${n.y}px"><svg viewBox="0 0 48 48">${I[n.ic]}</svg></div>
+     <div class="num" style="left:${n.x}px;top:${n.y}px">${i + 1}</div>
+     <div class="label" style="left:${n.x}px;top:${n.y}px">${n.t}</div>
+     <div class="stack" style="left:${sx}px;top:${n.y}px">${n.c.map(t => `<div class="${n.no ? 'no' : ''}">${t}</div>`).join('')}</div>`);
+});
+s += `<polygon points="${pts.join(' ')}" fill="var(--or)"/>`;
+svg.innerHTML = s;
+</script>
+</body>
+</html>

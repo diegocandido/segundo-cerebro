@@ -1,0 +1,70 @@
+<!-- MODELO DO KIT: o padrão visual das peças de redes sociais do cliente e o card de mapa.
+     Entra se o cliente respondeu sim à pergunta 13d e mandou um exemplo visual.
+     Troque cada {{...}} e apague estes comentários.
+     {{DONO}}: nome do cliente. {{AREA_SOCIAL}}: pasta de redes sociais do OS (ex.: Social, Marketing).
+     {{PERFIL}}: @ do cliente. {{CTA}}: o convite padrão dele (ex.: 'COMENTE "QUERO" PARA RECEBER O GUIA').
+     {{LUGAR_DAS_PECAS}}: onde ele olha as peças prontas (ex.: um canvas de design, uma pasta do Drive).
+     {{DATA}}: data da instalação.
+     Nada de travessão nos textos gerados. -->
+
+## Como montar o padrão visual na instalação
+
+1. **Peça o exemplo** (pergunta 13d): uma ou duas imagens de post que o cliente já usa ou gosta, o
+   logo e, se ele souber, as cores e a fonte da marca. Sem exemplo, não invente uma marca: use o
+   modelo como está e registre "padrão visual a definir".
+2. **Tire do exemplo** as cores (fundo, cartão, borda, destaque, texto, texto secundário) e a fonte
+   (a do Google Fonts mais próxima, se a dele não estiver lá). Mostre ao cliente a lista antes de
+   aplicar.
+3. **Aplique no modelo:** copie [card-mapa.html](card-mapa.html) para
+   `{{AREA_SOCIAL}}/modelo-card/card-mapa.html` no OS e troque só o bloco `:root` e o `<link>` da fonte.
+4. **Gere um card de teste** com um tema real do cliente (o conteúdo vem do trabalho dele ou de uma
+   notícia com fonte), mostre e ajuste até o "aprovado". Esse passa a ser o modelo.
+5. **Grave o padrão** com a nota e a decisão abaixo.
+
+## 1. Nota: {{AREA_SOCIAL}}/card-mapa.md
+<!-- Crie com: python3 bin/brain.py nota --pasta {{AREA_SOCIAL}} --tipo memoria ... --corpo - -->
+
+# Card de mapa: o padrão visual das peças
+
+> Modelo: [modelo-card/card-mapa.html](modelo-card/card-mapa.html), aprovado por {{DONO}} em {{DATA}}.
+
+## Como é
+- **Formato:** 1080x1350, uma imagem só (LinkedIn e Instagram).
+- **Estrutura:** título com um trecho em destaque, uma linha de apoio, um centro e 8 pontos em volta,
+  cada um com ícone numerado, etiqueta curta e 2 cartões de frase curta. Embaixo, o convite
+  ({{CTA}}) e um rodapé com {{PERFIL}} e as fontes.
+- **Narrativa:** de 1 a 6 o que o tema faz (fato com fonte); 7 e 8 são a virada para o público de
+  {{DONO}}, marcados com `no:true`.
+- **Visual:** as cores e a fonte do bloco `:root` do modelo. Não mude sem {{DONO}} aprovar.
+
+## Regras
+- Etiqueta com até ~16 letras; cartão com até ~30 letras. Texto maior quebra o layout.
+- Fato sem fonte não entra. Sem logo de marca de terceiros: ícones de traço simples.
+- **Tudo de uma peça fica no mesmo lugar:** o card, o texto do post e as outras peças da mesma
+  publicação vão juntos para {{LUGAR_DAS_PECAS}}, nunca espalhados em pastas diferentes.
+
+## Passo a passo
+1. Copiar o modelo para a pasta da publicação e trocar o título, o `.sub`, o `.cta`, o `.foot` e a lista `N`.
+2. Gerar o PNG com o Chrome em modo headless (no Mac):
+   ```bash
+   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1080,1350 --virtual-time-budget=5000 --screenshot="$PWD/card.png" "file://$PWD/card.html"
+   ```
+3. Abrir o PNG e conferir: etiqueta encostando no cartão, texto quebrando, convite cabendo numa linha.
+4. Mostrar a {{DONO}}. Só depois do "aprovado" a peça vai para {{LUGAR_DAS_PECAS}}. Publicar é sempre de {{DONO}}.
+
+## 2. Decisão: memory/decisoes/{{DATA}}-padrao-visual-das-pecas.md
+<!-- Crie com: python3 bin/brain.py nota --pasta memory/decisoes --tipo decisao --datado ... --corpo - -->
+
+**Data:** {{DATA}} · **Frente:** {{AREA_SOCIAL}}
+
+### Contexto
+{{DONO}} mandou um exemplo do visual que usa nas redes. As cores e a fonte foram tiradas dele e
+aplicadas no card de mapa, aprovado com um tema real.
+
+### Decisão
+As peças de redes sociais saem do modelo `{{AREA_SOCIAL}}/modelo-card/card-mapa.html`, com o visual
+aprovado, e cada publicação fica inteira em {{LUGAR_DAS_PECAS}}.
+
+### O que faria mudar de ideia
+Uma marca nova, um formato que o card não comporta (vídeo, carrossel longo) ou resultado fraco
+registrado no acompanhamento dos posts.
