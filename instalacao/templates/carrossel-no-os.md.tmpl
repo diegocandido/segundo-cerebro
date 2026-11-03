@@ -1,0 +1,91 @@
+<!-- MODELO DO KIT: o carrossel de Instagram do cliente, no padrão visual dele.
+     Entra se o cliente respondeu sim à pergunta 13d e quer carrossel (resposta 13e).
+     Troque cada {{...}} e apague estes comentários.
+     {{DONO}}: nome do cliente. {{AREA_SOCIAL}}: pasta de redes sociais do OS (ex.: Social, Marketing).
+     {{PERFIL}}: @ do cliente. {{PALAVRA}}: a palavra que o público comenta no slide de CTA (ex.: QUERO).
+     {{OFERTA}}: o que o CTA oferece (ex.: uma conversa de 30 minutos, um guia, um orçamento).
+     {{LUGAR_DAS_PECAS}}: onde ele olha as peças prontas (ex.: um canvas de design, uma pasta do Drive).
+     {{DATA}}: data da instalação.
+     Nada de travessão nos textos gerados. -->
+
+## Como montar o carrossel na instalação
+
+1. **Use o mesmo exemplo do card de mapa** (pergunta 13d): as cores e a fonte tiradas dele valem
+   para as duas peças. Peça também a **foto** de quem assina (rosto bem iluminado; uma segunda sem
+   fundo, se tiver, para o slide de CTA), o **logo** e a **oferta** do CTA com a **palavra** que o
+   público comenta (resposta 13e). Sem exemplo, não invente uma marca: use o modelo como está e
+   registre "padrão visual a definir".
+2. **Copie o modelo** [carrossel/](carrossel/) inteiro para `{{AREA_SOCIAL}}/modelo-carrossel/` no
+   OS: `marca.css`, `slide-01.html` a `slide-05.html` e a pasta `imagens/`.
+3. **Aplique a marca:** troque só o `:root` e o `@import` da fonte em `marca.css`. Mostre a lista de
+   cores a {{DONO}} antes. Ponha a foto em `imagens/foto.jpg`, a foto sem fundo em
+   `imagens/foto-cta.png`, o logo em `imagens/logo.png` e, se houver, a imagem da oferta em
+   `imagens/oferta.png`. Imagem que não existir some sem quebrar o slide.
+4. **Assinatura e CTA:** troque "Seu Nome" e "@seuperfil" nos slides 01 a 04 por {{DONO}} e
+   {{PERFIL}}. No slide 05, troque o nome da marca, a promessa, a frase de apoio, o convite e a
+   PALAVRA do botão. O slide 05 é fixo: aprovado uma vez, sai igual em todo carrossel.
+5. **Copie o gerador** [../scripts/carrossel_jpeg.py](../scripts/carrossel_jpeg.py) para
+   `bin/carrossel_jpeg.py` do OS.
+6. **Gere um carrossel de teste** com um tema real de {{DONO}} (o conteúdo vem do trabalho dele ou de
+   uma notícia com fonte): copie a pasta do modelo para a pasta da publicação, troque os textos dos
+   slides 01 a 04 e rode `python3 bin/carrossel_jpeg.py <pasta>`. Mostre os 5 JPEGs e ajuste até o
+   "aprovado". Esse visual passa a ser o modelo.
+7. **Grave o padrão** com a nota e a decisão abaixo. Se o Instagram estiver ligado (13c), o teste
+   termina com a prévia do `bin/instagram.py publicar` sem `--confirmo`.
+
+## 1. Nota: {{AREA_SOCIAL}}/carrossel.md
+<!-- Crie com: python3 bin/brain.py nota --pasta {{AREA_SOCIAL}} --tipo memoria ... --corpo - -->
+
+# Carrossel de Instagram: modelo e passo a passo
+
+> Modelo: [modelo-carrossel/](modelo-carrossel/), aprovado por {{DONO}} em {{DATA}}. Não editar o
+> modelo para um post: copiar a pasta.
+
+## Estrutura (5 slides, 1080x1350)
+| Slide | Papel | O que leva |
+|---|---|---|
+| 01 Capa | Gancho | Imagem no topo (oficial ou de divulgação, com crédito), a assinatura com foto, nome e {{PERFIL}}, manchete em caixa alta de até ~20 palavras com 2 trechos em destaque, "DESLIZE PARA VER MAIS" e as 5 bolinhas |
+| 02 | 1. O que é | Título numerado, "ENTENDA:", a explicação na linguagem do público de {{DONO}} e, se for o caso, uma nota de transparência |
+| 03 | 2. O que mudou | Título numerado, imagem opcional (900x520, com crédito) e texto com 2 ou 3 termos em destaque |
+| 04 | 3. O ângulo de {{DONO}} | Por que isso importa para o público dele, fechando com 3 perguntas numeradas |
+| 05 CTA | Oferta | **Fixo:** {{OFERTA}}, com o botão "COMENTE {{PALAVRA}}". Todo carrossel fecha com uma cópia exata dele |
+
+## Visual
+As cores e a fonte do `:root` de `modelo-carrossel/marca.css`, as mesmas do card de mapa. Não mude
+sem {{DONO}} aprovar.
+
+## Regras
+- Manchete com até ~20 palavras; parágrafo com até ~50. Texto maior estoura o slide: confira no JPEG.
+- Fato sem fonte não entra. Imagem de terceiros só oficial ou de divulgação, sempre com crédito; sem
+  ela, uma imagem ilustrativa com o crédito "Imagem ilustrativa gerada com IA", ou o slide sem imagem.
+- **Tudo de uma peça fica no mesmo lugar:** os slides, os JPEGs e a legenda da mesma publicação vão
+  juntos para {{LUGAR_DAS_PECAS}}, nunca espalhados em pastas diferentes.
+- Nada sai sem o "pode postar" de {{DONO}} para aquele post.
+
+## Passo a passo
+1. Copiar `modelo-carrossel/` para a pasta da publicação e trocar os textos (e as imagens) dos slides
+   01 a 04. O 05 fica como está.
+2. Gerar os JPEGs: `python3 bin/carrossel_jpeg.py <pasta-da-publicação>` (saem em `<pasta>/jpeg/`).
+3. Abrir os 5 JPEGs e conferir: texto estourando, trecho em destaque certo, bolinha do slide certo.
+4. Escrever a legenda (até 2.200 caracteres) em `legenda.txt`, na mesma pasta.
+5. Mostrar a {{DONO}}. Só depois do "aprovado" a peça vai para {{LUGAR_DAS_PECAS}}. Publicar é
+   sempre com o "pode postar" dele: as imagens sobem para um link público https e saem pelo
+   `bin/instagram.py publicar ... --confirmo`, se o Instagram estiver ligado, ou ele posta pelo app.
+
+## 2. Decisão: memory/decisoes/{{DATA}}-carrossel-de-instagram.md
+<!-- Crie com: python3 bin/brain.py nota --pasta memory/decisoes --tipo decisao --datado ... --corpo - -->
+
+**Data:** {{DATA}} · **Frente:** {{AREA_SOCIAL}}
+
+### Contexto
+{{DONO}} publica carrossel no Instagram e montar cada um à mão toma tempo. O visual foi tirado do
+exemplo que ele mandou, o mesmo do card de mapa, e aprovado com um carrossel de teste de tema real.
+
+### Decisão
+Os carrosséis saem do modelo `{{AREA_SOCIAL}}/modelo-carrossel/` (5 slides, fechamento fixo com
+{{OFERTA}}), viram JPEG pelo `bin/carrossel_jpeg.py` e cada publicação fica inteira em
+{{LUGAR_DAS_PECAS}}.
+
+### O que faria mudar de ideia
+Uma marca nova, uma oferta nova no CTA, um formato que o modelo não comporta (vídeo, mais de 5
+slides com outra estrutura) ou resultado fraco registrado no acompanhamento dos posts.

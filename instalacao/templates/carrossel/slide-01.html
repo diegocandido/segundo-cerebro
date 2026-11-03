@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Slide 01 Capa</title>
+<link rel="stylesheet" href="marca.css">
+</head>
+<body>
+<!-- MODELO DO KIT, slide 01 (capa, o gancho). Troque: a imagem (imagens/capa.jpg, oficial ou de divulgação,
+     sempre com crédito; sem imagem oficial, uma ilustrativa com o crédito "Imagem ilustrativa gerada com IA"),
+     o crédito, o nome e o @ da assinatura e a manchete (até ~20 palavras, 2 trechos em <span class="d">).
+     As cores vêm de marca.css. Nada de travessão. -->
+<div class="slide">
+  <div class="img" style="height:760px;flex-shrink:0">
+    <img src="imagens/capa.jpg" alt="" style="object-position:50% 30%" onerror="this.remove()">
+    <span class="credito">Imagem: Empresa / Divulgação</span>
+    <div style="position:absolute;left:0;right:0;bottom:0;height:160px;background:linear-gradient(180deg,transparent 0%,var(--fundo) 100%)"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:22px;padding:0 40px;margin-top:-44px;position:relative">
+    <div style="flex:1;height:2px;background:var(--texto);opacity:.7"></div>
+    <div class="assina" style="gap:14px"><div class="foto" style="width:84px;height:84px;border-width:3px"><img src="imagens/foto.jpg" alt="" onerror="this.remove()"></div><div class="nome"><b style="font-size:28px">Seu Nome</b><span style="font-size:20px">@seuperfil</span></div></div>
+    <div style="flex:1;height:2px;background:var(--texto);opacity:.7"></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:18px 48px 34px;text-align:center">
+    <h1 style="margin:0;font-weight:800;font-size:60px;line-height:1.13;letter-spacing:-1px;text-transform:uppercase">Seu cliente espera <span class="d">resposta em minutos</span>. A sua empresa <span class="d">responde em horas</span>?</h1>
+    <span style="font-size:26px;font-weight:700;letter-spacing:1px">DESLIZE PARA VER MAIS →</span>
+    <div class="pontos"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+</body>
+</html>

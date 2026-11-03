@@ -175,6 +175,8 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
   a imagem pelo endereço; arquivo no computador não serve). De 2 a 20 slides, no formato do
   primeiro (carrossel do Instagram costuma ser 1080×1350). Legenda de até 2.200 caracteres, 30
   hashtags e 20 menções. Até 3 colaboradores por post e 100 posts pela API em 24 horas.
+- **De onde vêm os slides:** do modelo de carrossel do cliente (pergunta 13e), em JPEG pelo
+  `bin/carrossel_jpeg.py`, pelo guia [templates/carrossel-no-os.md.tmpl](templates/carrossel-no-os.md.tmpl).
 - **Onde hospedar as imagens:** qualquer endereço público que o cliente já tenha (site, Vercel,
   Netlify, armazenamento em nuvem com link público). Subir imagem é publicação: só com o ok dele.
 - **Comandos do script:**

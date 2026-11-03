@@ -1,0 +1,57 @@
+/* MODELO DO KIT: a marca do carrossel de Instagram (5 slides, 1080x1350).
+   O visual vem do exemplo que o cliente mandou na instalação (pergunta 13d): troque só este :root
+   e o @import da fonte, mostre a lista de cores ao cliente antes de aplicar e confira o resultado
+   com ele. Os slides (slide-01.html a slide-05.html) não levam cor fixa: tudo sai daqui.
+   Guia: ../carrossel-no-os.md.tmpl. */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+:root {
+  --fundo: #0B1224;        /* fundo dos slides */
+  --cartao: #161E36;       /* fundo de foto, imagem e caixas */
+  --borda: #26314F;        /* borda das imagens */
+  --destaque: #FF6B2C;     /* números, trechos em destaque, botão do CTA */
+  --destaque-claro: #FFB07A; /* borda do botão do CTA */
+  --texto: #FFFFFF;
+  --sobre-destaque: #FFFFFF; /* texto em cima da cor de destaque (caixa e botão do CTA) */
+  --texto-sec: #A9B4C8;    /* notas, @ do perfil */
+  --bolinha: #3E4A68;      /* bolinha inativa da paginação */
+  --brilho: #173A8C;       /* brilho do fundo do slide de CTA */
+  --fonte: Poppins;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1080px; height: 1350px; overflow: hidden; background: var(--fundo); }
+body { font-family: var(--fonte), "Helvetica Neue", Arial, sans-serif; color: var(--texto); }
+.slide { width: 1080px; height: 1350px; background: var(--fundo); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.d { color: var(--destaque); }
+strong.d { font-weight: 700; }
+
+/* imagem sem arquivo: o cartão fica com a cor da marca, sem ícone de imagem quebrada */
+.img { background: var(--cartao); position: relative; overflow: hidden; }
+.img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.credito { position: absolute; right: 14px; top: 28px; writing-mode: vertical-rl; font-size: 15px; letter-spacing: 1px; color: #FFFFFF; opacity: .85; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+
+/* assinatura: foto redonda, nome e @ */
+.assina { display: flex; align-items: center; gap: 12px; }
+.assina .foto { width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--texto); background: var(--cartao); overflow: hidden; flex-shrink: 0; }
+.assina .foto img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; display: block; }
+.assina .nome { display: flex; flex-direction: column; line-height: 1.2; }
+.assina .nome b { font-size: 22px; font-weight: 700; }
+.assina .nome span { font-size: 17px; color: var(--texto-sec); }
+
+/* paginação: 5 bolinhas, a do slide atual em branco */
+.pontos { display: flex; justify-content: center; gap: 10px; }
+.pontos i { width: 12px; height: 12px; border-radius: 50%; background: var(--bolinha); }
+.pontos i.on { background: var(--texto); }
+
+/* slides de conteúdo (02 a 04) */
+.conteudo { padding: 56px 90px; }
+.conteudo .topo { display: flex; justify-content: flex-end; }
+.conteudo .meio { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 36px; }
+.conteudo h2 { margin: 0; font-weight: 800; font-size: 54px; line-height: 1.2; text-transform: uppercase; }
+.conteudo .rotulo { font-size: 34px; font-weight: 700; text-transform: uppercase; }
+.conteudo p { margin: 0; font-size: 35px; line-height: 1.44; }
+.conteudo p.nota { font-size: 24px; line-height: 1.4; color: var(--texto-sec); }
+.conteudo .lista { display: flex; flex-direction: column; gap: 24px; }
+.conteudo .lista p { font-size: 32px; line-height: 1.4; }
+.conteudo .lista strong { color: var(--destaque); font-weight: 800; }

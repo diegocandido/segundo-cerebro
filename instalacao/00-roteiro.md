@@ -53,6 +53,11 @@ Acrescente, se o cliente aprovou:
   [templates/card-mapa.html](templates/card-mapa.html), com as cores e a fonte tiradas do exemplo
   que o cliente mandou, pelo guia [templates/card-mapa-no-os.md.tmpl](templates/card-mapa-no-os.md.tmpl).
   Um card de teste com tema real, aprovado por ele, vira o modelo.
+- O carrossel de Instagram (pergunta 13e), no mesmo visual: o modelo de 5 slides a partir de
+  [templates/carrossel/](templates/carrossel/) e o gerador de JPEG
+  [scripts/carrossel_jpeg.py](scripts/carrossel_jpeg.py), pelo guia
+  [templates/carrossel-no-os.md.tmpl](templates/carrossel-no-os.md.tmpl). Um carrossel de teste
+  com tema real, aprovado por ele, vira o modelo; o slide de CTA, com a oferta dele, fica fixo.
 - Se ele publica em redes: o calendário editorial a partir de
   [templates/calendario-social.md.tmpl](templates/calendario-social.md.tmpl), que alimenta o card
   Social da tela Gestão.

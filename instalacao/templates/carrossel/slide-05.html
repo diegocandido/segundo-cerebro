@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Slide 05 CTA</title>
+<link rel="stylesheet" href="marca.css">
+<!-- MODELO DO KIT, slide 05 (CTA, a oferta). É o fechamento FIXO: monte uma vez na instalação com a oferta
+     e a palavra do cliente, aprove com ele e copie igual em todo carrossel. Troque: o logo
+     (imagens/logo.png) e o nome da marca, a promessa (o trecho da caixa em destaque), a frase de apoio,
+     o convite, a PALAVRA do botão, a foto (imagens/foto-cta.png, de preferência sem fundo) e a imagem da
+     oferta (imagens/oferta.png, opcional). Apague o que o cliente não tiver. Nada de travessão. -->
+<style>
+  .cta { background: radial-gradient(ellipse at 90% 8%, var(--brilho) 0%, transparent 42%), radial-gradient(ellipse at 0% 62%, var(--brilho) 0%, transparent 34%), var(--fundo); }
+  .cta .abs { position: absolute; }
+  .cta .caixa { margin-top: 10px; background: var(--destaque); border-radius: 18px; padding: 4px 20px 8px; font-size: 86px; font-weight: 900; line-height: 1; letter-spacing: -2px; white-space: nowrap; color: var(--sobre-destaque); box-shadow: 0 0 34px color-mix(in srgb, var(--destaque) 45%, transparent); }
+  .cta .botao { border-radius: 30px; background: var(--destaque); border: 3px solid var(--destaque-claro); box-shadow: 0 0 46px color-mix(in srgb, var(--destaque) 60%, transparent); display: flex; align-items: center; gap: 26px; padding: 0 30px; }
+  .cta svg { flex-shrink: 0; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+<div class="slide cta">
+  <img class="abs" src="imagens/oferta.png" alt="" style="left:452px;top:85px;width:628px;height:724px;object-fit:contain" onerror="this.remove()">
+  <img class="abs" src="imagens/foto-cta.png" alt="" style="left:-114px;top:560px;width:680px;height:840px;object-fit:cover;object-position:center top;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%);mask-image:linear-gradient(180deg,transparent 0%,#000 14%)" onerror="this.remove()">
+
+  <div class="abs" style="left:48px;top:38px;display:flex;align-items:center;gap:16px">
+    <img src="imagens/logo.png" alt="" style="width:74px;height:74px;object-fit:contain" onerror="this.remove()">
+    <span style="font-size:32px;font-weight:800;line-height:1">SUA MARCA</span>
+  </div>
+
+  <div class="abs" style="left:48px;top:136px;width:560px;display:flex;flex-direction:column;align-items:flex-start">
+    <span style="font-size:72px;font-weight:900;line-height:1;letter-spacing:-1px;padding-left:16px">RESPONDA</span>
+    <span class="caixa">5X MAIS</span>
+    <span style="margin-top:12px;font-size:50px;font-weight:900;line-height:1;letter-spacing:-1.5px;white-space:nowrap">RÁPIDO.</span>
+    <div style="margin-top:26px;width:230px;height:7px;border-radius:4px;background:var(--destaque)"></div>
+    <span style="margin-top:22px;padding-left:4px;font-size:32px;font-weight:500;line-height:1.15">Frase de apoio<br><strong class="d" style="font-weight:800">da sua oferta.</strong></span>
+  </div>
+
+  <div class="abs" style="left:562px;top:860px;width:490px;display:flex;gap:18px;align-items:flex-start">
+    <svg width="58" height="58" viewBox="0 0 24 24" stroke="var(--destaque)" stroke-width="1.8" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path></svg>
+    <div style="width:2px;align-self:stretch;background:var(--destaque);opacity:.7"></div>
+    <p style="margin:0;font-size:25px;line-height:1.34;color:var(--texto);opacity:.9;width:396px">O convite: uma conversa de <strong style="font-weight:800;opacity:1">30 minutos</strong> para ver como isso funciona na sua empresa.</p>
+  </div>
+
+  <div class="abs botao" style="left:555px;top:1057px;width:508px;height:152px">
+    <svg width="92" height="92" viewBox="0 0 24 24" stroke="var(--sobre-destaque)" stroke-width="1.8" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M8 9h8"></path><path d="M8 13h5"></path></svg>
+    <div style="display:flex;flex-direction:column;line-height:.98;font-weight:900;letter-spacing:-1px;color:var(--sobre-destaque)"><span style="font-size:54px">COMENTE</span><span style="font-size:66px">PALAVRA</span></div>
+  </div>
+
+  <div class="abs" style="left:661px;top:1239px;display:flex;align-items:center;gap:20px">
+    <svg width="56" height="56" viewBox="0 0 24 24" stroke="var(--destaque)" stroke-width="1.8" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+    <span style="font-size:29px;line-height:1.25">Eu te envio <strong style="font-weight:800">o link</strong><br>no direct <strong style="font-weight:800">(DM)</strong>.</span>
+  </div>
+</div>
+</body>
+</html>

@@ -67,12 +67,20 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
     pública, ligada a uma Página do Facebook, e um app na Meta (o guia em
     [02-ferramentas.md](02-ferramentas.md) mostra os cliques). As imagens precisam ficar num link
     público. Sem a Página ou sem o app, fica `sugerido`, com o que falta registrado.
-13d. **Quer que o OS monte as imagens dos seus posts no seu padrão visual?** O card de mapa
-    (um tema no centro e 8 pontos em volta, 1080x1350) serve para LinkedIn e Instagram. **Peça um
+13d. **Quer que o OS monte as imagens dos seus posts no seu padrão visual?** Duas peças saem do
+    mesmo visual: o card de mapa (um tema no centro e 8 pontos em volta, uma imagem só, 1080x1350,
+    para LinkedIn e Instagram) e o carrossel de Instagram (5 slides, pergunta 13e). **Peça um
     exemplo:** uma ou duas imagens de post que ele já usa ou gosta, o logo e, se souber, as cores e a
     fonte da marca. Pergunte também onde ele quer ver as peças prontas, todas juntas (um canvas de
-    design, uma pasta). Sem exemplo, fica `a definir`, com o modelo como está. Guia em
+    design, uma pasta). Sem exemplo, fica `a definir`, com os modelos como estão. Guia em
     [templates/card-mapa-no-os.md.tmpl](templates/card-mapa-no-os.md.tmpl).
+13e. **Você posta carrossel no Instagram?** O modelo tem 5 slides: capa com gancho, três de
+    conteúdo numerados e um fechamento fixo com a sua oferta. Se sim, peça: a **foto** de quem
+    assina (e uma sem fundo, se tiver, para o fechamento), o **@** que vai nos slides, a **oferta** do
+    fechamento (ex.: uma conversa de 30 minutos, um guia) e a **palavra** que o público comenta para
+    receber (ex.: QUERO). Sem foto ou sem oferta, o slide sai sem elas e fica `a definir`. Funciona
+    com ou sem a publicação pela API (13c): sem ela, ele posta os JPEGs pelo app. Guia em
+    [templates/carrossel-no-os.md.tmpl](templates/carrossel-no-os.md.tmpl).
 14. **Como você monta um orçamento ou proposta hoje?** Modelo no Word, Canva, PDF, sistema.
     Quanto tempo leva. Quem aprova o preço.
     - Se é manual e repetitivo: sugira o **PandaDoc** (modelo com campos, preenchido

@@ -1,0 +1,7 @@
+Fotos e logo do cliente, com estes nomes (a que faltar some do slide sem quebrar):
+  foto.jpg      foto de quem assina (slides 01 a 04)
+  foto-cta.png  a mesma pessoa, de preferência sem fundo (slide 05)
+  logo.png      logo da marca (slide 05)
+  oferta.png    imagem da oferta (slide 05, opcional)
+  capa.jpg      imagem da capa de cada post (slide 01)
+  conteudo.jpg  imagem do slide 03 de cada post (opcional)
