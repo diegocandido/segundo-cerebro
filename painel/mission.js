@@ -41,6 +41,7 @@ const MC_DEFAULTS = {
   clientsDir: 'clientes',
   mirrorPath: 'memory/todos.md',
   pendingHeadingPattern: 'pend[eê]ncias|pending',
+  socialCalendar: 'Social/calendario.md', // tela Gestão, card Social
 };
 function mcOpt(key) {
   const mc = cfg().missionControl || {};

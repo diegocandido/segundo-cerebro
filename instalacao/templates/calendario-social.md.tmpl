@@ -1,0 +1,32 @@
+<!-- MODELO DO KIT: o calendário editorial do cliente, lido pelo card Social da tela Gestão (tecla G).
+     Entra se o cliente publica em redes sociais (perguntas 13 e 13d). Troque cada {{...}} e apague
+     estes comentários. {{AREA_SOCIAL}}: pasta de redes do OS (ex.: Social). {{REDE_1}} e {{REDE_2}}:
+     as duas redes principais dele (ex.: LinkedIn, Instagram).
+     Se a pasta ou o nome do arquivo forem outros, aponte o painel em config/workspace.json:
+     "missionControl": { "socialCalendar": "{{AREA_SOCIAL}}/calendario.md" }.
+     O painel só lê. Os nomes das seções e a ordem das colunas não mudam, senão o card não acha.
+     Nada de travessão nos textos. -->
+---
+tipo: memoria
+area: social
+resumo: Calendário editorial e histórico do que foi publicado
+---
+
+# Calendário editorial
+
+> Atualizado pelo dono ou pelo Claude, mais recente primeiro.
+> Status que o painel destaca: "pronto para postar" e "aguardando aprovação". Linha de semana
+> passada com "a pautar" some sozinha.
+
+## Próximos posts
+| Data | {{REDE_1}} | {{REDE_2}} | Status |
+|---|---|---|---|
+| DD/MM/AAAA | *(preencher)* | *(preencher)* | a pautar |
+
+## Publicados
+| Data | Rede | Peça | Link |
+|---|---|---|---|
+| DD/MM/AAAA | {{REDE_1}} | *(o que foi publicado, em uma frase)* | [link curto](https://...) |
+
+<!-- Post apagado ou substituído: risque a peça (~~texto~~) e escreva o motivo depois. O card conta
+     esse post em "para apagar no app" até a linha sair da tabela. -->

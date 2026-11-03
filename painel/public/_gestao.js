@@ -1,7 +1,7 @@
 /* _gestao.js - tela Gestão (tecla G): os números da operação num lugar só, sem sair do painel.
 
    Um fetch em /api/gestao (só leitura). Cada card abre o detalhe embaixo, dentro da própria
-   tela: cobranças, propostas, WhatsApp (conversas e mensagens), clientes, agenda e tarefas.
+   tela: cobranças, propostas, WhatsApp (conversas e mensagens), clientes, social, agenda e tarefas.
    Nada aqui envia, cria ou altera algo: enviar e cobrar continuam com prévia e confirmação. */
 'use strict';
 (function () {
@@ -49,6 +49,10 @@
       out.push({ id: 'clientes', titulo: 'Clientes', grande: String(cl.ativos.length), sub: 'ativos · ' + cl.prospects.length + ' prospect(s)',
         alerta: velhos > 0, extra: velhos ? velhos + ' com estado velho (mais de 14 dias)' : 'estados em dia' });
     }
+    const so = d.social; // some sem o calendário do social
+    if (!falha(so)) out.push({ id: 'social', titulo: 'Social', grande: String(so.publicados30d), sub: 'post(s) publicado(s) em 30 dias',
+      alerta: so.esperando > 0 || so.paraApagar > 0,
+      extra: (so.esperando ? so.esperando + ' pronto(s) para postar · ' : '') + (so.paraApagar ? so.paraApagar + ' para apagar no app' : 'nada para apagar') });
     const b = d.brief;
     if (!falha(b)) out.push({ id: 'agenda', titulo: 'Hoje', grande: String(b.agenda.length), sub: 'compromisso(s) · ' + b.emails.length + ' e-mail(s) pedindo resposta',
       extra: b.geradoEm ? 'resumo das ' + String(b.geradoEm).slice(11, 16) : 'sem resumo da manhã ainda' });
@@ -104,6 +108,19 @@
       return grupo('Ativos <span>' + cl.ativos.length + '</span>', cl.ativos.map(c => linha(c.atualizado ? ddmm(c.atualizado) : '--', esc(c.nome) + (c.velho ? ' · <b class="gs-alerta">estado velho</b>' : ''),
           esc(c.resumo), ' data-nota="' + esc(c.nota) + '"', c.velho ? ' late' : '')).join('') || vazio('nenhum'))
         + grupo('Prospects <span>' + cl.prospects.length + '</span>', cl.prospects.map(c => linha('', esc(c.nome), esc(c.resumo), ' data-nota="' + esc(c.nota) + '"')).join('') || vazio('nenhum'));
+    }
+    if (id === 'social') {
+      const so = d.social;
+      const link = u => u ? ' · <a href="' + esc(u) + '" target="_blank" rel="noopener">abrir o post</a>' : '';
+      const fila = so.fila.map(f => linha(ddmm(f.data), esc(f.status), esc(f.linkedin) + ' · ' + esc(f.instagram),
+        ' data-nota="' + esc(so.nota) + '"', /pronto|aguardando/i.test(f.status) ? ' late' : '')).join('');
+      const pub = so.publicados.filter(p => p.ativo).map(p => linha(ddmm(p.data), esc(p.rede), esc(p.peca) + link(p.url))).join('');
+      const apagar = so.publicados.filter(p => !p.ativo).map(p => linha(ddmm(p.data), esc(p.rede) + ' · <b class="gs-alerta">apagar no app</b>',
+        esc(p.nota || p.peca) + link(p.url), '', ' late')).join('');
+      return grupo('Na fila <span>' + so.fila.length + '</span>', fila || vazio('nada esperando'))
+        + grupo('Publicados <span>' + so.publicados30d + ' em 30 dias</span>', pub || vazio('nenhum registrado ainda'))
+        + (apagar ? grupo('Para apagar no app <span>' + so.paraApagar + '</span>', apagar) : '')
+        + '<div class="mc-form-note">Lido de ' + esc(so.nota) + '. Postar continua pelo Claude, depois do seu "pode postar".</div>';
     }
     if (id === 'agenda') {
       const b = d.brief;

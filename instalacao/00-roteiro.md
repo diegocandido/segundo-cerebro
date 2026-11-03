@@ -53,6 +53,9 @@ Acrescente, se o cliente aprovou:
   [templates/card-mapa.html](templates/card-mapa.html), com as cores e a fonte tiradas do exemplo
   que o cliente mandou, pelo guia [templates/card-mapa-no-os.md.tmpl](templates/card-mapa-no-os.md.tmpl).
   Um card de teste com tema real, aprovado por ele, vira o modelo.
+- Se ele publica em redes: o calendário editorial a partir de
+  [templates/calendario-social.md.tmpl](templates/calendario-social.md.tmpl), que alimenta o card
+  Social da tela Gestão.
 - A voz (pergunta 17), o livro-caixa (18) e o agente remoto com backup (19), cada um pelo guia
   dele em [02-ferramentas.md](02-ferramentas.md).
 - No ritual de abrir o dia, a seção de cobranças do Asaas (modelo no guia do Asaas em

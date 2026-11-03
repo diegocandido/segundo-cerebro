@@ -52,7 +52,8 @@ Kit-OS-Cara-da-IA/
 │   │                       assistente.json.example), livro_caixa.py e sync-github.sh
 │   ├── comandos/reuniao.md.tmpl
 │   └── templates/          rotina Morning Brief, seção do painel no COMO-USAR, o WhatsApp e o Instagram no OS,
-│                           card de mapa no padrão visual do cliente (card-mapa.html)
+│                           card de mapa no padrão visual do cliente (card-mapa.html),
+│                           calendário editorial lido pelo card Social (calendario-social.md.tmpl)
 │                           e as instruções do agente remoto
 ├── os-builder/             a skill que entrevista e constrói o segundo cérebro
 └── painel/                 o painel (Node, sem dependências), sem dados de nenhum cliente

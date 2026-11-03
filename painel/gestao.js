@@ -6,6 +6,7 @@
      - whatsapp:  Uazapi, só GET /instance/status, POST /chat/find e POST /message/find
      - tarefas e agenda/e-mails: o que o Mission Control já guarda (state/)
      - clientes:  pastas de {vault}/Clientes e notas de Clientes/_prospects
+     - social:    tabelas do calendário editorial (missionControl.socialCalendar, padrão Social/calendario.md)
 
    Nada aqui envia, cria ou altera algo fora deste computador. */
 'use strict';
@@ -98,6 +99,36 @@ function clientes() {
   return { ativos, prospects };
 }
 
+// ---------- social: o calendário editorial (fila e publicados) ----------
+// Precisa de duas tabelas no calendário: "## Próximos posts" (Data | Rede 1 | Rede 2 | Status) e
+// "## Publicados" (Data | Rede | Peça | Link). Linha riscada (~~) em Publicados conta como post para apagar.
+function tabela(txt, titulo) {
+  const linhas = secao(txt, titulo).split(/\r?\n/).filter(l => /^\|/.test(l.trim()));
+  return linhas.slice(2).map(l => l.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim()));
+}
+const semMd = s => String(s || '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/~~/g, '').replace(/\*\(?|\)?\*/g, '').replace(/`/g, '').trim();
+const isoBr = s => { const m = String(s || '').match(/(\d{2})\/(\d{2})\/(\d{4})/); return m ? m[3] + '-' + m[2] + '-' + m[1] : ''; };
+function social() {
+  const rel = M.mcOpt('socialCalendar');
+  const txt = fs.readFileSync(path.join(ROOT, rel), 'utf8');
+  const publicados = tabela(txt, 'Publicados').map(([data, rede, peca, link]) => {
+    const url = (String(link || '').match(/\((https?:[^)\s]+)\)/) || [])[1] || '';
+    const riscado = /~~/.test(peca || '');
+    return { data: isoBr(data), rede: semMd(rede), peca: semMd(String(peca || '').split('~~').filter(Boolean)[0]),
+      nota: riscado ? semMd(String(peca).split('~~').pop()) : '', url, ativo: !riscado };
+  }).sort((a, b) => b.data.localeCompare(a.data));
+  const fila = tabela(txt, (txt.match(/^## (Próxim[^\n]*)/m) || [])[1] || 'Próximos posts').map(([data, rede1, rede2, status]) => ({
+    data: isoBr(data), linkedin: semMd(rede1), instagram: semMd(rede2), status: semMd(status),
+  })).filter(f => /pronto|aguardando/i.test(f.status) || (/pautar|rascunho|gravar/i.test(f.status) && f.data >= M.today()));
+  const ativos = publicados.filter(p => p.ativo);
+  return {
+    nota: rel, publicados, fila,
+    publicados30d: ativos.filter(p => { const d = diasDesde(p.data); return d !== null && d <= 30; }).length,
+    paraApagar: publicados.filter(p => !p.ativo).length,
+    esperando: fila.filter(f => /pronto|aguardando/i.test(f.status)).length,
+  };
+}
+
 // ---------- tarefas e Morning Brief (o que o Mission Control já tem) ----------
 function tarefas() {
   const store = M.readStore();
@@ -171,6 +202,7 @@ async function resumo() {
     cobrancas, whatsapp: wpp,
     propostas: await bloco(async () => propostas()),
     clientes: await bloco(async () => clientes()),
+    social: await bloco(async () => social()),
     tarefas: await bloco(async () => tarefas()),
     brief: await bloco(async () => brief()),
   };

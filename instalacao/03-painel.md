@@ -48,9 +48,13 @@ Confira junto com o cliente:
   encontrada".
 - Tecla **M** abre o Mission Control; tecla **C** abre as cobranças (se o Asaas estiver ligado).
 - Tecla **G** (ou o botão GESTÃO) abre a tela Gestão: cards com cobranças, propostas, WhatsApp,
-  clientes, agenda e tarefas; clicar num card abre o detalhe dentro do painel. No painel de cada
+  clientes, social, agenda e tarefas; clicar num card abre o detalhe dentro do painel. No painel de cada
   ferramenta, o botão "Abrir no painel" leva para a seção dela (campo `painel` do `apps.json`).
   Card de ferramenta que não está ligada aparece com o aviso de indisponível, e os outros seguem.
+- O card **Social** só aparece se existir o calendário editorial (`Social/calendario.md`, modelo em
+  [templates/calendario-social.md.tmpl](templates/calendario-social.md.tmpl); outro caminho vai em
+  `missionControl.socialCalendar` do `config/workspace.json`). Teste com um post na tabela Publicados:
+  o card conta os dos últimos 30 dias e abre o link.
 
 Se entraram os opcionais:
 - **Voz:** o botão 🎙 FALAR (tecla V) aparece sempre; ele só responde se o segundo cérebro tiver
