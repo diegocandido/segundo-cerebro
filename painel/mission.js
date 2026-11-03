@@ -184,7 +184,6 @@ function renderMirror(store, keepInbox) {
   L.push('tipo: recurso');
   L.push('frente: operacao');
   L.push('gerado_em: ' + nowISO());
-  L.push('relacionados: [[PAINEL-MISSION-CONTROL]]');
   L.push('---');
   L.push('');
   L.push('# To-dos');
