@@ -53,6 +53,7 @@
     if (!falha(so)) out.push({ id: 'social', titulo: 'Social', grande: String(so.publicados30d), sub: 'post(s) publicado(s) em 30 dias',
       alerta: so.esperando > 0 || so.paraApagar > 0,
       extra: (so.esperando ? so.esperando + ' pronto(s) para postar · ' : '') + (so.paraApagar ? so.paraApagar + ' para apagar no app' : 'nada para apagar') });
+    out.push({ id: 'estudio', titulo: 'Estúdio Social', grande: '✦', sub: 'carrosséis e cards em produção', extra: 'abre o quadro por etapa (tecla E)' });
     const b = d.brief;
     if (!falha(b)) out.push({ id: 'agenda', titulo: 'Hoje', grande: String(b.agenda.length), sub: 'compromisso(s) · ' + b.emails.length + ' e-mail(s) pedindo resposta',
       extra: b.geradoEm ? 'resumo das ' + String(b.geradoEm).slice(11, 16) : 'sem resumo da manhã ainda' });
@@ -175,7 +176,7 @@
       const b = el('button', 'gs-card' + (aberto === c.id ? ' on' : '') + (c.alerta ? ' alerta' : ''));
       b.innerHTML = '<div class="gs-card-t">' + esc(c.titulo) + '</div><div class="gs-card-n">' + esc(c.grande) + '</div>'
         + '<div class="gs-card-s">' + esc(c.sub) + '</div>' + (c.extra ? '<div class="gs-card-x">' + esc(c.extra) + '</div>' : '');
-      b.onclick = () => { aberto = aberto === c.id ? null : c.id; render(); };
+      b.onclick = () => { if (c.id === 'estudio') { if (window.Estudio) window.Estudio.abrir(); return; } aberto = aberto === c.id ? null : c.id; render(); };
       grid.appendChild(b);
     }
     inner.appendChild(grid);

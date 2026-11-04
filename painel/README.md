@@ -12,6 +12,9 @@ Servidor local, sem dependências, que lê a pasta de um segundo cérebro em mar
   cobrança, com prévia e confirmação.
 - **Gestão (tecla G):** os números da operação em cards (cobranças, propostas, WhatsApp, clientes,
   agenda, tarefas), com o detalhe aberto dentro do painel. Só leitura.
+- **Estúdio Social (tecla E):** as peças de rede social (carrosséis e cards) num quadro por etapa,
+  Em criação, Para aprovar, Aprovado e Publicado, com a capa, os slides, os vídeos e a legenda.
+  Relê as pastas a cada 8 segundos; também aparece como faixa no Mission Control. Só leitura.
 
 ## Rodar
 
@@ -22,7 +25,14 @@ node server.js
 Abra http://127.0.0.1:5210. Porta ocupada: `PORT=5211 node server.js`.
 
 Antes, crie os `config/*.json` a partir dos `config/*.example` (o roteiro de instalação do kit,
-`instalacao/03-painel.md`, diz o que vai em cada um).
+`instalacao/03-painel.md`, diz o que vai em cada um) e confira com:
+
+```bash
+node bin/checar.js --testar
+```
+
+Ele aponta config faltando, JSON quebrado, caminho errado do segundo cérebro e porta ocupada, e
+testa o servidor de verdade. Painel em branco quase sempre é algo que ele mostra.
 
 ## Arquivos
 
@@ -33,6 +43,11 @@ Antes, crie os `config/*.json` a partir dos `config/*.example` (o roteiro de ins
 | `mission.js`, `ingest.js` | Tarefas e pendências do diário do Mission Control |
 | `asaas.js` | Leitura das cobranças e criação de cobrança em duas etapas |
 | `gestao.js` | Os números da tela Gestão (só leitura; cada fonte falha sozinha) |
+| `estudio.js` | O Estúdio Social: lê as pastas das peças (`missionControl.carrosseisDirs`) e serve só as imagens e vídeos delas |
+| `bin/checar.js` | Confere a instalação (configs, segundo cérebro, porta) e, com `--testar`, sobe um servidor de teste e chama as rotas |
+| `bin/previa.js` | Prévia do painel com o nome do cliente, sobre o OS de demonstração do kit, para mostrar no fim da entrevista |
+| `bin/testar-asaas.js` | Confere se a chave do Asaas gravada funciona (só leitura) |
+| `public/vendor/` | d3 e marked guardados no painel, para abrir sem internet (licenças em `vendor/LEIA.txt`) |
 | `brain.js` | CLI de memória (`recall`, `store`) |
 | `bin/write-mission.js` | Grava o Morning Brief (usado pela rotina agendada) |
 | `bin/gravar-chave-asaas.sh` | Grava a chave do Asaas sem passar pelo chat |

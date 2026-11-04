@@ -1,8 +1,9 @@
 # Instalar o painel
 
 O painel é um servidor Node sem dependências que lê a pasta do segundo cérebro e mostra o grafo
-(Aplicações, Rotinas, Memória e Skills) e o Mission Control (tarefas, Morning Brief, cobranças e,
-se o cliente quis, livro-caixa e o botão de voz).
+(Aplicações, Rotinas, Memória e Skills), o Mission Control (tarefas, Morning Brief, cobranças e,
+se o cliente quis, livro-caixa e o botão de voz), a Gestão e o Estúdio Social (as peças de rede
+social por etapa).
 Ele só aceita acesso da própria máquina.
 
 ## 1. Copiar para fora do segundo cérebro
@@ -32,14 +33,39 @@ respostas da entrevista:
 | `brand.json` | Nome, subtítulo, título da aba e logo (copie o logo do cliente para `public/` e aponte aqui). |
 | `agents.json`, `access-overrides.json`, `tweaks.json` | Cópia do exemplo, sem mudança, salvo se o cliente tiver agente remoto. |
 
-## 3. Subir e mostrar
+No `workspace.json`, se o Estúdio Social entrou (pergunta 13g): `missionControl.carrosseisDirs`
+com a pasta das peças (padrão `["Social/carrosseis"]`) e `carrosseis` em `excludeDirs`.
+
+## 3. Conferir antes de subir (obrigatório)
+
+```bash
+cd ~/MeuOS-painel && node bin/checar.js --testar
+```
+
+Ele confere o Node, cada `config/*.json` (se existe e se o JSON está certo), o caminho do segundo
+cérebro, as pastas que as configs citam, o logo, a chave do Asaas e a porta; depois sobe um
+servidor de teste numa porta livre, chama o grafo, o Mission Control, a Gestão e o Estúdio e
+desliga. **Só siga com `0 erro(s)`.** Cada ERRO vem com o conserto na linha de baixo; AVISO não
+impede, mas resolva o que der antes de mostrar ao cliente.
+
+| Sintoma | Causa comum | Conserto |
+|---|---|---|
+| Grafo em branco, só os botões | `root` errado (pasta vazia, relativa ou o exemplo) | `checar.js` aponta; use o caminho absoluto do OS |
+| "Scan failed" na tela de abertura | `config/workspace.json` com erro de JSON | corrigir a vírgula que o `checar.js` mostra |
+| Ferramenta que sumiu do anel | `apps.json` com erro de JSON (o painel ignora o arquivo inteiro) | idem |
+| Página não abre | servidor desligado ou porta ocupada | `node server.js` na pasta do painel; `PORT=5211` se ocupada |
+| `localhost` não conecta | algumas máquinas | use `http://127.0.0.1:5210` |
+
+## 4. Subir e mostrar
 
 ```bash
 node ~/MeuOS-painel/server.js
 ```
 
-Abra `http://127.0.0.1:5210` (use `127.0.0.1`: em algumas máquinas `localhost` não conecta). Se a
-porta estiver ocupada: `PORT=5211 node server.js`.
+Deixe rodando numa aba de terminal (ou em segundo plano pela sessão) e abra
+`http://127.0.0.1:5210` **no navegador** (use `127.0.0.1`: em algumas máquinas `localhost` não
+conecta). Se a porta estiver ocupada: `PORT=5211 node server.js`. Olhe você mesmo antes de chamar o
+cliente: o grafo precisa estar desenhado no centro da tela e o console do navegador sem erro.
 
 Confira junto com o cliente:
 - O topo mostra o nome e o logo dele.
@@ -56,6 +82,11 @@ Confira junto com o cliente:
   `missionControl.socialCalendar` do `config/workspace.json`). Teste com um post na tabela Publicados:
   o card conta os dos últimos 30 dias e abre o link.
 
+- Tecla **E** (ou o botão ✦ ESTÚDIO) abre o Estúdio Social; o Mission Control mostra a faixa
+  "Estúdio Social" no alto. Sem nenhuma peça, ele explica onde procura. Se o carrossel de teste já
+  existe, ele aparece na coluna da etapa dele (guia em 02-ferramentas.md, "Criador de carrosséis e
+  Estúdio Social").
+
 Se entraram os opcionais:
 - **Voz:** o botão 🎙 FALAR (tecla V) aparece sempre; ele só responde se o segundo cérebro tiver
   `bin/conversar.py` e `bin/assistente.json` (guia da voz em 02-ferramentas.md). Teste digitando
@@ -66,7 +97,7 @@ Se entraram os opcionais:
   `agenteFinanceiroDir` para os lançamentos do agente remoto. Sem livro-caixa, a tela só avisa
   que não encontrou o arquivo.
 
-## 4. Deixar fácil de abrir
+## 5. Deixar fácil de abrir
 
 O servidor precisa estar rodando para o painel abrir. Ofereça ao cliente uma destas, e só faça
 com o "pode":

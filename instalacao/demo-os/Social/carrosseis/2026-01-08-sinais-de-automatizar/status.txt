@@ -1,0 +1,3 @@
+etapa: para aprovar
+data: 08/01/2026
+rede: Instagram

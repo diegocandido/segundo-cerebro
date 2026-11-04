@@ -39,6 +39,8 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
 - **O que resolve:** cobrança avulsa por Pix, boleto ou cartão, criada pelo painel com prévia e
   confirmação; visão de vencidas, a vencer e recebidas na tecla C.
 - **Ligar, sempre nesta ordem:**
+  0. **Se a fase 0 já resolveu** (conta, chave gravada e `testar-asaas.js` com `ASAAS OK`), pule
+     para o passo 3.
   1. **Sandbox.** O cliente cria a conta de teste em sandbox.asaas.com, cadastra um cliente de
      teste e gera a chave em Integrações.
   2. O cliente grava a chave **pelo terminal** (nunca no chat):
@@ -46,6 +48,7 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
      (no Windows, peça para criar o arquivo `%USERPROFILE%\.asaas-sandbox.env` com a linha
      `ASAAS_API_KEY=...` num editor de texto). O script recusa chave do ambiente errado.
      Rode o comando numa aba de terminal, não pelo "!" do chat: o `read` precisa de teclado.
+     Confira, só lendo: `node <pasta-do-painel>/bin/testar-asaas.js` (tem que sair `ASAAS OK`).
   3. Em `config/asaas.json`: `"ambiente": "sandbox"`, `valorMaximo` (resposta 9) e `formas`
      (resposta 10: `PIX`, `BOLETO`, `CREDIT_CARD`, `UNDEFINED`).
   4. **Teste no sandbox:** o cliente abre o Mission Control, clica em Nova cobrança, revisa e
@@ -230,7 +233,51 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
   Instagram por cima (o vídeo já tem a dele). O `bin/instagram.py` ainda não publica vídeo.
 - **Atualizar a skill:** não atualize sozinho. Uma versão nova do autor só entra no Kit depois de
   testada; aí muda a versão fixa no `instalar.sh`.
-- **No painel:** não tem card próprio; entra na linha do carrossel no índice da área de redes sociais.
+- **No painel:** os MP4 aparecem no Estúdio Social (tecla E), no detalhe da peça, tocando em loop.
+
+---
+
+## Criador de carrosséis e Estúdio Social (opcional, pergunta 13g)
+
+- **O que resolve:** o Claude cria o carrossel inteiro com a skill **criador-de-carrosseis-simples**
+  (do Felpborges, a mesma do carrossel vivo): estratégia, estrutura, copy slide a slide com
+  legenda, capa, design em código (PNG 1080x1350), crítica com nota e, se pedido, a versão viva.
+  O cliente acompanha tudo no **Estúdio Social** do painel: um quadro com uma coluna por etapa (Em
+  criação, Para aprovar, Aprovado, Publicado), a capa de cada peça, os slides, os vídeos e a
+  legenda. Com a tela aberta, ela relê as pastas a cada 8 segundos: a peça que o Claude está
+  fazendo aparece com o selo "fazendo agora".
+- **Ligar:**
+  1. Da pasta do Kit, numa aba de terminal: `bash instalacao/carrossel-vivo/instalar.sh` (se a 13f
+     já instalou, pule). Ele baixa a skill do autor em `~/.claude/skills/` e o motor de
+     renderização. Confira: `ls ~/.claude/skills/criador-de-carrosseis-simples/SKILL.md`.
+  2. Crie no OS a pasta das peças, `{{AREA_SOCIAL}}/carrosseis/` (o padrão do painel é
+     `Social/carrosseis`). Outra pasta vai em `config/workspace.json`, em
+     `missionControl.carrosseisDirs` (lista; aceita caminho relativo ao OS, absoluto ou com `~`).
+     Ponha `carrosseis` em `excludeDirs` para o grafo não ler os arquivos de trabalho das peças.
+  3. Na nota do carrossel do OS (`{{AREA_SOCIAL}}/carrossel.md`), acrescente a seção "Estúdio
+     Social" do guia [templates/carrossel-no-os.md.tmpl](templates/carrossel-no-os.md.tmpl): cada
+     peça é uma subpasta `AAAA-MM-DD-tema` criada com
+     `python3 ~/.claude/skills/criador-de-carrosseis-simples/scripts/novo-projeto.py {{AREA_SOCIAL}}/carrosseis/AAAA-MM-DD-tema`,
+     e a etapa fica no `status.txt` da peça.
+- **O `status.txt` de cada peça** (o Claude escreve; o painel só lê):
+  ```
+  etapa: para aprovar        (criando | para aprovar | aprovado | publicado)
+  data: 08/01/2026           dia previsto ou da publicação
+  rede: Instagram
+  link: https://...          o post publicado, quando houver
+  ```
+  Sem `status.txt`, o painel deduz: sem imagem é "Em criação", com imagem é "Para aprovar".
+  "Aprovado" e "Publicado" só aparecem quando o Claude escreve, depois do "aprovado" e do "pode
+  postar" do cliente.
+- **Testar, com o cliente olhando:** com o painel aberto na tecla E, peça um carrossel de teste com
+  tema real. A peça aparece em Em criação assim que a pasta nasce e passa para Para aprovar quando
+  os PNGs saem. Clique nela: os slides aparecem em tamanho de celular, com a legenda. Depois do
+  "aprovado", o Claude escreve `etapa: aprovado` e o cartão muda de coluna.
+- **Entende os dois formatos:** projeto da skill (`resultados/estatico/slide-NN.png`,
+  `resultados/slide-NN.mp4`) e o carrossel do modelo de 5 slides do Kit (`jpeg/`, `mp4/`). Os dois
+  aparecem no mesmo quadro.
+- **No painel:** botão ✦ ESTÚDIO e tecla **E**; faixa "Estúdio Social" no alto do Mission Control
+  com as peças em produção; card na tela Gestão. Só leitura: aprovar e postar continuam no Claude.
 
 ---
 

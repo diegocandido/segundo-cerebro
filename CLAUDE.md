@@ -14,13 +14,15 @@ Quando a pessoa disser "instalar", "começar", "montar o OS" ou parecida, siga o
 |---|---|
 | `os-builder/` | A skill que entrevista o cliente e constrói o segundo cérebro. Leia `os-builder/SKILL.md` antes de começar: é ela que manda nas fases de entrevista, diagnóstico e construção. |
 | `instalacao/` | O roteiro de instalação, as perguntas extras do kit (painel e ferramentas), o guia de cada ferramenta sugerida e os modelos de comando. |
-| `painel/` | O painel (servidor Node sem dependências). Não roda daqui: na fase 5 ele é copiado para fora do kit e configurado para o segundo cérebro do cliente. |
+| `painel/` | O painel (servidor Node sem dependências). Não roda daqui: na fase 5 ele é copiado para fora do kit e configurado para o segundo cérebro do cliente. A exceção é a prévia (`painel/bin/previa.js`), que roda numa cópia temporária sobre `instalacao/demo-os/` no fim da entrevista. |
 
 ## Regras deste kit (somam às do os-builder)
 
 1. **Entrevista antes de tudo.** Nada é criado, nem o segundo cérebro nem o painel, antes do
    diagnóstico aprovado pelo cliente. As perguntas extras do kit entram **dentro** da entrevista
-   do os-builder, como o último bloco.
+   do os-builder, como o último bloco. Não contam como criar: a chave do Asaas gravada pelo
+   cliente na fase 0 (arquivo na pasta pessoal dele, fora do OS) e a prévia do painel no fim da
+   entrevista (cópia temporária sobre o OS de demonstração, apagada ao desligar).
 2. **Ferramenta sugerida não é ferramenta adotada.** tl;dv, Asaas, PandaDoc, o Instagram pela API da Meta e o WhatsApp pelo
    Uazapi são sugestões do Cara da IA. Só entram como `live` no painel as que o cliente usa ou
    decidiu adotar e que foram testadas. As outras ficam `sugerido` ou `a-definir`, ou saem.
@@ -34,5 +36,7 @@ Quando a pessoa disser "instalar", "começar", "montar o OS" ou parecida, siga o
 6. **Nunca invente.** Campo sem resposta fica `*(preencher)*`. Vale para o segundo cérebro, para
    as configs do painel e para o painel de cada ferramenta.
 7. **Nada de travessão** (em dash) nos arquivos gerados.
-8. **Crédito do painel.** Os arquivos `painel/LICENSE` e `painel/NOTICE` vão junto na cópia, sem
+8. **Painel só é dado como pronto depois de visto.** Rode `node bin/checar.js --testar` até sair
+   0 erro e abra a página no navegador antes de dizer ao cliente que funciona.
+9. **Crédito do painel.** Os arquivos `painel/LICENSE` e `painel/NOTICE` vão junto na cópia, sem
    alteração (licença CC BY 4.0 do motor do grafo).

@@ -1,5 +1,5 @@
 {
-  "_note": "Copie para config/workspace.json. 'root' é o caminho ABSOLUTO da pasta do segundo cérebro do cliente (o mission.js resolve pelo diretório atual, então caminho relativo quebra). 'visibleRoots' são as pastas que aparecem abertas no grafo: troque CLIENTES/AREA pelos nomes das áreas que o os-builder criou. 'missionControl' aponta para o diário, a pasta de clientes, o espelho das tarefas e a pasta dos registros de proposta (que a tela Gestão conta) dentro do OS. 'livroCaixa' e 'agenteFinanceiroDir' só valem se o cliente quis o livro-caixa (tecla L).",
+  "_note": "Copie para config/workspace.json. 'root' é o caminho ABSOLUTO da pasta do segundo cérebro do cliente (o mission.js resolve pelo diretório atual, então caminho relativo quebra). 'visibleRoots' são as pastas que aparecem abertas no grafo: troque CLIENTES/AREA pelos nomes das áreas que o os-builder criou. 'missionControl' aponta para o diário, a pasta de clientes, o espelho das tarefas e a pasta dos registros de proposta (que a tela Gestão conta) dentro do OS. 'carrosseisDirs' são as pastas das peças de rede social que o Estúdio Social (tecla E) mostra, uma subpasta por peça; 'carrosseis' em excludeDirs evita que o grafo leia os arquivos de trabalho delas. 'livroCaixa' e 'agenteFinanceiroDir' só valem se o cliente quis o livro-caixa (tecla L).",
   "root": "/CAMINHO/ABSOLUTO/DO/SEGUNDO-CEREBRO",
   "memoryDir": "memory",
   "memoryIndex": "memory/memory.md",
@@ -11,7 +11,8 @@
   "sharedPrefixes": [],
   "excludeDirs": [
     ".git",
-    ".venv"
+    ".venv",
+    "carrosseis"
   ],
   "visibleRoots": [
     "",
@@ -51,6 +52,9 @@
     "clientsDir": "Clientes",
     "mirrorPath": "inbox/todos.md",
     "propostasDir": "inbox/propostas",
+    "carrosseisDirs": [
+      "Social/carrosseis"
+    ],
     "pendingHeadingPattern": "pend[eê]ncias|pending",
     "livroCaixa": "../Financeiro/livro-caixa.csv",
     "agenteFinanceiroDir": "inbox/agente/financeiro"

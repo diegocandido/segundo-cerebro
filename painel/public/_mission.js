@@ -567,6 +567,10 @@
     const bCx = el('button', 'act', 'Livro-caixa');
     bCx.title = 'entradas, saídas e saldo do mês (tecla L)';
     bCx.onclick = () => openCaixa();
+    const bEs = el('button', 'act', 'Estúdio');
+    bEs.title = 'as peças de rede social em produção, por etapa (tecla E)';
+    bEs.onclick = () => { if (window.Estudio) window.Estudio.abrir(); };
+    right.appendChild(bEs);
     right.appendChild(bCx); right.appendChild(bVer); right.appendChild(bCob); right.appendChild(bIng); right.appendChild(bRef); right.appendChild(clock);
     top.appendChild(right);
     inner.appendChild(top);
@@ -578,6 +582,9 @@
         + '<code>state/mission.json</code> ainda. Copie <code>state/mission.example.json</code> pra começar, '
         + 'ou rode a sua rotina de refresh. As tarefas abaixo funcionam normalmente.</div>'));
     }
+
+    // Estúdio Social: as peças de rede social em produção, com a capa (some se não houver o Estúdio)
+    if (window.Estudio) window.Estudio.faixa(inner);
 
     // To-do e Morning Brief, lado a lado. O to-do vem primeiro por ser o coracao.
     const cols = el('div', 'mc-cols');

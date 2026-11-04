@@ -18,6 +18,28 @@ Avise que a entrevista leva de 20 a 40 minutos e que nada é criado antes de ele
 
 Se faltar Node ou Python, diga como instalar e espere. Não instale nada sem o "pode".
 
+### Dados do Asaas, logo no início
+
+Antes da entrevista, pergunte se o cliente cobra pelo Asaas ou quer começar a cobrar por ele
+(uma linha: boleto, Pix e cartão, avulso e recorrente, e o painel mostra e cria cobrança com
+prévia). Se a resposta for sim, resolva agora o que depende dele, para a chave já estar pronta
+quando o painel for ligado:
+
+1. **Conta de teste.** Ele já tem conta no sandbox (sandbox.asaas.com)? Se não, cria agora, cadastra
+   um cliente de teste e gera a chave em Integrações. Se já usa o Asaas de verdade, a conta real
+   fica para depois: o kit sempre começa no sandbox.
+2. **Chave pelo terminal, nunca pelo chat.** Peça que ele abra uma aba de terminal na pasta do kit e
+   rode `zsh painel/bin/gravar-chave-asaas.sh sandbox` (no Windows, o arquivo
+   `%USERPROFILE%\.asaas-sandbox.env` com a linha `ASAAS_API_KEY=...`). Espere ele dizer que gravou.
+3. **Teste, só leitura:** `node painel/bin/testar-asaas.js`. Tem que sair `ASAAS OK (sandbox)` com o
+   nome da conta. Chave recusada: ele gera outra e grava de novo.
+4. **As três respostas de cobrança**, já anotadas para a config do painel: quem pode criar cobrança
+   (recomende só o dono, pelo painel), o valor máximo de uma cobrança normal e as formas aceitas
+   (Pix, Boleto, Cartão, cliente escolhe).
+
+Se ele ainda não decidiu, siga em frente: a rodada 3 do bloco 5 volta ao assunto. Na rodada 3,
+o que já foi respondido aqui só é confirmado.
+
 ## Fase 1: entrevista (os-builder + bloco do kit)
 
 Siga `os-builder/SKILL.md` e `os-builder/references/01-entrevista.md` (blocos 0 a 4). Depois do
@@ -25,7 +47,27 @@ bloco 4, rode o **bloco 5 do kit**, em [01-perguntas-extras.md](01-perguntas-ext
 painel, reuniões (tl;dv), cobrança (Asaas), WhatsApp, orçamentos (PandaDoc) e o horário do Morning
 Brief.
 
-Nada é criado nesta fase.
+Nada do cliente é criado nesta fase.
+
+### Fecho da entrevista: a prévia do painel
+
+Terminadas as perguntas, antes do diagnóstico, mostre ao cliente como o painel vai ficar. Rode,
+da pasta do kit, em segundo plano:
+
+```bash
+node painel/bin/previa.js --nome "<nome que vai no topo, resposta 1>" [--logo <PNG do cliente>]
+```
+
+Ela copia o painel para uma pasta temporária, aponta para o OS de demonstração do kit
+(`instalacao/demo-os/`, só dados de exemplo), confere tudo sozinha e só sobe se passar. Quando
+aparecer `PRÉVIA NO AR: http://127.0.0.1:<porta>`, abra o endereço no navegador (o painel do app
+do Claude ou o Chrome) e percorra com ele, em 2 minutos: o grafo, a tecla **M** (Mission Control,
+com a faixa do Estúdio Social), a **G** (Gestão) e a **E** (Estúdio Social, com o carrossel de
+exemplo). Diga que são dados de exemplo e que o painel dele vai mostrar o segundo cérebro dele.
+Se a prévia não subir, ela mostra o erro e o conserto: corrija e rode de novo; não pule para o
+diagnóstico com o painel quebrado sem dizer ao cliente.
+
+No fim, desligue a prévia (encerre o processo; ela apaga a cópia sozinha).
 
 ## Fase 2: diagnóstico
 
@@ -62,6 +104,12 @@ Acrescente, se o cliente aprovou:
   [carrossel-vivo/instalar.sh](carrossel-vivo/instalar.sh) e o script
   [scripts/carrossel_vivo.py](scripts/carrossel_vivo.py), pelo guia em
   [02-ferramentas.md](02-ferramentas.md). Os 5 MP4 do carrossel de teste, aprovados por ele, fecham o item.
+- O criador de carrosséis e o Estúdio Social (pergunta 13g): a skill
+  `criador-de-carrosseis-simples` pelo instalador
+  [carrossel-vivo/instalar.sh](carrossel-vivo/instalar.sh) (o mesmo do carrossel vivo), a pasta
+  `{{AREA_SOCIAL}}/carrosseis/` no OS, onde cada peça vira uma subpasta, e a regra do `status.txt`
+  na nota do carrossel, pelo guia "Criador de carrosséis e Estúdio Social" em
+  [02-ferramentas.md](02-ferramentas.md). É o que alimenta a tela Estúdio do painel.
 - Se ele publica em redes: o calendário editorial a partir de
   [templates/calendario-social.md.tmpl](templates/calendario-social.md.tmpl), que alimenta o card
   Social da tela Gestão.
@@ -85,8 +133,10 @@ muda o rumo e que o cliente tomou na entrevista. No mínimo:
 ## Fase 5: painel
 
 Siga [03-painel.md](03-painel.md): copiar `painel/` para fora do segundo cérebro, gerar as configs
-a partir das respostas, aplicar a marca, subir o servidor e mostrar ao cliente o grafo e o Mission
-Control funcionando.
+a partir das respostas, aplicar a marca, **rodar `node bin/checar.js --testar` até sair 0 erro**,
+subir o servidor e mostrar ao cliente, aberto no navegador, o grafo, o Mission Control, a Gestão e
+o Estúdio Social funcionando. Não diga que o painel está pronto sem ter aberto a página e visto o
+grafo desenhado.
 
 ## Fase 6: ferramentas
 
@@ -107,6 +157,11 @@ Siga a fase 4 de `os-builder/references/05-rituais.md` (popular uma entidade rea
 três perguntas de aceitação só com o OS, `doctor`, ritual de fechar o dia). Depois:
 - Acrescente ao `COMO-USAR.md` do cliente a seção do painel, a partir de
   [templates/como-usar-painel.md.tmpl](templates/como-usar-painel.md.tmpl).
+- **Termine no visual.** Suba o painel do cliente (se não estiver no ar), confira de novo com
+  `node bin/checar.js`, abra no navegador e passe com ele pelo grafo (o OS dele, com as áreas dele),
+  o Mission Control (tarefas e o Morning Brief), a Gestão e o Estúdio Social. Se ele fez o
+  carrossel de teste, ele tem que aparecer no Estúdio, na coluna certa. A sessão acaba com o
+  painel aberto e funcionando na tela dele.
 - Diga em três linhas o que fazer amanhã.
 - Liste o que ficou pendente (chave a gravar, ferramenta a decidir, produção do Asaas), cada item
   com quem faz.

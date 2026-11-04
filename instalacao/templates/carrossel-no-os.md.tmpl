@@ -79,6 +79,21 @@ FECHAM". Mostrar os 5 MP4 a {{DONO}} e esperar o "aprovado". O projeto de trabal
 em `~/.carrossel-vivo/projetos/`. Publicar os vídeos é pelo app do Instagram, na ordem, depois do
 "pode postar", sem música do Instagram por cima.
 
+## Estúdio Social (só se a pergunta 13g entrou)
+Toda peça mora numa subpasta de `{{AREA_SOCIAL}}/carrosseis/`, com o nome `AAAA-MM-DD-tema`, e é
+lá que o painel olha (tecla E). Peça nova com a skill:
+`python3 ~/.claude/skills/criador-de-carrosseis-simples/scripts/novo-projeto.py {{AREA_SOCIAL}}/carrosseis/AAAA-MM-DD-tema`.
+Peça no modelo de 5 slides: copiar `modelo-carrossel/` para a mesma pasta.
+
+A etapa fica no `status.txt` da peça, e quem escreve é o Claude, no mesmo passo em que a etapa muda:
+- ao criar a pasta: `etapa: criando`, `data:` (dia previsto) e `rede:`;
+- PNGs ou JPEGs prontos e mostrados a {{DONO}}: `etapa: para aprovar`;
+- depois do "aprovado" dele: `etapa: aprovado`;
+- depois de publicado, com o "pode postar": `etapa: publicado` e `link:` do post, e a linha em
+  Publicados no calendário editorial.
+
+O painel só lê: aprovar, pedir ajuste e postar continuam no Claude.
+
 ## 2. Decisão: memory/decisoes/{{DATA}}-carrossel-de-instagram.md
 <!-- Crie com: python3 bin/brain.py nota --pasta memory/decisoes --tipo decisao --datado ... --corpo - -->
 

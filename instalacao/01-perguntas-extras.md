@@ -30,6 +30,10 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
 
 ## Rodada 3: cobrança (Asaas)
 
+> Se o Asaas foi resolvido na fase 0 ("Dados do Asaas, logo no início", em
+> [00-roteiro.md](00-roteiro.md)), aqui só confirme as respostas 7 a 10 e siga. A chave já está
+> gravada e testada.
+
 7. **Como você cobra hoje?** Boleto, Pix, cartão, recorrência. Em que sistema.
    - Se não tem sistema ou está insatisfeito: sugira o **Asaas** (boleto, Pix e cartão, cobrança
      avulsa e recorrente, avisa o cliente sozinho). O painel mostra vencidas, a vencer e
@@ -87,6 +91,15 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
     Instagram como carrossel de vídeos. Avise antes do sim: pede uns 400 MB no computador (Node,
     ffmpeg, Python e um Chromium) e, por enquanto, a publicação dos vídeos é pelo app do Instagram,
     não pela API. Só Mac ou Linux. Guia em [02-ferramentas.md](02-ferramentas.md), "Carrossel vivo".
+13g. **Quer acompanhar as suas peças de rede social num quadro visual?** O Claude cria carrosséis
+    com a skill **criador-de-carrosseis-simples** (estratégia, copy slide a slide, design em código,
+    crítica com nota até ficar bom e, se quiser, a versão viva em vídeo) e cada peça aparece no
+    **Estúdio Social** do painel (tecla E, e uma faixa no Mission Control): a capa, os slides, os
+    vídeos e a legenda, em colunas Em criação, Para aprovar, Aprovado e Publicado, atualizando
+    enquanto o Claude trabalha. Avise antes do sim: o instalador baixa a skill do autor e o motor de
+    renderização (uns 400 MB, Mac ou Linux, o mesmo da 13f). Se ele já respondeu sim à 13f, isto vem
+    junto. Pergunte também em que pasta do OS ficam as peças (padrão `Social/carrosseis`). Guia em
+    [02-ferramentas.md](02-ferramentas.md), "Criador de carrosséis e Estúdio Social".
 14. **Como você monta um orçamento ou proposta hoje?** Modelo no Word, Canva, PDF, sistema.
     Quanto tempo leva. Quem aprova o preço.
     - Se é manual e repetitivo: sugira o **PandaDoc** (modelo com campos, preenchido
@@ -124,3 +137,7 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
 
 > Fecho do bloco: liste as ferramentas em três grupos, **liga hoje**, **fica sugerida** e
 > **fica fora**, e confirme com o cliente. Essa lista entra no diagnóstico.
+>
+> Depois do fecho, antes do diagnóstico, rode a **prévia do painel** (`node painel/bin/previa.js
+> --nome "..."`, passo "Fecho da entrevista" em [00-roteiro.md](00-roteiro.md)) e mostre ao cliente
+> o grafo, o Mission Control, a Gestão e o Estúdio Social com os dados de exemplo.

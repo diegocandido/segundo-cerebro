@@ -20,6 +20,9 @@
      GET  /api/conversar/nome   nome da assistente (bin/assistente.json)
      POST /api/conversar/nova   zera a conversa
      POST /api/conversar/parar  para a voz que esta tocando
+   Estúdio Social:
+     GET  /api/estudio          as peças de rede social e a etapa de cada uma (so leitura)
+     GET  /api/estudio/midia?id=&f=  imagem ou video de uma peca (so as midias listadas dela)
    Livro-caixa:
      GET  /api/caixa[?mes=AAAA-MM]  entradas, saidas, saldo e lancamentos do mes (so leitura)
 */
@@ -34,6 +37,7 @@ const ingest = require('./ingest');
 const asaas = require('./asaas');
 const gestao = require('./gestao');
 const caixa = require('./caixa');
+const estudio = require('./estudio');
 
 // Rede de segurança: ferramenta pessoal always-on não deve morrer por um erro
 // isolado (ex.: falha ao abrir um arquivo). Loga e segue de pé.
@@ -372,6 +376,28 @@ const handle = async (req, res) => {
     if (p === '/api/gestao/whatsapp' && req.method === 'GET') {
       try { return sendJSON(res, { mensagens: await gestao.whatsappMensagens(url.searchParams.get('chatid')) }); }
       catch (e) { return sendJSON(res, { error: e.message }, 400); }
+    }
+
+    // Estúdio Social (tecla E): as peças de rede social e a etapa de cada uma. Só leitura.
+    if (p === '/api/estudio' && req.method === 'GET') {
+      try { return sendJSON(res, estudio.resumo()); }
+      catch (e) { return sendJSON(res, { error: e.message }, 500); }
+    }
+    if (p === '/api/estudio/midia' && req.method === 'GET') {
+      const abs = estudio.arquivo(url.searchParams.get('id'), url.searchParams.get('f'));
+      if (!abs) { res.writeHead(404); return res.end('nao encontrado'); }
+      const tipo = { '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.mp4': 'video/mp4' }[path.extname(abs).toLowerCase()] || 'application/octet-stream';
+      const tam = fs.statSync(abs).size;
+      const faixa = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+      if (faixa && tipo === 'video/mp4') {
+        const ini = faixa[1] ? Number(faixa[1]) : Math.max(0, tam - Number(faixa[2] || 0));
+        const fim = faixa[1] && faixa[2] ? Math.min(Number(faixa[2]), tam - 1) : tam - 1;
+        if (ini > fim || ini >= tam) { res.writeHead(416, { 'Content-Range': 'bytes */' + tam }); return res.end(); }
+        res.writeHead(206, { 'Content-Type': tipo, 'Content-Range': 'bytes ' + ini + '-' + fim + '/' + tam, 'Accept-Ranges': 'bytes', 'Content-Length': fim - ini + 1, 'Cache-Control': 'no-store' });
+        return fs.createReadStream(abs, { start: ini, end: fim }).pipe(res);
+      }
+      res.writeHead(200, { 'Content-Type': tipo, 'Content-Length': tam, 'Accept-Ranges': 'bytes', 'Cache-Control': 'no-store' });
+      return fs.createReadStream(abs).pipe(res);
     }
 
     // Ferramentas: so diz se o arquivo de chave existe. Nunca le nem devolve o conteudo.

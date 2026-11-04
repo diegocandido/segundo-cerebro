@@ -1,0 +1,57 @@
+/* ---------- Estúdio Social (tecla E) ---------- */
+#es-root { position: fixed; inset: 0; z-index: 73; display: none; opacity: 0; transition: opacity .22s ease;
+  font-family: 'DM Sans', sans-serif; color: var(--ink); background: var(--bg); }
+#es-root.on { display: block; }
+#es-root.in { opacity: 1; }
+#es-scroll { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 20px 26px 60px; }
+#es-inner { max-width: 1400px; margin: 0 auto; }
+#fab-estudio { right: 18px; bottom: 166px; }
+body.mc-open #fab-estudio { display: none !important; }
+
+.es-quadro { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; align-items: start; }
+.es-col { border: 1px solid var(--border); border-radius: 14px; padding: 12px; background: var(--panel); min-height: 160px; }
+.es-col-h { display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; letter-spacing: 1.6px;
+  text-transform: uppercase; color: var(--faint); font-weight: 700; margin: 2px 2px 12px; }
+.es-col-h span { font-family: 'Space Grotesk', sans-serif; font-size: 14px; color: var(--accent); letter-spacing: 0; }
+.es-vazio { color: var(--faint); text-align: center; padding: 26px 0; }
+
+.es-card { display: block; width: 100%; text-align: left; font-family: inherit; color: var(--ink); cursor: pointer; padding: 0;
+  margin-bottom: 12px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: var(--input-bg, rgba(255,255,255,.03));
+  transition: border-color .15s ease, transform .15s ease; }
+.es-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.es-card.agora { border-color: #43C07A; box-shadow: 0 0 0 3px rgba(67,192,122,.14); }
+.es-capa { aspect-ratio: 4 / 5; background: rgba(0,0,0,.25); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.es-capa img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.es-sem-capa { color: var(--faint); font-size: 11.5px; text-align: center; line-height: 1.5; padding: 14px; }
+.es-card-b { padding: 10px 12px 12px; }
+.es-card-t { font-size: 13px; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.es-card-s { font-size: 11px; color: var(--faint); margin-top: 5px; }
+.es-selos { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+.es-selo { font-size: 10px; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+.es-selo.anim { color: var(--accent); border-color: var(--accent); }
+.es-selo.vivo-agora { color: #43C07A; border-color: #43C07A; animation: es-pulso 1.4s ease-in-out infinite; }
+@keyframes es-pulso { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .es-selo.vivo-agora { animation: none; } }
+
+.es-det { border: 1px solid var(--accent); border-radius: 16px; padding: 16px 18px; background: var(--panel); margin-bottom: 18px; }
+.es-det-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
+.es-det-etapa { font-size: 9.5px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+.es-det-etapa b { color: #43C07A; }
+.es-det-t { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; margin-top: 4px; }
+.es-tira { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 8px; }
+.es-tira figure { margin: 0; flex: 0 0 auto; cursor: zoom-in; }
+.es-tira img, .es-tira video { width: 260px; aspect-ratio: 4 / 5; object-fit: cover; display: block; border-radius: 8px; background: #111; }
+.es-tira figcaption { font-size: 11px; color: var(--faint); margin-top: 4px; }
+.es-legenda { white-space: pre-wrap; font: 12.5px/1.5 'DM Sans', sans-serif; color: var(--muted); max-width: 760px;
+  border-top: 1px solid var(--border); padding-top: 10px; margin: 0 0 8px; }
+
+/* faixa dentro do Mission Control */
+.es-faixa { margin: 4px 0 22px; }
+.es-faixa-h { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.es-faixa-h .act { margin-left: auto; }
+.es-faixa-fila { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+.es-card.mini { width: 150px; flex: 0 0 150px; margin-bottom: 0; }
+.es-card.mini .es-card-t { font-size: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+@media (max-width: 980px) { .es-quadro { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { #es-scroll { padding: 16px; } .es-quadro { grid-template-columns: 1fr; } .es-tira img, .es-tira video { width: 200px; } }

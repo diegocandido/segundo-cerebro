@@ -1,0 +1,6 @@
+Bibliotecas usadas pelo painel, guardadas aqui para ele abrir sem internet.
+
+d3.min.js      d3 v7.9.0, de Mike Bostock (https://d3js.org). Licença ISC.
+marked.min.js  marked v11.1.1 (https://github.com/markedjs/marked). Licença MIT.
+
+O aviso de copyright de cada uma está no topo do próprio arquivo. Não edite estes arquivos.

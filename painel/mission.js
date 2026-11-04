@@ -31,7 +31,11 @@ function cfg() {
   catch { _cfg = {}; }
   return _cfg;
 }
-function vaultRoot() { return cfg().root || null; }
+function vaultRoot() {
+  const r = cfg().root;
+  if (!r) return null;
+  return r === '~' || r.startsWith('~/') ? path.join(require('os').homedir(), r.slice(2)) : r; // aceita ~/
+}
 
 /* Convencoes do vault que o Mission Control precisa conhecer. Sao configuraveis
    em config/workspace.json -> missionControl, porque cada workspace nomeia suas

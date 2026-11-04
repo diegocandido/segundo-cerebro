@@ -9,7 +9,7 @@ const path = require('path');
 const os = require('os');
 
 const WS = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'workspace.json'), 'utf8')); } catch { return {}; } })();
-const ROOT = path.resolve(__dirname, WS.root || '..'); // the workspace this brain maps
+const ROOT = path.resolve(__dirname, expandHome(WS.root) || '..'); // the workspace this brain maps (aceita ~/)
 const CONFIG_DIR = path.join(__dirname, 'config');
 const CACHE_FILE = path.join(__dirname, '.cache', 'links-cache.json');
 

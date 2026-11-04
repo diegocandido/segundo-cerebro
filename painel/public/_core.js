@@ -908,11 +908,18 @@ window.BrainCore = (function () {
 
   function resize() {
     S.DPR = Math.min(2, devicePixelRatio || 1);
-    S.W = innerWidth; S.H = innerHeight;
+    // Janela ainda sem tamanho (aba em segundo plano, painel embutido abrindo): mede com piso de 1px
+    // e, quando ela ganhar tamanho de verdade, recentra a câmera. Sem isso o desenho quebra na
+    // primeira volta e o grafo fica em branco.
+    const zerada = !(innerWidth > 1 && innerHeight > 1);
+    const estavaZerada = S._semTamanho;
+    S._semTamanho = zerada;
+    S.W = Math.max(1, innerWidth); S.H = Math.max(1, innerHeight);
     S.canvas.width = S.W * S.DPR; S.canvas.height = S.H * S.DPR;
     S.canvas.style.width = S.W + 'px'; S.canvas.style.height = S.H + 'px';
     S.ctx.setTransform(S.DPR, 0, 0, S.DPR, 0, 0);
     S.bgCache = null;
+    if (estavaZerada && !zerada && S.nodes) resetCam(1);
   }
 
   function hitTest(px, py, all) {
@@ -931,6 +938,11 @@ window.BrainCore = (function () {
   // ======================= render loop =======================
   function loop() {
     if (window.__mcPaused) { requestAnimationFrame(loop); return; } // Mission Control aberto: nao gasta CPU desenhando o grafo escondido
+    if (S._semTamanho || innerWidth < 2 || innerHeight < 2) { if (innerWidth > 1 && innerHeight > 1) resize(); requestAnimationFrame(loop); return; }
+    try { desenhar(); } catch (e) { if (!S._erroLoop) { S._erroLoop = true; console.error('[grafo] erro ao desenhar, seguindo:', e); } S.bgCache = null; }
+    requestAnimationFrame(loop);
+  }
+  function desenhar() {
     const st = S.st; S.tick++;
     if (S.fly) {
       S.fly.t++;
@@ -1066,7 +1078,6 @@ window.BrainCore = (function () {
       const el = document.getElementById('brain-fps');
       if (el) el.textContent = S.perf.fps + ' fps · ' + S.visible.length + ' nodes';
     }
-    requestAnimationFrame(loop);
   }
 
   function drawLabels() {
