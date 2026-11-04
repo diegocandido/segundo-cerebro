@@ -194,6 +194,46 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
 
 ---
 
+## Carrossel vivo (opcional, pergunta 13f)
+
+- **O que resolve:** o carrossel aprovado vira um carrossel de vídeos. Cada slide sai em MP4 em
+  loop (1080x1350, 30 fps, 6 ou 8 segundos, música a -14 LUFS), com o quadro 0 igual ao JPEG e a
+  emenda do loop sem pulo. O texto nunca some: o movimento é carimbo, pulso, deslize curto e linha
+  que se redesenha.
+- **De quem é o motor:** da skill **criador-de-carrosseis-simples**, do Felpborges
+  ([github.com/Felpborges/criador-de-carrosseis-simples](https://github.com/Felpborges/criador-de-carrosseis-simples)).
+  O repositório não tem licença declarada, então o Kit **não leva cópia** dela: o instalador
+  baixa a skill direto do repositório do autor, numa versão fixa testada com o Kit, e aplica por
+  cima três ajustes do Kit ([carrossel-vivo/ajustar-skill.py](carrossel-vivo/ajustar-skill.py)).
+  O que é do Kit é a ponte entre o modelo de carrossel e o motor
+  ([carrossel-vivo/vivo.js](carrossel-vivo/vivo.js)) e o script `carrossel_vivo.py`.
+- **Pré-requisitos:** Mac ou Linux, git, Node 18+, Python 3 e ffmpeg (no Mac, `brew install
+  ffmpeg`; o instalador faz isso sozinho se o Homebrew existir). Uns 400 MB livres.
+- **Ligar:**
+  1. Da pasta do Kit, numa aba de terminal: `bash instalacao/carrossel-vivo/instalar.sh`. Ele
+     instala a skill em `~/.claude/skills/`, o Python dela (`.venv` com numpy, scipy e Pillow), o
+     motor de renderização em `~/.carrossel-vivo/motor` (Playwright e o Chromium dele) e a ponte
+     em `~/.carrossel-vivo/ponte`. Nada disso entra no segundo cérebro. Pode rodar de novo: o que
+     já existe fica.
+  2. Copie [scripts/carrossel_vivo.py](scripts/carrossel_vivo.py) para o `bin/` do segundo cérebro.
+  3. Acrescente na nota do carrossel (`{{AREA_SOCIAL}}/carrossel.md`) a seção "Versão viva" do guia
+     [templates/carrossel-no-os.md.tmpl](templates/carrossel-no-os.md.tmpl).
+- **Testar, com o cliente olhando:** com o carrossel de teste já aprovado em JPEG,
+  `python3 bin/carrossel_vivo.py <pasta-do-carrossel>`. Leva de 3 a 6 minutos. Só vale se terminar
+  com **"TODOS OS LOOPS E QUADROS 0 FECHAM"**. Os MP4 saem em `<pasta>/mp4/`; o `preview.html` do
+  projeto (o caminho aparece no fim) mostra os 5 tocando lado a lado. Mostre e ajuste até o "aprovado".
+- **Coreografia:** a padrão já conhece o modelo do Kit (capa, slides de conteúdo e CTA). Para uma sob
+  medida num post, rode com `--so-montar`, escreva a coreografia no `VIVO.iniciar({...})` de cada
+  `src/slides/slide-NN.html` do projeto (em `~/.carrossel-vivo/projetos/<nome>/`, regras no topo do
+  `vivo.js`) e rode de novo sem opção. Se o texto dos slides mudar depois, `--refazer`.
+- **Publicar:** com o "pode postar", os MP4 sobem pelo app do Instagram, na ordem, sem música do
+  Instagram por cima (o vídeo já tem a dele). O `bin/instagram.py` ainda não publica vídeo.
+- **Atualizar a skill:** não atualize sozinho. Uma versão nova do autor só entra no Kit depois de
+  testada; aí muda a versão fixa no `instalar.sh`.
+- **No painel:** não tem card próprio; entra na linha do carrossel no índice da área de redes sociais.
+
+---
+
 ## PandaDoc (orçamentos automatizados)
 
 - **O que resolve:** orçamento ou proposta montada a partir de um modelo com campos (cliente,

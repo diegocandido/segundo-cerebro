@@ -33,6 +33,7 @@ O segundo cérebro e o painel são criados **fora** da pasta do kit, no lugar qu
 | Instagram (API oficial da Meta) | Publicar carrossel depois do "pode postar", pelo `bin/instagram.py` | Sugerido; precisa de conta profissional ligada a Página do Facebook e de um app na Meta |
 | Padrão visual das peças | Imagens de post (card de mapa, 1080x1350) no visual do cliente, a partir de um exemplo que ele manda na entrevista | Opcional, pergunta 13d; sem exemplo fica a definir |
 | Carrossel de Instagram | 5 slides no mesmo visual (capa, 3 de conteúdo, CTA fixo com a oferta do cliente), em JPEG pelo `bin/carrossel_jpeg.py` | Opcional, pergunta 13e; precisa do Chrome ou do Edge |
+| Carrossel vivo | Cada slide do carrossel em MP4 em loop, com música, pelo `bin/carrossel_vivo.py`; o motor é a skill criador-de-carrosseis-simples, baixada do repositório do autor | Opcional, pergunta 13f; Mac ou Linux, ffmpeg e uns 400 MB |
 | PandaDoc | Orçamentos e propostas automatizados a partir de modelo | Sugerido; o comando de orçamento ainda não vem pronto |
 | Voz (Whisper local + ElevenLabs ou voz do macOS) | Perguntar ao OS falando, pelo botão 🎙 do painel ou mãos livres | Opcional; só Mac com chip Apple |
 | Livro-caixa | Despesas e recebimentos do dia a dia, tecla L no painel | Opcional; CSV local, fora do segundo cérebro |
@@ -50,7 +51,8 @@ Kit-OS-Cara-da-IA/
 │   ├── 02-ferramentas.md   guia de cada ferramenta (ligar, testar, como fica no painel)
 │   ├── 03-painel.md        como copiar, configurar e subir o painel
 │   ├── scripts/            whatsapp.py (Uazapi), instagram.py (Meta), voz (conversar, falar, ouvir, falar_resposta,
-│   │                       assistente.json.example), livro_caixa.py, carrossel_jpeg.py e sync-github.sh
+│   │                       assistente.json.example), livro_caixa.py, carrossel_jpeg.py, carrossel_vivo.py e sync-github.sh
+│   ├── carrossel-vivo/     instalador do carrossel vivo (baixa a skill do autor), ajustes e a ponte vivo.js
 │   ├── comandos/reuniao.md.tmpl
 │   └── templates/          rotina Morning Brief, seção do painel no COMO-USAR, o WhatsApp e o Instagram no OS,
 │                           card de mapa no padrão visual do cliente (card-mapa.html),

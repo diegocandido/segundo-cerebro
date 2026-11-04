@@ -81,6 +81,12 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
     receber (ex.: QUERO). Sem foto ou sem oferta, o slide sai sem elas e fica `a definir`. Funciona
     com ou sem a publicação pela API (13c): sem ela, ele posta os JPEGs pelo app. Guia em
     [templates/carrossel-no-os.md.tmpl](templates/carrossel-no-os.md.tmpl).
+13f. **Se o carrossel entrar: quer também a versão animada?** Cada slide vira um vídeo curto em
+    loop (6 a 8 segundos, com música), no mesmo visual do JPEG: o texto não some, só ganha
+    movimento (números que carimbam, destaques que pulam, o botão do CTA que pulsa). Sobe no
+    Instagram como carrossel de vídeos. Avise antes do sim: pede uns 400 MB no computador (Node,
+    ffmpeg, Python e um Chromium) e, por enquanto, a publicação dos vídeos é pelo app do Instagram,
+    não pela API. Só Mac ou Linux. Guia em [02-ferramentas.md](02-ferramentas.md), "Carrossel vivo".
 14. **Como você monta um orçamento ou proposta hoje?** Modelo no Word, Canva, PDF, sistema.
     Quanto tempo leva. Quem aprova o preço.
     - Se é manual e repetitivo: sugira o **PandaDoc** (modelo com campos, preenchido

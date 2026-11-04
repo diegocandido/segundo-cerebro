@@ -58,6 +58,10 @@ Acrescente, se o cliente aprovou:
   [scripts/carrossel_jpeg.py](scripts/carrossel_jpeg.py), pelo guia
   [templates/carrossel-no-os.md.tmpl](templates/carrossel-no-os.md.tmpl). Um carrossel de teste
   com tema real, aprovado por ele, vira o modelo; o slide de CTA, com a oferta dele, fica fixo.
+- O carrossel vivo (pergunta 13f), só depois do carrossel de teste aprovado: o instalador
+  [carrossel-vivo/instalar.sh](carrossel-vivo/instalar.sh) e o script
+  [scripts/carrossel_vivo.py](scripts/carrossel_vivo.py), pelo guia em
+  [02-ferramentas.md](02-ferramentas.md). Os 5 MP4 do carrossel de teste, aprovados por ele, fecham o item.
 - Se ele publica em redes: o calendário editorial a partir de
   [templates/calendario-social.md.tmpl](templates/calendario-social.md.tmpl), que alimenta o card
   Social da tela Gestão.
