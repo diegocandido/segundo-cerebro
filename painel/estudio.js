@@ -11,11 +11,15 @@
        resultados/slide-NN.mp4 (vivo), legenda.txt
      - carrossel do modelo do kit: slide-NN.html, jpeg/*.jpg, mp4/*.mp4, legenda.txt
    A etapa vem do arquivo status.txt da peça, se existir (linhas "etapa: aprovado",
-   "data: 2026-11-07", "rede: Instagram", "link: https://..."); sem ele, é deduzida dos arquivos. */
+   "data: 2026-11-07", "rede: Instagram", "link: https://...", "titulo: ..."); "etapa: descartado" (ou arquivado) tira a peça do quadro; sem ele, é deduzida dos arquivos.
+   Peça cuja legenda.txt bate com um post do histórico do bin/instagram.py
+   (missionControl.publicadosLog, padrão Social/publicados-instagram.jsonl) vira Publicado sozinha,
+   com o link e a data do post. */
 'use strict';
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const crypto = require('crypto');
 const scan = require('./scan');
 const M = require('./mission');
 
@@ -35,6 +39,21 @@ function dirs() {
   });
 }
 
+// histórico do bin/instagram.py: uma linha JSON por post, com a assinatura da legenda
+function publicados() {
+  const rel = M.mcOpt('publicadosLog') || 'Social/publicados-instagram.jsonl';
+  const e = scan.expandHome(String(rel));
+  const out = new Map();
+  let txt = '';
+  try { txt = fs.readFileSync(path.isAbsolute(e) ? e : path.join(ROOT, e), 'utf8'); } catch { return out; }
+  for (const l of txt.split(/\r?\n/)) {
+    try { const j = JSON.parse(l); if (j.assinatura) out.set(j.assinatura, j); } catch { }
+  }
+  return out;
+}
+// a mesma conta do instagram.py: sha256 da legenda com os espaços normalizados, 16 primeiros caracteres
+const assinatura = t => crypto.createHash('sha256').update(String(t).split(/\s+/).filter(Boolean).join(' '), 'utf8').digest('hex').slice(0, 16);
+
 function listar(dir, re) {
   try { return fs.readdirSync(dir).filter(f => re.test(f) && !f.startsWith('.')).sort(); } catch { return []; }
 }
@@ -52,11 +71,18 @@ function status(pasta) {
 
 function titulo(pasta, nome) {
   const brief = ler(path.join(pasta, 'BRIEF.md'));
-  const tema = brief.match(/^\s*(?:[-*]\s*)?\**(?:tema|frase única|frase unica)\**\s*[:·]\s*(.+)$/im);
-  if (tema && !/preencher|\{\{/.test(tema[1])) return tema[1].replace(/[*_`]/g, '').trim().slice(0, 120);
-  const h = brief.match(/^#\s+(.+)$/m);
+  const tema = brief.match(/^[ \t]*(?:[-*][ \t]*)?\**(?:tema|frase única|frase unica)\**[ \t]*[:·]\**[ \t]*([^\s*].*)$/im);
+  if (tema && !/preencher|\{\{|^\[/.test(tema[1].trim())) return tema[1].replace(/[*_`]/g, '').trim().slice(0, 120);
+  const h = brief.match(/^#[ \t]+(.+)$/m);
   if (h && !/^BRIEF\b/i.test(h[1].trim())) return h[1].replace(/[*_`]/g, '').trim().slice(0, 120);
-  const limpo = nome.replace(/^\d{4}-\d{2}-\d{2}[-_ ]*/, '').replace(/[-_]+/g, ' ').trim() || nome;
+  const resto = nome.replace(/^\d{4}-\d{2}-\d{2}[-_ ]*/, '');
+  if (!resto || /^[0-9a-f]{5,8}$/i.test(resto)) { // pasta com nome de data e código: usa a 1ª frase da legenda
+    const leg = ler(path.join(pasta, 'legenda.txt'), 400).split(/\r?\n/).find(l => l.trim());
+    if (leg) return leg.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').split(/(?<=[.!?])\s/)[0].trim().slice(0, 110);
+  }
+  const dt = nome.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (dt && (!resto || /^[0-9a-f]{5,8}$/i.test(resto))) return 'Carrossel de ' + dt[3] + '/' + dt[2] + (resto ? ' (' + resto + ')' : '');
+  const limpo = resto.replace(/[-_]+/g, ' ').trim() || nome;
   return limpo.charAt(0).toUpperCase() + limpo.slice(1);
 }
 
@@ -64,7 +90,9 @@ function titulo(pasta, nome) {
 function midia(pasta) {
   const imgs = [];
   for (const sub of ['resultados/estatico', 'jpeg', 'png', 'imagens-prontas']) {
-    for (const f of listar(path.join(pasta, sub), IMG)) imgs.push(sub + '/' + f);
+    const todas = listar(path.join(pasta, sub), IMG);
+    const slides = todas.filter(f => /^(slide|card)/i.test(f)); // folha e miniatura de prova ficam de fora
+    for (const f of (slides.length ? slides : todas)) imgs.push(sub + '/' + f);
     if (imgs.length) break;
   }
   if (!imgs.length) for (const f of listar(pasta, IMG)) if (/^(slide|card)/i.test(f)) imgs.push(f);
@@ -78,12 +106,16 @@ function midia(pasta) {
 }
 
 function ehPeca(pasta) {
-  return ['BRIEF.md', 'status.txt', 'legenda.txt', 'slide-01.html', 'src/slides', 'resultados', 'jpeg'].some(f => fs.existsSync(path.join(pasta, f)));
+  return ['BRIEF.md', 'status.txt', 'legenda.txt', 'slide-01.html', 'src/slides', 'resultados', 'jpeg'].some(f => fs.existsSync(path.join(pasta, f)))
+    || listar(pasta, /^(slide|card)[-_]?\d*.*\.(png|jpe?g|webp)$/i).length > 0;
 }
 
-function peca(base, i, nome) {
+function peca(base, i, nome, hist) {
   const pasta = path.join(base.abs, nome);
   const st = status(pasta);
+  const legenda = ler(path.join(pasta, 'legenda.txt'), 2200).trim();
+  const post = legenda && hist ? hist.get(assinatura(legenda)) : null;
+  if (post && !st.etapa) { st.etapa = 'publicado'; st.link = st.link || post.link || ''; st.data = st.data || post.data || ''; st.rede = st.rede || 'Instagram'; }
   const m = midia(pasta);
   let etapa = (st.etapa || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (/publicad|postad/.test(etapa)) etapa = 'publicado';
@@ -103,10 +135,10 @@ function peca(base, i, nome) {
   if (!atualizado) atualizado = mtime(pasta);
   const slidesHtml = listar(path.join(pasta, 'src/slides'), /^slide-\d+\.html$/).length || listar(pasta, /^slide-\d+\.html$/).length;
   return {
-    id: i + ':' + nome, nome, titulo: titulo(pasta, nome), etapa, etapaNome: NOMES[etapa],
+    id: i + ':' + nome, nome, titulo: st.titulo || (post && post.titulo) || titulo(pasta, nome), etapa, etapaNome: NOMES[etapa],
     rede: st.rede || '', data: st.data || '', link: /^https?:\/\//.test(st.link || '') ? st.link : '',
     capa: m.imgs[0] || m.folha || '', imgs: m.imgs, vids: m.vids, slidesHtml,
-    legenda: ler(path.join(pasta, 'legenda.txt'), 2200).trim(),
+    legenda,
     temBrief: fs.existsSync(path.join(pasta, 'BRIEF.md')),
     atualizado, agora: etapa !== 'publicado' && Date.now() - atualizado < 10 * 60 * 1000,
     onde: path.join(base.rel, nome),
@@ -116,12 +148,17 @@ function peca(base, i, nome) {
 function resumo() {
   const pecas = [];
   const fontes = [];
+  const hist = publicados();
   dirs().forEach((base, i) => {
     let nomes = [];
     try { nomes = fs.readdirSync(base.abs, { withFileTypes: true }).filter(d => d.isDirectory() && !d.name.startsWith('.')).map(d => d.name); }
     catch { fontes.push({ pasta: base.rel, existe: false }); return; }
     fontes.push({ pasta: base.rel, existe: true });
-    for (const n of nomes) { const p = path.join(base.abs, n); if (ehPeca(p)) pecas.push(peca(base, i, n)); }
+    for (const n of nomes) {
+      const p = path.join(base.abs, n);
+      if (/descart|arquiv/i.test(status(p).etapa || '')) continue; // "etapa: descartado" tira a peça do quadro
+      if (ehPeca(p)) pecas.push(peca(base, i, n, hist));
+    }
   });
   pecas.sort((a, b) => b.atualizado - a.atualizado);
   const contagem = Object.fromEntries(ETAPAS.map(e => [e, pecas.filter(p => p.etapa === e).length]));

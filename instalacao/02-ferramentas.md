@@ -267,6 +267,9 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
   link: https://...          o post publicado, quando houver
   ```
   Sem `status.txt`, o painel deduz: sem imagem é "Em criação", com imagem é "Para aprovar".
+  Se o Instagram estiver ligado (13c), a peça cuja `legenda.txt` bate com um post do histórico do
+  `bin/instagram.py` passa sozinha para "Publicado", com o link do post (outro caminho do
+  histórico vai em `missionControl.publicadosLog`; padrão `Social/publicados-instagram.jsonl`).
   "Aprovado" e "Publicado" só aparecem quando o Claude escreve, depois do "aprovado" e do "pode
   postar" do cliente.
 - **Testar, com o cliente olhando:** com o painel aberto na tecla E, peça um carrossel de teste com

@@ -44,7 +44,7 @@
 ## Estrutura (5 slides, 1080x1350)
 | Slide | Papel | O que leva |
 |---|---|---|
-| 01 Capa | Gancho | Imagem no topo (oficial ou de divulgação, com crédito), a assinatura com foto, nome e {{PERFIL}}, manchete em caixa alta de até ~20 palavras com 2 trechos em destaque, "DESLIZE PARA VER MAIS" e as 5 bolinhas |
+| 01 Capa | Gancho | Imagem no topo que mostra o que a notícia anuncia (a tela oficial do produto, a foto do lançamento), nunca ícones genéricos, oficial ou de divulgação e com crédito, a assinatura com foto, nome e {{PERFIL}}, manchete em caixa alta de até ~20 palavras com 2 trechos em destaque, "DESLIZE PARA VER MAIS" e as 5 bolinhas |
 | 02 | 1. O que é | Título numerado, "ENTENDA:", a explicação na linguagem do público de {{DONO}} e, se for o caso, uma nota de transparência |
 | 03 | 2. O que mudou | Título numerado, imagem opcional (900x520, com crédito) e texto com 2 ou 3 termos em destaque |
 | 04 | 3. O ângulo de {{DONO}} | Por que isso importa para o público dele, fechando com 3 perguntas numeradas |
@@ -58,6 +58,9 @@ sem {{DONO}} aprovar.
 - Manchete com até ~20 palavras; parágrafo com até ~50. Texto maior estoura o slide: confira no JPEG.
 - Fato sem fonte não entra. Imagem de terceiros só oficial ou de divulgação, sempre com crédito; sem
   ela, uma imagem ilustrativa com o crédito "Imagem ilustrativa gerada com IA", ou o slide sem imagem.
+- **Capa com a imagem oficial:** procure, nesta ordem, no post ou blog oficial da empresa, no perfil
+  oficial dela nas redes e em matérias que creditam a imagem à empresa. Capa só com ícones não sai.
+  Se o fundo da imagem for claro, o crédito vai numa cor escura para continuar legível.
 - **Tudo de uma peça fica no mesmo lugar:** os slides, os JPEGs e a legenda da mesma publicação vão
   juntos para {{LUGAR_DAS_PECAS}}, nunca espalhados em pastas diferentes.
 - Nada sai sem o "pode postar" de {{DONO}} para aquele post.
@@ -90,7 +93,12 @@ A etapa fica no `status.txt` da peça, e quem escreve é o Claude, no mesmo pass
 - PNGs ou JPEGs prontos e mostrados a {{DONO}}: `etapa: para aprovar`;
 - depois do "aprovado" dele: `etapa: aprovado`;
 - depois de publicado, com o "pode postar": `etapa: publicado` e `link:` do post, e a linha em
-  Publicados no calendário editorial.
+  Publicados no calendário editorial;
+- peça que não vai sair (substituída por outra versão, desistência): `etapa: descartado`. Ela sai do
+  quadro e a pasta continua onde está.
+
+Uma linha `titulo:` no `status.txt` troca o nome com que a peça aparece no painel (útil quando a
+pasta tem só data e código).
 
 O painel só lê: aprovar, pedir ajuste e postar continuam no Claude.
 
