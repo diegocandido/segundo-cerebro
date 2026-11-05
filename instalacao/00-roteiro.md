@@ -122,6 +122,9 @@ Acrescente, se o cliente aprovou:
 
 Termine com `python3 bin/brain.py indexar` e `python3 bin/brain.py doctor` limpos.
 
+**Carimbo da versão:** copie o conteúdo de `VERSAO.txt` do kit para `.kit-versao` na raiz do segundo
+cérebro (uma linha). É por ele que um pacote de atualização sabe de que versão o cliente parte.
+
 ## Fase 4: decisões registradas
 
 Crie, com `python3 bin/brain.py nota`, uma decisão em `memory/decisoes/` para cada escolha que
