@@ -16,6 +16,12 @@ Você é o chefe de gabinete de {Nome}. Monte o briefing da manhã dele.
    vencendo}.
 
 {Opcionais: inclua só os blocos que o cliente adotou e apague as chaves}
+{Painel:}
+0. **Antes de tudo, suba o painel:** no app do Claude, `preview_start` com `{name: "painel"}`
+   (de `.claude/launch.json`), que reaproveita se já estiver no ar; fora do app, numa aba de
+   terminal, `node painel/server.js` a partir da pasta do painel. O briefing termina com "Painel no
+   ar em http://localhost:5210" (ou o erro, se não subiu).
+{Fim painel}
 {Agente remoto:}
 0. **Antes de tudo, sozinho:** `bash bin/sync-github.sh`, que traz o que o agente gravou.
    Depois leia `inbox/agente/financeiro/` e `inbox/agente/propostas/` com `status: pendente`:
