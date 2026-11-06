@@ -34,7 +34,10 @@ respostas da entrevista:
 | `agents.json`, `access-overrides.json`, `tweaks.json` | Cópia do exemplo, sem mudança, salvo se o cliente tiver agente remoto. |
 
 No `workspace.json`, se o Estúdio Social entrou (pergunta 13g): `missionControl.carrosseisDirs`
-com a pasta das peças (padrão `["Social/carrosseis"]`) e `carrosseis` em `excludeDirs`.
+com a pasta das peças (padrão `["Social/carrosseis"]`) e `carrosseis` em `excludeDirs`;
+`missionControl.estudioConta` com o @ do Instagram do cliente, sem a arroba (aparece na prévia de
+celular e no Feed), e `missionControl.estudioDiaPost` com o dia fixo de postar, se ele tiver um
+(1 = segunda ... 6 = sábado; sem dia fixo, tire a linha).
 
 ## 3. Conferir antes de subir (obrigatório)
 
@@ -83,7 +86,10 @@ Confira junto com o cliente:
   o card conta os dos últimos 30 dias e abre o link.
 
 - Tecla **E** (ou o botão ✦ ESTÚDIO) abre o Estúdio Social; o Mission Control mostra a faixa
-  "Estúdio Social" no alto. Sem nenhuma peça, ele explica onde procura. Se o carrossel de teste já
+  "Estúdio Social" no alto. Ele tem 4 abas: **Quadro** (as peças por etapa), **Semana** (o próximo
+  post, os números e os 7 dias, com o dia de postar marcado), **Posts** (a prévia em tela de celular,
+  com slides, carrossel vivo e legenda) e **Feed** (como o perfil fica com as próximas peças). A
+  data de cada peça vem da linha `data:` do `status.txt` dela. Sem nenhuma peça, ele explica onde procura. Se o carrossel de teste já
   existe, ele aparece na coluna da etapa dele (guia em 02-ferramentas.md, "Criador de carrosséis e
   Estúdio Social").
 

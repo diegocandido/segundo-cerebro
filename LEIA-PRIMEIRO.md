@@ -35,7 +35,7 @@ O segundo cérebro e o painel são criados **fora** da pasta do kit, no lugar qu
 | Instagram (API oficial da Meta) | Publicar carrossel depois do "pode postar", pelo `bin/instagram.py` | Sugerido; precisa de conta profissional ligada a Página do Facebook e de um app na Meta |
 | Padrão visual das peças | Imagens de post (card de mapa, 1080x1350) no visual do cliente, a partir de um exemplo que ele manda na entrevista | Opcional, pergunta 13d; sem exemplo fica a definir |
 | Carrossel de Instagram | 5 slides no mesmo visual (capa, 3 de conteúdo, CTA fixo com a oferta do cliente), em JPEG pelo `bin/carrossel_jpeg.py` | Opcional, pergunta 13e; precisa do Chrome ou do Edge |
-| Criador de carrosséis + Estúdio Social | O Claude cria o carrossel com a skill criador-de-carrosseis-simples e cada peça aparece no painel (tecla E), com capa, slides e etapa | Opcional, pergunta 13g; o mesmo instalador do carrossel vivo |
+| Criador de carrosséis + Estúdio Social | O Claude cria o carrossel com a skill criador-de-carrosseis-simples e cada peça aparece no painel (tecla E), com capa, slides, etapa, semana, prévia de celular e feed | Opcional, pergunta 13g; o mesmo instalador do carrossel vivo |
 | Carrossel vivo | Cada slide do carrossel em MP4 em loop, com música, pelo `bin/carrossel_vivo.py`; o motor é a skill criador-de-carrosseis-simples, baixada do repositório do autor | Opcional, pergunta 13f; Mac ou Linux, ffmpeg e uns 400 MB |
 | PandaDoc | Orçamentos e propostas automatizados a partir de modelo | Sugerido; o comando de orçamento ainda não vem pronto |
 | Voz (Whisper local + ElevenLabs ou voz do macOS) | Perguntar ao OS falando, pelo botão 🎙 do painel ou mãos livres | Opcional; só Mac com chip Apple |

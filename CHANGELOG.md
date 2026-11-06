@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.1 (2026-11-06)
+O Estúdio Social (tecla E) ganhou 4 abas: Quadro, Semana, Posts e Feed. A aba Semana mostra o próximo post, os números e os 7 dias, com o seu dia fixo de postar marcado. A aba Posts mostra cada peça numa tela de celular, como vai sair no Instagram, com slides, carrossel vivo e legenda. A aba Feed mostra como o perfil fica com as próximas peças. O @ da prévia e o dia de postar ficam no config/workspace.json (estudioConta e estudioDiaPost).
+
 ## 1.0 (2026-11-04)
 Primeira versão numerada. Entram o controle de versão (VERSAO.txt, este CHANGELOG e o carimbo .kit-versao no segundo cérebro) e os pacotes de atualização para quem já tem o OS. Desde a instalação de 03/11: Estúdio Social no painel (tecla E), com peça descartada fora do quadro e título pelo status.txt; tela Gestão e Mission Control revistos; verificador do painel (bin/checar.js); prévia do painel no fim da entrevista; carrossel vivo opcional; capa do carrossel com a imagem oficial do que a notícia anuncia; passo opcional que sobe o painel no briefing da manhã.
 

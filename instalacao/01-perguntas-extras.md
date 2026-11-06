@@ -95,10 +95,12 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
     com a skill **criador-de-carrosseis-simples** (estratégia, copy slide a slide, design em código,
     crítica com nota até ficar bom e, se quiser, a versão viva em vídeo) e cada peça aparece no
     **Estúdio Social** do painel (tecla E, e uma faixa no Mission Control): a capa, os slides, os
-    vídeos e a legenda, em colunas Em criação, Para aprovar, Aprovado e Publicado, atualizando
+    vídeos e a legenda, em colunas Em criação, Para aprovar, Aprovado e Publicado, com a semana, a prévia em tela de celular e o feed, atualizando
     enquanto o Claude trabalha. Avise antes do sim: o instalador baixa a skill do autor e o motor de
     renderização (uns 400 MB, Mac ou Linux, o mesmo da 13f). Se ele já respondeu sim à 13f, isto vem
-    junto. Pergunte também em que pasta do OS ficam as peças (padrão `Social/carrosseis`). Guia em
+    junto. Pergunte também em que pasta do OS ficam as peças (padrão `Social/carrosseis`), qual é o @
+    do Instagram (vai na prévia de celular e no Feed) e se ele tem um dia fixo de postar (vai marcado na
+    aba Semana). Guia em
     [02-ferramentas.md](02-ferramentas.md), "Criador de carrosséis e Estúdio Social".
 14. **Como você monta um orçamento ou proposta hoje?** Modelo no Word, Canva, PDF, sistema.
     Quanto tempo leva. Quem aprova o preço.

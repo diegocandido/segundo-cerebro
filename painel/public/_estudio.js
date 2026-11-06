@@ -1,17 +1,31 @@
-/* _estudio.js - Estúdio Social (tecla E): as peças de rede social em quadro, por etapa.
+/* _estudio.js - Estúdio Social (tecla E): as peças de rede social em 4 abas.
 
-   Cada carrossel ou card que o Claude está fazendo aparece como um cartão com a capa, na coluna
-   da etapa: Em criação, Para aprovar, Aprovado, Publicado. Clicar abre os slides em tamanho de
-   celular, os vídeos do carrossel vivo e a legenda. Com a tela aberta, ela relê as pastas a cada
-   8 segundos: dá para ver as peças nascendo enquanto o Claude gera.
+   Quadro: as peças por etapa (Em criação, Para aprovar, Aprovado, Publicado).
+   Semana: o próximo post, os números e os 7 dias da semana, com o dia fixo de postar marcado.
+   Posts:  lista com filtros e a prévia em tela de celular, como vai sair no Instagram
+           (slides passando, carrossel vivo, legenda), mais todos os slides lado a lado.
+   Feed:   como o perfil fica com as próximas peças em cima das publicadas.
+
+   Com a tela aberta, ela relê as pastas a cada 8 segundos: dá para ver as peças nascendo
+   enquanto o Claude gera. A conta da prévia e o dia de postar vêm do workspace.json
+   (missionControl.estudioConta e estudioDiaPost).
 
    Também desenha a faixa "Estúdio Social" no Mission Control (window.Estudio.faixa).
-   Só leitura: aprovar e postar continuam no Claude, com o "pode postar" do dono. */
+   Só leitura: aprovar, agendar e postar continuam no Claude, com o "pode postar" do dono. */
 'use strict';
 (function () {
   let dados = null;
-  let aberta = null;      // id da peça aberta no detalhe
+  let aberta = null;      // id da peça aberta na aba Posts
   let timer = null;
+  let aba = localStorage.getItem('es-aba') || 'quadro';
+  let filtro = 'todos';
+  let semana = 0;         // 0 = esta semana, -1 = a passada, 1 = a próxima
+  let vivo = true;        // na prévia, mostrar o carrossel vivo quando houver
+  const slideIdx = {};    // slide atual da prévia, por peça
+  const legAberta = {};   // legenda expandida na prévia, por peça
+
+  const ABAS = [['quadro', 'Quadro'], ['semana', 'Semana'], ['posts', 'Posts'], ['feed', 'Feed']];
+  const DIAS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 
   const $ = s => document.querySelector(s);
   const el = (tag, cls, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
@@ -25,6 +39,11 @@
     if (h < 24) return 'há ' + h + ' h';
     return new Date(ms).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
   };
+  const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  const dataBR = s => s ? s.slice(8, 10) + '/' + s.slice(5, 7) : '';
+  const diaDe = s => DIAS[new Date(s + 'T12:00').getDay()];
+  const hoje = () => iso(new Date());
+  const conta = () => (dados && dados.perfil && dados.perfil.conta) || 'suaconta';
 
   async function carregar() {
     try {
@@ -36,8 +55,15 @@
     return dados;
   }
 
+  function irPara(novaAba, id) {
+    aba = novaAba;
+    localStorage.setItem('es-aba', aba);
+    if (id !== undefined) aberta = id;
+    render(true);
+  }
+
   // ---------- cartão de uma peça ----------
-  function cartao(p, mini) {
+  function cartao(p, mini, aoClicar) {
     const c = el('button', 'es-card' + (p.agora ? ' agora' : '') + (mini ? ' mini' : ''));
     const capa = p.capa
       ? '<img src="' + src(p, p.capa) + '" alt="" loading="lazy">'
@@ -52,83 +78,12 @@
       + (mini ? '<div class="es-card-s">' + esc(p.etapaNome) + ' · ' + esc(quando(p.atualizado)) + '</div>'
         : '<div class="es-selos">' + selos.join('') + '</div><div class="es-card-s">' + (p.data ? esc(p.data) + ' · ' : '') + 'mexido ' + esc(quando(p.atualizado)) + '</div>')
       + '</div>';
-    c.onclick = () => { if (mini) abrir(p.id); else { aberta = p.id; render(); } };
+    c.onclick = aoClicar || (() => { if (mini) abrir(p.id); else irPara('posts', p.id); });
     return c;
   }
 
-  // ---------- detalhe ----------
-  function detalhe(p) {
-    const box = el('div', 'es-det');
-    const top = el('div', 'es-det-top');
-    top.innerHTML = '<div><div class="es-det-etapa">' + esc(p.etapaNome) + (p.agora ? ' · <b>fazendo agora</b>' : '') + '</div>'
-      + '<div class="es-det-t">' + esc(p.titulo) + '</div><div class="es-card-s">' + esc(p.onde) + '</div></div>';
-    const fechar = el('button', 'act', 'Fechar');
-    fechar.onclick = () => { aberta = null; render(); };
-    top.appendChild(fechar);
-    box.appendChild(top);
-
-    if (p.imgs.length) {
-      box.appendChild(el('div', 'mc-cob-h', 'Slides <span>' + p.imgs.length + '</span>'));
-      const tira = el('div', 'es-tira');
-      p.imgs.forEach((f, i) => {
-        const fig = el('figure', '', '<img src="' + src(p, f) + '" alt="slide ' + (i + 1) + '"><figcaption>' + String(i + 1).padStart(2, '0') + '</figcaption>');
-        fig.onclick = () => window.open(src(p, f), '_blank');
-        tira.appendChild(fig);
-      });
-      box.appendChild(tira);
-    } else {
-      box.appendChild(el('div', 'mc-empty', 'Ainda sem imagens. Quando o Claude renderizar os slides, eles aparecem aqui sozinhos.'));
-    }
-    if (p.vids.length) {
-      box.appendChild(el('div', 'mc-cob-h', 'Carrossel vivo <span>' + p.vids.length + ' vídeo(s)</span>'));
-      const tira = el('div', 'es-tira');
-      p.vids.forEach((f, i) => tira.appendChild(el('figure', '', '<video src="' + src(p, f) + '" muted loop playsinline autoplay preload="metadata"></video><figcaption>' + String(i + 1).padStart(2, '0') + '</figcaption>')));
-      box.appendChild(tira);
-      const som = el('button', 'act', 'Tocar com som');
-      som.onclick = () => box.querySelectorAll('video').forEach(v => { v.muted = false; v.currentTime = 0; v.play(); });
-      box.appendChild(som);
-    }
-    if (p.legenda) {
-      box.appendChild(el('div', 'mc-cob-h', 'Legenda'));
-      box.appendChild(el('pre', 'es-legenda', esc(p.legenda)));
-    }
-    if (p.link) box.appendChild(el('div', 'mc-form-note', '<a href="' + esc(p.link) + '" target="_blank" rel="noopener">Abrir o post publicado</a>'));
-    box.appendChild(el('div', 'mc-form-note', 'Para aprovar, pedir ajuste ou postar, fale com o Claude ("aprovado", "troca a capa", "pode postar"). O Estúdio só mostra.'));
-    return box;
-  }
-
-  // ---------- tela ----------
-  function render() {
-    const inner = $('#es-inner');
-    if (!inner) return;
-    const B = window.BRAND || {};
-    inner.innerHTML = '';
-    const top = el('div', 'mc-top');
-    const back = el('button', 'mc-back', '<span class="mc-back-arrow">&#9666;</span><div><div><span class="mc-back-name">' + esc(B.nome || 'Cara da IA')
-      + '</span><span class="mc-back-os">Estúdio</span></div><div class="mc-back-sub">voltar pro grafo do cérebro</div></div>');
-    back.onclick = fecharTela;
-    top.appendChild(back);
-    const dir = el('div', 'mc-top-right');
-    const bMc = el('button', 'act', 'Mission Control');
-    bMc.onclick = () => { fecharTela(); window.MissionControl && window.MissionControl.open(); };
-    const bAt = el('button', 'act', 'Atualizar');
-    bAt.onclick = () => carregar().then(render);
-    dir.appendChild(bMc); dir.appendChild(bAt);
-    if (dados && dados.geradoEm) dir.appendChild(el('div', 'mc-clock', '<div class="mc-clock-d">' + esc(String(dados.geradoEm).slice(11, 16)) + '</div><div class="mc-clock-s">relendo a cada 8 s</div>'));
-    top.appendChild(dir);
-    inner.appendChild(top);
-
-    if (!dados) { inner.appendChild(el('div', 'mc-empty', 'lendo as peças...')); return; }
-    if (dados.erro) { inner.appendChild(el('div', 'mc-warn', '<div>&#9888;</div><div>' + esc(dados.erro) + '</div>')); return; }
-
-    const p = aberta && dados.pecas.find(x => x.id === aberta);
-    if (p) inner.appendChild(detalhe(p));
-
-    if (!dados.pecas.length) {
-      const onde = dados.fontes.map(f => '<code>' + esc(f.pasta) + '</code>' + (f.existe ? '' : ' (ainda não existe)')).join(' e ');
-      inner.appendChild(el('div', 'mc-warn', '<div>✦</div><div><b>Nenhuma peça ainda.</b> Peça um carrossel ao Claude ("faz um carrossel sobre ...") e ele aparece aqui, '
-        + 'na coluna Em criação, e vai andando até Publicado. O Estúdio procura em ' + onde + '.</div>'));
-    }
+  // ---------- aba Quadro ----------
+  function abaQuadro(inner) {
     const quadro = el('div', 'es-quadro');
     for (const et of dados.etapas) {
       const col = el('div', 'es-col');
@@ -139,6 +94,265 @@
       quadro.appendChild(col);
     }
     inner.appendChild(quadro);
+  }
+
+  // ---------- aba Semana ----------
+  function proximo() {
+    const h = hoje();
+    const fila = dados.pecas.filter(p => p.etapa !== 'publicado');
+    const datadas = fila.filter(p => p.dataISO && p.dataISO >= h).sort((a, b) => a.dataISO < b.dataISO ? -1 : 1);
+    if (datadas.length) return datadas[0];
+    const ordem = { aprovado: 0, aprovar: 1, criando: 2 };
+    return fila.slice().sort((a, b) => (ordem[a.etapa] - ordem[b.etapa]) || (b.atualizado - a.atualizado))[0] || null;
+  }
+
+  function abaSemana(inner) {
+    const base = new Date(); base.setHours(12, 0, 0, 0);
+    const seg = new Date(base); seg.setDate(base.getDate() - ((base.getDay() + 6) % 7) + semana * 7);
+    const dias = [...Array(7)].map((_, i) => { const d = new Date(seg); d.setDate(seg.getDate() + i); return d; });
+    const ini = iso(dias[0]), fim = iso(dias[6]);
+    const diaPost = dados.perfil && dados.perfil.diaPost;
+    const h = hoje();
+
+    const cab = el('div', 'es-sem-cab');
+    const titulo = semana === 0 ? 'Esta semana' : semana === -1 ? 'Semana passada' : semana === 1 ? 'Próxima semana' : 'Semana';
+    cab.innerHTML = '<div><div class="es-rot">semana de ' + dataBR(ini) + ' a ' + dataBR(fim) + '</div><div class="es-sem-t">' + titulo + '</div></div>';
+    const nav = el('div', 'es-sem-nav');
+    [['‹', -1], ['Hoje', 0], ['›', 1]].forEach(([t, d]) => {
+      const b = el('button', 'act', t);
+      b.onclick = () => { semana = d === 0 ? 0 : semana + d; render(); };
+      nav.appendChild(b);
+    });
+    cab.appendChild(nav);
+    inner.appendChild(cab);
+
+    // o próximo post
+    const px = proximo();
+    const prox = el(px ? 'button' : 'div', 'es-prox');
+    if (px) {
+      prox.innerHTML = '<div class="es-prox-capa">' + (px.capa ? '<img src="' + src(px, px.capa) + '" alt="">' : '') + '</div>'
+        + '<div class="es-prox-b"><div class="es-rot">próximo post</div><div class="es-prox-t">' + esc(px.titulo) + '</div>'
+        + '<div class="es-card-s">' + esc(px.etapaNome) + (px.dataISO ? ' · sai ' + esc(diaDe(px.dataISO)) + ', ' + dataBR(px.dataISO) : ' · sem data ainda')
+        + (diaPost != null && !px.dataISO ? ' · o dia fixo é ' + DIAS[diaPost] : '') + '</div></div>';
+      prox.onclick = () => irPara('posts', px.id);
+    } else {
+      prox.innerHTML = '<div class="es-prox-b"><div class="es-rot">próximo post</div><div class="es-prox-t">Nada na fila</div>'
+        + '<div class="es-card-s">Peça um carrossel ao Claude e ele aparece aqui.</div></div>';
+    }
+    inner.appendChild(prox);
+
+    // números
+    const c = dados.contagem || {};
+    const noAr = dados.pecas.filter(p => p.etapa === 'publicado' && p.dataISO >= ini && p.dataISO <= fim).length;
+    const nums = el('div', 'es-nums');
+    [['Em criação', c.criando || 0, 'o Claude está fazendo'], ['Para aprovar', c.aprovar || 0, 'esperando o seu ok'],
+      ['Aprovadas', c.aprovado || 0, 'prontas para sair'], ['No ar na semana', noAr, 'publicadas de ' + dataBR(ini) + ' a ' + dataBR(fim)]]
+      .forEach(([r, n, s]) => nums.appendChild(el('div', 'es-num', '<div class="es-rot">' + r + '</div><div class="es-num-n">' + n + '</div><div class="es-card-s">' + s + '</div>')));
+    inner.appendChild(nums);
+
+    // os 7 dias
+    const grade = el('div', 'es-dias');
+    dias.forEach(d => {
+      const k = iso(d);
+      const fixo = d.getDay() === diaPost;
+      const col = el('div', 'es-dia' + (k === h ? ' hoje' : '') + (fixo ? ' fixo' : ''));
+      col.appendChild(el('div', 'es-dia-h', '<span>' + DIAS[d.getDay()].slice(0, 3) + '</span><b>' + d.getDate() + '</b>'
+        + (fixo ? '<em>dia de postar</em>' : '')));
+      const doDia = dados.pecas.filter(p => p.dataISO === k);
+      if (!doDia.length) col.appendChild(el('div', 'es-vazio', fixo && k >= h ? 'livre' : '·'));
+      doDia.forEach(p => {
+        const b = el('button', 'es-dia-p et-' + p.etapa, (p.capa ? '<img src="' + src(p, p.capa) + '" alt="">' : '')
+          + '<div><div class="es-dia-t">' + esc(p.titulo) + '</div><div class="es-card-s">' + esc(p.etapaNome) + '</div></div>');
+        b.onclick = () => irPara('posts', p.id);
+        col.appendChild(b);
+      });
+      grade.appendChild(col);
+    });
+    inner.appendChild(grade);
+
+    const semData = dados.pecas.filter(p => p.etapa !== 'publicado' && !p.dataISO);
+    if (semData.length) {
+      inner.appendChild(el('div', 'mc-cob-h', 'Sem data ainda <span>' + semData.length + '</span>'));
+      const fila = el('div', 'es-faixa-fila');
+      semData.forEach(p => fila.appendChild(cartao(p, true, () => irPara('posts', p.id))));
+      inner.appendChild(fila);
+      inner.appendChild(el('div', 'mc-form-note', 'A data vem da linha "data:" do status.txt da peça. Para marcar, peça ao Claude ("essa sai quinta").'));
+    }
+  }
+
+  // ---------- aba Posts ----------
+  function celular(p) {
+    const usarVivo = vivo && p.vids.length > 0;
+    const midias = usarVivo ? p.vids : p.imgs;
+    const n = midias.length;
+    const i = Math.min(slideIdx[p.id] || 0, Math.max(0, n - 1));
+    const tel = el('div', 'es-tel');
+    tel.innerHTML = '<div class="es-tel-top"><img class="es-tel-av" src="/logo.png" alt=""><b>' + esc(conta()) + '</b><span>···</span></div>';
+    const tela = el('div', 'es-tel-midia');
+    if (!n) tela.innerHTML = '<div class="es-sem-capa">' + (p.slidesHtml ? 'slides em HTML, ainda sem imagem' : 'ainda sem imagem') + '</div>';
+    else {
+      const f = midias[i];
+      tela.innerHTML = usarVivo
+        ? '<video src="' + src(p, f) + '" muted loop playsinline autoplay preload="metadata"></video>'
+        : '<img src="' + src(p, f) + '" alt="slide ' + (i + 1) + '">';
+      if (n > 1) {
+        tela.appendChild(el('div', 'es-tel-cont', (i + 1) + '/' + n));
+        if (i > 0) { const a = el('button', 'es-tel-seta esq', '‹'); a.onclick = () => { slideIdx[p.id] = i - 1; render(); }; tela.appendChild(a); }
+        if (i < n - 1) { const a = el('button', 'es-tel-seta dir', '›'); a.onclick = () => { slideIdx[p.id] = i + 1; render(); }; tela.appendChild(a); }
+      }
+    }
+    tel.appendChild(tela);
+    const pontos = n > 1 ? '<div class="es-tel-pontos">' + midias.map((_, k) => '<i' + (k === i ? ' class="on"' : '') + '></i>').join('') + '</div>' : '<div class="es-tel-pontos"></div>';
+    tel.appendChild(el('div', 'es-tel-acoes', '<span>♡</span><span>◯</span><span>➤</span>' + pontos + '<span>⌑</span>'));
+    if (p.legenda) {
+      const curta = p.legenda.length > 125 && !legAberta[p.id];
+      const texto = curta ? p.legenda.slice(0, 125).replace(/\s+\S*$/, '') : p.legenda;
+      const leg = el('div', 'es-tel-leg', '<b>' + esc(conta()) + '</b> ' + esc(texto) + (curta ? ' <button class="es-tel-mais">... mais</button>' : ''));
+      const mais = leg.querySelector('.es-tel-mais');
+      if (mais) mais.onclick = () => { legAberta[p.id] = true; render(); };
+      tel.appendChild(leg);
+    }
+    tel.appendChild(el('div', 'es-tel-data', p.dataISO ? diaDe(p.dataISO) + ', ' + dataBR(p.dataISO) : esc(p.etapaNome)));
+    return tel;
+  }
+
+  function abaPosts(inner) {
+    const wrap = el('div', 'es-posts');
+    const lado = el('div', 'es-lista');
+    const filtros = el('div', 'es-filtros');
+    [['todos', 'Todos'], ...dados.etapas.map(e => [e.id, e.nome])].forEach(([id, nome]) => {
+      const b = el('button', 'es-filtro' + (filtro === id ? ' on' : ''), esc(nome));
+      b.onclick = () => { filtro = id; render(); };
+      filtros.appendChild(b);
+    });
+    lado.appendChild(filtros);
+    const lista = dados.pecas.filter(p => filtro === 'todos' || p.etapa === filtro);
+    if (!lista.length) lado.appendChild(el('div', 'es-vazio', 'nada aqui'));
+    lista.forEach(p => {
+      const b = el('button', 'es-item' + (p.id === aberta ? ' on' : ''),
+        '<div class="es-item-capa">' + (p.capa ? '<img src="' + src(p, p.capa) + '" alt="" loading="lazy">' : '') + '</div>'
+        + '<div><div class="es-card-t">' + esc(p.titulo) + '</div><div class="es-selos"><span class="es-selo et-' + p.etapa + '">' + esc(p.etapaNome) + '</span>'
+        + (p.vids.length ? '<span class="es-selo anim">▶ vivo</span>' : '') + (p.imgs.length ? '<span class="es-selo">' + p.imgs.length + ' slides</span>' : '') + '</div></div>');
+      b.onclick = () => { aberta = p.id; render(); };
+      lado.appendChild(b);
+    });
+    wrap.appendChild(lado);
+
+    const p = dados.pecas.find(x => x.id === aberta);
+    const dir = el('div', 'es-prev');
+    if (!p) {
+      dir.appendChild(el('div', 'es-escolha', '<div class="es-prox-t">Escolha um post</div><div class="es-card-s">Clique numa peça da lista para ver como ela sai no celular.</div>'));
+    } else {
+      const top = el('div', 'es-det-top');
+      top.innerHTML = '<div><div class="es-det-etapa">' + esc(p.etapaNome) + (p.agora ? ' · <b>fazendo agora</b>' : '') + '</div>'
+        + '<div class="es-det-t">' + esc(p.titulo) + '</div><div class="es-card-s">' + esc(p.onde) + '</div></div>';
+      if (p.vids.length && p.imgs.length) {
+        const tg = el('div', 'es-filtros');
+        [[false, 'Estático'], [true, 'Vivo']].forEach(([v, t]) => {
+          const b = el('button', 'es-filtro' + (vivo === v ? ' on' : ''), t);
+          b.onclick = () => { vivo = v; render(); };
+          tg.appendChild(b);
+        });
+        top.appendChild(tg);
+      }
+      dir.appendChild(top);
+      const corpo = el('div', 'es-prev-corpo');
+      corpo.appendChild(celular(p));
+      const info = el('div', 'es-prev-info');
+      const linhas = [['Etapa', esc(p.etapaNome)], ['Data', p.dataISO ? diaDe(p.dataISO) + ', ' + dataBR(p.dataISO) : 'sem data'],
+        ['Rede', esc(p.rede || 'Instagram')], ['Conta', '@' + esc(conta())], ['Mexido', esc(quando(p.atualizado))]];
+      info.innerHTML = linhas.map(([k, v]) => '<div class="es-info-l"><span>' + k + '</span><b>' + v + '</b></div>').join('');
+      if (p.link) info.appendChild(el('div', 'mc-form-note', '<a href="' + esc(p.link) + '" target="_blank" rel="noopener">Abrir o post publicado</a>'));
+      if (p.vids.length) {
+        const som = el('button', 'act', 'Tocar com som');
+        som.onclick = () => dir.querySelectorAll('video').forEach(v => { v.muted = false; v.currentTime = 0; v.play(); });
+        info.appendChild(som);
+      }
+      info.appendChild(el('div', 'mc-form-note', 'Para aprovar, pedir ajuste, marcar a data ou postar, fale com o Claude ("aprovado", "troca a capa", "sai quinta", "pode postar"). O Estúdio só mostra.'));
+      corpo.appendChild(info);
+      dir.appendChild(corpo);
+      if (p.imgs.length) {
+        dir.appendChild(el('div', 'mc-cob-h', 'Todos os slides <span>' + p.imgs.length + '</span>'));
+        const tira = el('div', 'es-tira');
+        p.imgs.forEach((f, i) => {
+          const fig = el('figure', '', '<img src="' + src(p, f) + '" alt="slide ' + (i + 1) + '" loading="lazy"><figcaption>' + String(i + 1).padStart(2, '0') + '</figcaption>');
+          fig.onclick = () => { slideIdx[p.id] = i; vivo = false; render(); };
+          tira.appendChild(fig);
+        });
+        dir.appendChild(tira);
+      }
+    }
+    wrap.appendChild(dir);
+    inner.appendChild(wrap);
+  }
+
+  // ---------- aba Feed ----------
+  function abaFeed(inner) {
+    const desc = (a, b) => (b < a ? -1 : b > a ? 1 : 0);
+    // o que ainda não saiu fica em cima: sem data no topo, depois a data mais distante
+    const fila = dados.pecas.filter(p => p.etapa !== 'publicado').sort((a, b) => desc(a.dataISO || '9999', b.dataISO || '9999') || b.atualizado - a.atualizado);
+    const pub = dados.pecas.filter(p => p.etapa === 'publicado').sort((a, b) => desc(a.dataISO || '', b.dataISO || '') || b.atualizado - a.atualizado);
+    const wrap = el('div', 'es-feed');
+    wrap.appendChild(el('div', 'es-feed-perfil', '<img class="es-feed-av" src="/logo.png" alt=""><div><div class="es-prox-t">' + esc(conta()) + '</div>'
+      + '<div class="es-card-s"><b>' + pub.length + '</b> publicadas pelo OS · <b>' + fila.length + '</b> na fila</div></div>'));
+    wrap.appendChild(el('div', 'mc-form-note', 'As peças com borda tracejada ainda não saíram: é assim que o perfil fica quando elas entrarem. Só aparece o que passou pelo OS.'));
+    const grade = el('div', 'es-feed-grade');
+    [...fila, ...pub].forEach(p => {
+      const b = el('button', 'es-feed-i' + (p.etapa !== 'publicado' ? ' fila' : ''),
+        (p.capa ? '<img src="' + src(p, p.capa) + '" alt="" loading="lazy">' : '<div class="es-sem-capa">sem capa</div>')
+        + (p.imgs.length > 1 ? '<span class="es-feed-ic">❐</span>' : '')
+        + (p.etapa !== 'publicado' ? '<span class="es-feed-et">' + esc(p.etapaNome) + (p.dataISO ? ' · ' + dataBR(p.dataISO) : '') + '</span>' : ''));
+      b.title = p.titulo;
+      b.onclick = () => irPara('posts', p.id);
+      grade.appendChild(b);
+    });
+    if (!fila.length && !pub.length) grade.appendChild(el('div', 'es-vazio', 'nenhuma peça ainda'));
+    wrap.appendChild(grade);
+    inner.appendChild(wrap);
+  }
+
+  // ---------- tela ----------
+  function render(doTopo) {
+    const inner = $('#es-inner');
+    if (!inner) return;
+    const B = window.BRAND || {};
+    const sc = $('#es-scroll');
+    const rolagem = sc && !doTopo ? sc.scrollTop : 0;
+    inner.innerHTML = '';
+    const top = el('div', 'mc-top');
+    const back = el('button', 'mc-back', '<span class="mc-back-arrow">&#9666;</span><div><div><span class="mc-back-name">' + esc(B.nome || 'Cara da IA')
+      + '</span><span class="mc-back-os">Estúdio</span></div><div class="mc-back-sub">voltar pro grafo do cérebro</div></div>');
+    back.onclick = fecharTela;
+    top.appendChild(back);
+    const dir = el('div', 'mc-top-right');
+    const bMc = el('button', 'act', 'Mission Control');
+    bMc.onclick = () => { fecharTela(); window.MissionControl && window.MissionControl.open(); };
+    const bAt = el('button', 'act', 'Atualizar');
+    bAt.onclick = () => carregar().then(() => render());
+    dir.appendChild(bMc); dir.appendChild(bAt);
+    if (dados && dados.geradoEm) dir.appendChild(el('div', 'mc-clock', '<div class="mc-clock-d">' + esc(String(dados.geradoEm).slice(11, 16)) + '</div><div class="mc-clock-s">relendo a cada 8 s</div>'));
+    top.appendChild(dir);
+    inner.appendChild(top);
+
+    const abas = el('div', 'es-abas');
+    ABAS.forEach(([id, nome]) => {
+      const b = el('button', 'es-aba' + (aba === id ? ' on' : ''), nome);
+      b.onclick = () => irPara(id);
+      abas.appendChild(b);
+    });
+    inner.appendChild(abas);
+
+    if (!dados) { inner.appendChild(el('div', 'mc-empty', 'lendo as peças...')); return; }
+    if (dados.erro) { inner.appendChild(el('div', 'mc-warn', '<div>&#9888;</div><div>' + esc(dados.erro) + '</div>')); return; }
+
+    if (!dados.pecas.length) {
+      const onde = dados.fontes.map(f => '<code>' + esc(f.pasta) + '</code>' + (f.existe ? '' : ' (ainda não existe)')).join(' e ');
+      inner.appendChild(el('div', 'mc-warn', '<div>✦</div><div><b>Nenhuma peça ainda.</b> Peça um carrossel ao Claude ("faz um carrossel sobre ...") e ele aparece aqui, '
+        + 'na coluna Em criação, e vai andando até Publicado. O Estúdio procura em ' + onde + '.</div>'));
+    }
+    if (aba === 'posts' && !dados.pecas.find(x => x.id === aberta) && dados.pecas.length) aberta = dados.pecas[0].id;
+    ({ quadro: abaQuadro, semana: abaSemana, posts: abaPosts, feed: abaFeed }[aba] || abaQuadro)(inner);
+    if (sc) sc.scrollTop = rolagem;
   }
 
   // ---------- faixa no Mission Control ----------
@@ -175,9 +389,9 @@
     window.__mcPaused = true;
     void root.offsetHeight;
     root.classList.add('in');
-    aberta = id || aberta;
-    render();
-    carregar().then(render);
+    if (id) { aberta = id; aba = 'posts'; }
+    render(true);
+    carregar().then(() => render());
     clearInterval(timer);
     timer = setInterval(async () => {
       if (document.hidden) return;
@@ -212,7 +426,18 @@
         const drawer = document.getElementById('brain-viewer');
         if (drawer && drawer.classList.contains('open')) return;
         e.stopPropagation(); e.preventDefault();
-        if (aberta) { aberta = null; render(); } else fecharTela();
+        if (aba !== 'quadro') irPara('quadro'); else fecharTela();
+        return;
+      }
+      // setas trocam o slide da prévia na aba Posts
+      if (estaAberta() && !digitando && aba === 'posts' && aberta && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+        const p = dados && dados.pecas && dados.pecas.find(x => x.id === aberta);
+        if (p) {
+          const n = (vivo && p.vids.length ? p.vids : p.imgs).length;
+          const i = (slideIdx[p.id] || 0) + (e.key === 'ArrowRight' ? 1 : -1);
+          if (i >= 0 && i < n) { slideIdx[p.id] = i; render(); }
+          e.preventDefault();
+        }
         return;
       }
       if (!digitando && !e.metaKey && !e.ctrlKey && !e.altKey && (e.key === 'e' || e.key === 'E')) {

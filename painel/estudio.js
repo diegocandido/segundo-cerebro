@@ -110,6 +110,18 @@ function ehPeca(pasta) {
     || listar(pasta, /^(slide|card)[-_]?\d*.*\.(png|jpe?g|webp)$/i).length > 0;
 }
 
+// "2026-11-07", "07/11/2026" ou "07/11" -> "2026-11-07" (as abas Semana e Feed usam); o resto fica vazio
+function dataISO(t) {
+  const s = String(t || '').trim();
+  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return m[1] + '-' + m[2] + '-' + m[3];
+  m = s.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/);
+  if (!m) return '';
+  let a = m[3] ? Number(m[3]) : new Date().getFullYear();
+  if (a < 100) a += 2000;
+  return a + '-' + String(m[2]).padStart(2, '0') + '-' + String(m[1]).padStart(2, '0');
+}
+
 function peca(base, i, nome, hist) {
   const pasta = path.join(base.abs, nome);
   const st = status(pasta);
@@ -136,7 +148,7 @@ function peca(base, i, nome, hist) {
   const slidesHtml = listar(path.join(pasta, 'src/slides'), /^slide-\d+\.html$/).length || listar(pasta, /^slide-\d+\.html$/).length;
   return {
     id: i + ':' + nome, nome, titulo: st.titulo || (post && post.titulo) || titulo(pasta, nome), etapa, etapaNome: NOMES[etapa],
-    rede: st.rede || '', data: st.data || '', link: /^https?:\/\//.test(st.link || '') ? st.link : '',
+    rede: st.rede || '', data: st.data || '', dataISO: dataISO(st.data), link: /^https?:\/\//.test(st.link || '') ? st.link : '',
     capa: m.imgs[0] || m.folha || '', imgs: m.imgs, vids: m.vids, slidesHtml,
     legenda,
     temBrief: fs.existsSync(path.join(pasta, 'BRIEF.md')),
@@ -162,7 +174,11 @@ function resumo() {
   });
   pecas.sort((a, b) => b.atualizado - a.atualizado);
   const contagem = Object.fromEntries(ETAPAS.map(e => [e, pecas.filter(p => p.etapa === e).length]));
-  return { geradoEm: M.nowISO(), fontes, etapas: ETAPAS.map(e => ({ id: e, nome: NOMES[e] })), contagem, pecas };
+  // perfil da prévia (abas Posts e Feed) e o dia fixo de postar (aba Semana, 1 = segunda ... 6 = sábado):
+  // vêm do workspace.json (missionControl.estudioConta e estudioDiaPost), não do código
+  const dia = Number(M.mcOpt('estudioDiaPost'));
+  const perfil = { conta: String(M.mcOpt('estudioConta') || '').replace(/^@/, ''), diaPost: Number.isInteger(dia) && dia >= 1 && dia <= 6 ? dia : null };
+  return { geradoEm: M.nowISO(), perfil, fontes, etapas: ETAPAS.map(e => ({ id: e, nome: NOMES[e] })), contagem, pecas };
 }
 
 // caminho de um arquivo de mídia, só se ele for uma das mídias listadas daquela peça
