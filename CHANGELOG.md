@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.2 (2026-11-06)
+Atualizar ficou mais simples: quem já tem o OS recebe o link do repositório do kit e diz ao Claude "confere se meu OS precisa atualizar". Ele compara a sua versão com a mais nova, explica o que muda, faz backup e só aplica com o seu ok. O passo a passo está no novo ATUALIZAR.md, e o README.md mostra por onde começar.
+
 ## 1.1 (2026-11-06)
 O Estúdio Social (tecla E) ganhou 4 abas: Quadro, Semana, Posts e Feed. A aba Semana mostra o próximo post, os números e os 7 dias, com o seu dia fixo de postar marcado. A aba Posts mostra cada peça numa tela de celular, como vai sair no Instagram, com slides, carrossel vivo e legenda. A aba Feed mostra como o perfil fica com as próximas peças. O @ da prévia e o dia de postar ficam no config/workspace.json (estudioConta e estudioDiaPost).
 

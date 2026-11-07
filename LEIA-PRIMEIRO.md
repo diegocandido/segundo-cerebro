@@ -18,6 +18,15 @@ diagnóstico para o cliente aprovar,
 construção do segundo cérebro, instalação do painel, ligação das ferramentas e o primeiro teste.
 O segundo cérebro e o painel são criados **fora** da pasta do kit, no lugar que o cliente escolher.
 
+## Atualizar quem já tem o OS
+
+O kit vive num repositório privado no GitHub, com todas as versões. Para atualizar um cliente, mande
+o link do repositório e peça que ele diga ao Claude, na pasta do segundo cérebro: **"confere se meu
+OS precisa atualizar: <link>"**. O Claude dele segue o [ATUALIZAR.md](ATUALIZAR.md): compara a
+versão do `.kit-versao` com a mais nova, explica o que muda, faz backup e só aplica com o "pode".
+Na primeira vez o cliente precisa aceitar o convite do repositório e entrar no GitHub naquele
+computador (o passo a passo está no fim do ATUALIZAR.md).
+
 ## Pré-requisitos no computador do cliente
 
 - Claude Code (app desktop ou terminal), com uma conta Claude.

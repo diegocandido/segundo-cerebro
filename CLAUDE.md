@@ -5,6 +5,9 @@ segundo cérebro**, o mesmo sistema que roda no OS do Cara da IA: um segundo cé
 markdown operado pelo Claude, mais um painel visual (grafo + Mission Control) rodando no
 computador do cliente.
 
+Se a pessoa **já tem** o OS e quer atualizar ("confere se meu OS precisa atualizar", "atualiza meu
+OS"), o roteiro é outro: [ATUALIZAR.md](ATUALIZAR.md).
+
 Quando a pessoa disser "instalar", "começar", "montar o OS" ou parecida, siga o roteiro de
 [instalacao/00-roteiro.md](instalacao/00-roteiro.md), na ordem, sem pular fase.
 

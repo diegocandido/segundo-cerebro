@@ -123,7 +123,10 @@ Acrescente, se o cliente aprovou:
 Termine com `python3 bin/brain.py indexar` e `python3 bin/brain.py doctor` limpos.
 
 **Carimbo da versão:** copie o conteúdo de `VERSAO.txt` do kit para `.kit-versao` na raiz do segundo
-cérebro (uma linha). É por ele que um pacote de atualização sabe de que versão o cliente parte.
+cérebro (uma linha). É por ele que a atualização sabe de que versão o cliente parte. Explique ao
+cliente, numa frase, como as melhorias chegam: quando houver versão nova, ele recebe o link do
+repositório do kit e diz ao Claude "confere se meu OS precisa atualizar: <link>" (roteiro em
+[ATUALIZAR.md](../ATUALIZAR.md)).
 
 ## Fase 4: decisões registradas
 
