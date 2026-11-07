@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.3 (2026-11-06)
+Para atualizar, basta o link do repositório: não precisa de conta nem de login no GitHub. Sem git no computador, o Claude baixa as versões em zip direto pelo link.
+
 ## 1.2 (2026-11-06)
 Atualizar ficou mais simples: quem já tem o OS recebe o link do repositório do kit e diz ao Claude "confere se meu OS precisa atualizar". Ele compara a sua versão com a mais nova, explica o que muda, faz backup e só aplica com o seu ok. O passo a passo está no novo ATUALIZAR.md, e o README.md mostra por onde começar.
 

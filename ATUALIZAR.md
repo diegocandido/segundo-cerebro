@@ -14,10 +14,8 @@ Instalação nova (quem ainda não tem o OS) não é aqui: siga o [CLAUDE.md](CL
    esta pessoa na instalação. Leve só a regra ou o passo novo, escrito no jeito dela, nunca o modelo
    inteiro por cima.
 3. **Mostre antes, aplique depois.** Monte o plano, mostre e espere o "pode" da pessoa.
-4. **Senha e token nunca passam pelo chat.** O login no GitHub é feito pela pessoa, no navegador ou
-   no terminal dela.
-5. **Nada de travessão** (em dash) nos textos que você escrever.
-6. **Na dúvida, pergunte.** Arquivo que não existe no OS da pessoa é recurso que ela não adotou:
+4. **Nada de travessão** (em dash) nos textos que você escrever.
+5. **Na dúvida, pergunte.** Arquivo que não existe no OS da pessoa é recurso que ela não adotou:
    não instale sem ela pedir.
 
 ## Passo 1. Ver se precisa atualizar
@@ -28,8 +26,9 @@ Instalação nova (quem ainda não tem o OS) não é aqui: siga o [CLAUDE.md](CL
    próximas vezes:
    - Já existe: `git -C <OS>/../.kit-repo fetch --tags --force origin && git -C <OS>/../.kit-repo checkout -q origin/main`.
    - Não existe: `git clone <link> <OS>/../.kit-repo`.
-   - **Pediu login** (o repositório é privado): é a primeira vez neste computador. Veja
-     "Login no GitHub" no fim e, com o login feito, rode de novo.
+   - O repositório é público: não precisa de conta nem de login no GitHub. Se pedir usuário e
+     senha, o link está errado; confira com a pessoa.
+   - **Sem git no computador:** veja "Sem git" no fim.
 4. **Versão nova:** leia `<OS>/../.kit-repo/VERSAO.txt`.
 5. **Igual à instalada?** Diga "Seu OS está em dia, na versão X" e pare. **Diferente?** Leia no
    `CHANGELOG.md` as notas das versões entre a dela e a nova e explique em poucas linhas, em
@@ -77,14 +76,11 @@ arquivo por arquivo, com cuidado redobrado.
 6. **Resumo.** Diga em poucas linhas o que entrou, o que ficou de fora e por quê, e onde está o
    backup. Sugira que a pessoa avise quem entregou o kit que agora está na versão nova.
 
-## Login no GitHub (uma vez por computador)
-O repositório é privado: a pessoa precisa de uma conta no GitHub com o convite aceito (chega no
-e-mail dela). Depois, um destes caminhos, feito por ela:
-- **Pelo navegador (mais fácil, se o computador tem o GitHub CLI):** `gh auth login` (escolha
-  GitHub.com, HTTPS e "Login with a web browser") e depois `gh auth setup-git`.
-- **Com token:** ela cria um token clássico em github.com/settings/tokens/new, marcando só **repo**,
-  e roda o `git clone` no terminal dela. Quando pedir, o usuário é o dela no GitHub e a senha é o
-  token (o terminal não mostra o que é colado). O computador guarda e não pede de novo.
+## Sem git
+O git vem com as ferramentas de linha de comando da Apple (no Mac, `xcode-select --install` instala).
+Se não der para instalar, baixe os zips direto, sem login:
+- a versão mais nova: `<link>/archive/refs/heads/main.zip`;
+- a versão dela, para comparar: `<link>/archive/refs/tags/<tag-dela>.zip`.
 
-Se não der para logar, o plano B é quem entregou o kit mandar um pacote de atualização em zip, que
-traz as mesmas instruções.
+Descompacte os dois em `<OS>/../.kit-novo/` e `<OS>/../.kit-antes/` e compare as pastas (`diff -rq`
+para a lista, `diff` para cada arquivo) no lugar dos comandos do Passo 2.
