@@ -56,6 +56,8 @@ computador (o passo a passo está no fim do ATUALIZAR.md).
 ```
 Kit-OS-Cara-da-IA/
 ├── LEIA-PRIMEIRO.md        este arquivo
+├── ATUALIZAR.md           como o Claude atualiza um OS que já está instalado
+├── README.md              a página do repositório no GitHub
 ├── CLAUDE.md               instruções para o Claude da sessão de instalação
 ├── instalacao/
 │   ├── 00-roteiro.md       as 8 fases da instalação
