@@ -1,5 +1,5 @@
 {
-  "_note": "Copie para config/workspace.json. 'root' é o caminho ABSOLUTO da pasta do segundo cérebro do cliente (o mission.js resolve pelo diretório atual, então caminho relativo quebra). 'visibleRoots' são as pastas que aparecem abertas no grafo: troque CLIENTES/AREA pelos nomes das áreas que o os-builder criou. 'missionControl' aponta para o diário, a pasta de clientes, o espelho das tarefas e a pasta dos registros de proposta (que a tela Gestão conta) dentro do OS. 'carrosseisDirs' são as pastas das peças de rede social que o Estúdio Social (tecla E) mostra, uma subpasta por peça; 'estudioConta' é o @ do Instagram que aparece na prévia de celular e no Feed do Estúdio, e 'estudioDiaPost' é o dia fixo de postar marcado na aba Semana (1 = segunda ... 6 = sábado; tire a linha se não houver dia fixo); 'carrosseis' em excludeDirs evita que o grafo leia os arquivos de trabalho delas. 'livroCaixa' e 'agenteFinanceiroDir' só valem se o cliente quis o livro-caixa (tecla L).",
+  "_note": "Copie para config/workspace.json. 'root' é o caminho ABSOLUTO da pasta do segundo cérebro do cliente (o mission.js resolve pelo diretório atual, então caminho relativo quebra). 'visibleRoots' são as pastas que aparecem abertas no grafo: troque CLIENTES/AREA pelos nomes das áreas que o os-builder criou. 'missionControl' aponta para o diário, a pasta de clientes, o espelho das tarefas e a pasta dos registros de proposta (que a tela Gestão conta) dentro do OS. 'carrosseisDirs' são as pastas das peças de rede social que o Estúdio Social (tecla E) mostra, uma subpasta por peça; 'estudioConta' é o @ do Instagram que aparece na prévia de celular e no Feed do Estúdio, e 'estudioDiaPost' é o dia fixo de postar marcado na aba Semana (1 = segunda ... 6 = sábado; tire a linha se não houver dia fixo); 'estudioCor' é a cor da marca que acende o Estúdio (brilho, abas, números), em hexadecimal; 'carrosseis' em excludeDirs evita que o grafo leia os arquivos de trabalho delas. 'livroCaixa' e 'agenteFinanceiroDir' só valem se o cliente quis o livro-caixa (tecla L).",
   "root": "/CAMINHO/ABSOLUTO/DO/SEGUNDO-CEREBRO",
   "memoryDir": "memory",
   "memoryIndex": "memory/memory.md",
@@ -57,6 +57,7 @@
     ],
     "estudioConta": "suaconta",
     "estudioDiaPost": 4,
+    "estudioCor": "#2952E3",
     "pendingHeadingPattern": "pend[eê]ncias|pending",
     "livroCaixa": "../Financeiro/livro-caixa.csv",
     "agenteFinanceiroDir": "inbox/agente/financeiro"

@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.4 (2026-11-06)
+O Estúdio Social ganhou visual novo: fundo escuro com brilho na cor da sua marca, topo com abas e ícones, cartões de vidro e números grandes. A aba Semana abre com a saudação, o próximo post com a capa grande e quanto falta para ele sair, e a agenda com a capa de cada dia. A cor vem do config/workspace.json (estudioCor).
+
 ## 1.3 (2026-11-06)
 Para atualizar, basta o link do repositório: não precisa de conta nem de login no GitHub. Sem git no computador, o Claude baixa as versões em zip direto pelo link.
 

@@ -99,8 +99,8 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
     enquanto o Claude trabalha. Avise antes do sim: o instalador baixa a skill do autor e o motor de
     renderização (uns 400 MB, Mac ou Linux, o mesmo da 13f). Se ele já respondeu sim à 13f, isto vem
     junto. Pergunte também em que pasta do OS ficam as peças (padrão `Social/carrosseis`), qual é o @
-    do Instagram (vai na prévia de celular e no Feed) e se ele tem um dia fixo de postar (vai marcado na
-    aba Semana). Guia em
+    do Instagram (vai na prévia de celular e no Feed) se ele tem um dia fixo de postar (vai marcado na
+    aba Semana) e qual é a cor principal da marca (acende o Estúdio). Guia em
     [02-ferramentas.md](02-ferramentas.md), "Criador de carrosséis e Estúdio Social".
 14. **Como você monta um orçamento ou proposta hoje?** Modelo no Word, Canva, PDF, sistema.
     Quanto tempo leva. Quem aprova o preço.

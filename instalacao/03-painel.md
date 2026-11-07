@@ -37,7 +37,8 @@ No `workspace.json`, se o Estúdio Social entrou (pergunta 13g): `missionControl
 com a pasta das peças (padrão `["Social/carrosseis"]`) e `carrosseis` em `excludeDirs`;
 `missionControl.estudioConta` com o @ do Instagram do cliente, sem a arroba (aparece na prévia de
 celular e no Feed), e `missionControl.estudioDiaPost` com o dia fixo de postar, se ele tiver um
-(1 = segunda ... 6 = sábado; sem dia fixo, tire a linha).
+(1 = segunda ... 6 = sábado; sem dia fixo, tire a linha) e `missionControl.estudioCor` com a cor
+principal da marca dele em hexadecimal (ex.: `#2952E3`), que acende o Estúdio.
 
 ## 3. Conferir antes de subir (obrigatório)
 

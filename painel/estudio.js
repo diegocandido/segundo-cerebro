@@ -174,10 +174,16 @@ function resumo() {
   });
   pecas.sort((a, b) => b.atualizado - a.atualizado);
   const contagem = Object.fromEntries(ETAPAS.map(e => [e, pecas.filter(p => p.etapa === e).length]));
-  // perfil da prévia (abas Posts e Feed) e o dia fixo de postar (aba Semana, 1 = segunda ... 6 = sábado):
-  // vêm do workspace.json (missionControl.estudioConta e estudioDiaPost), não do código
+  // perfil da prévia (abas Posts e Feed), o dia fixo de postar (aba Semana, 1 = segunda ... 6 = sábado) e a
+  // cor da marca que acende a tela: vêm do workspace.json (missionControl.estudioConta, estudioDiaPost e
+  // estudioCor), não do código
   const dia = Number(M.mcOpt('estudioDiaPost'));
-  const perfil = { conta: String(M.mcOpt('estudioConta') || '').replace(/^@/, ''), diaPost: Number.isInteger(dia) && dia >= 1 && dia <= 6 ? dia : null };
+  const cor = String(M.mcOpt('estudioCor') || '');
+  const perfil = {
+    conta: String(M.mcOpt('estudioConta') || '').replace(/^@/, ''),
+    diaPost: Number.isInteger(dia) && dia >= 1 && dia <= 6 ? dia : null,
+    cor: /^#[0-9a-f]{6}$/i.test(cor) ? cor : '',
+  };
   return { geradoEm: M.nowISO(), perfil, fontes, etapas: ETAPAS.map(e => ({ id: e, nome: NOMES[e] })), contagem, pecas };
 }
 

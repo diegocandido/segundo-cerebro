@@ -24,6 +24,12 @@
   const slideIdx = {};    // slide atual da prévia, por peça
   const legAberta = {};   // legenda expandida na prévia, por peça
 
+  const ICO = {
+    quadro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="10" rx="1.5"/><rect x="17" y="4" width="4" height="13" rx="1.5"/></svg>',
+    semana: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+    posts: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+    feed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>',
+  };
   const ABAS = [['quadro', 'Quadro'], ['semana', 'Semana'], ['posts', 'Posts'], ['feed', 'Feed']];
   const DIAS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 
@@ -86,7 +92,7 @@
   function abaQuadro(inner) {
     const quadro = el('div', 'es-quadro');
     for (const et of dados.etapas) {
-      const col = el('div', 'es-col');
+      const col = el('div', 'es-vidro es-col');
       const lista = dados.pecas.filter(x => x.etapa === et.id);
       col.appendChild(el('div', 'es-col-h', esc(et.nome) + '<span>' + lista.length + '</span>'));
       if (!lista.length) col.appendChild(el('div', 'es-vazio', '·'));
@@ -113,70 +119,87 @@
     const ini = iso(dias[0]), fim = iso(dias[6]);
     const diaPost = dados.perfil && dados.perfil.diaPost;
     const h = hoje();
+    const MES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+    const daSemana = dados.pecas.filter(p => p.dataISO >= ini && p.dataISO <= fim);
 
-    const cab = el('div', 'es-sem-cab');
-    const titulo = semana === 0 ? 'Esta semana' : semana === -1 ? 'Semana passada' : semana === 1 ? 'Próxima semana' : 'Semana';
-    cab.innerHTML = '<div><div class="es-rot">semana de ' + dataBR(ini) + ' a ' + dataBR(fim) + '</div><div class="es-sem-t">' + titulo + '</div></div>';
-    const nav = el('div', 'es-sem-nav');
+    // título: saudação + resumo da semana
+    const hora = new Date().getHours();
+    const ola = hora < 12 ? 'Bom dia.' : hora < 18 ? 'Boa tarde.' : 'Boa noite.';
+    const resumo = !daSemana.length ? 'Nenhum post nesta semana.' : daSemana.length === 1 ? '1 post nesta semana.' : daSemana.length + ' posts nesta semana.';
+    const cab = el('div', 'es-ola');
+    cab.innerHTML = '<div><div class="es-rot">semana de ' + dias[0].getDate() + ' a ' + dias[6].getDate() + ' de ' + MES[dias[6].getMonth()] + '</div>'
+      + '<h1>' + (semana === 0 ? ola + ' ' : '') + '<span class="apagado">' + resumo + '</span></h1></div>';
+    const nav = el('div', 'es-ola-nav');
     [['‹', -1], ['Hoje', 0], ['›', 1]].forEach(([t, d]) => {
-      const b = el('button', 'act', t);
+      const b = el('button', 'es-btn sm', t);
       b.onclick = () => { semana = d === 0 ? 0 : semana + d; render(); };
       nav.appendChild(b);
     });
     cab.appendChild(nav);
     inner.appendChild(cab);
 
-    // o próximo post
+    // próximo post + números, lado a lado
+    const hero = el('div', 'es-hero');
     const px = proximo();
-    const prox = el(px ? 'button' : 'div', 'es-prox');
+    const prox = el(px ? 'button' : 'div', 'es-vidro es-prox' + (px ? '' : ' vazio'));
     if (px) {
+      let falta = 'sem data';
+      if (px.dataISO) {
+        const dd = Math.round((new Date(px.dataISO + 'T12:00') - base) / 864e5);
+        falta = dd <= 0 ? 'hoje' : dd === 1 ? 'amanhã' : 'em ' + dd + ' dias';
+      }
       prox.innerHTML = '<div class="es-prox-capa">' + (px.capa ? '<img src="' + src(px, px.capa) + '" alt="">' : '') + '</div>'
-        + '<div class="es-prox-b"><div class="es-rot">próximo post</div><div class="es-prox-t">' + esc(px.titulo) + '</div>'
-        + '<div class="es-card-s">' + esc(px.etapaNome) + (px.dataISO ? ' · sai ' + esc(diaDe(px.dataISO)) + ', ' + dataBR(px.dataISO) : ' · sem data ainda')
-        + (diaPost != null && !px.dataISO ? ' · o dia fixo é ' + DIAS[diaPost] : '') + '</div></div>';
+        + '<div class="es-prox-b"><div class="es-rot ac">próximo post' + (px.dataISO ? ' · ' + diaDe(px.dataISO) + ', ' + dataBR(px.dataISO) : '') + '</div>'
+        + '<h2>' + esc(px.titulo) + '</h2>'
+        + '<div class="es-tags"><span class="es-tag ac">' + esc(px.etapaNome) + '</span>' + (px.imgs.length ? '<span class="es-tag">' + px.imgs.length + ' slides</span>' : '')
+        + (px.vids.length ? '<span class="es-tag">▶ vivo</span>' : '') + '<span class="es-tag">' + esc(px.rede || 'Instagram') + '</span></div>'
+        + '<div class="es-falta">' + falta + '</div>'
+        + (!px.dataISO && diaPost != null ? '<div class="es-card-s">O seu dia fixo é ' + DIAS[diaPost] + '. Para marcar, diga ao Claude "essa sai ' + DIAS[diaPost] + '".</div>' : '')
+        + '</div>';
       prox.onclick = () => irPara('posts', px.id);
     } else {
-      prox.innerHTML = '<div class="es-prox-b"><div class="es-rot">próximo post</div><div class="es-prox-t">Nada na fila</div>'
-        + '<div class="es-card-s">Peça um carrossel ao Claude e ele aparece aqui.</div></div>';
+      prox.innerHTML = '<div class="es-prox-b"><div class="es-rot">próximo post</div><h2>Nada na fila</h2>'
+        + '<div class="es-card-s">Peça um carrossel ao Claude ("faz um carrossel sobre ...") e ele aparece aqui, pronto para você aprovar.</div></div>';
     }
-    inner.appendChild(prox);
-
-    // números
+    hero.appendChild(prox);
     const c = dados.contagem || {};
     const noAr = dados.pecas.filter(p => p.etapa === 'publicado' && p.dataISO >= ini && p.dataISO <= fim).length;
     const nums = el('div', 'es-nums');
-    [['Em criação', c.criando || 0, 'o Claude está fazendo'], ['Para aprovar', c.aprovar || 0, 'esperando o seu ok'],
-      ['Aprovadas', c.aprovado || 0, 'prontas para sair'], ['No ar na semana', noAr, 'publicadas de ' + dataBR(ini) + ' a ' + dataBR(fim)]]
-      .forEach(([r, n, s]) => nums.appendChild(el('div', 'es-num', '<div class="es-rot">' + r + '</div><div class="es-num-n">' + n + '</div><div class="es-card-s">' + s + '</div>')));
-    inner.appendChild(nums);
+    [['em criação', c.criando || 0, 'o Claude está fazendo'], ['para aprovar', c.aprovar || 0, 'esperando o seu ok'],
+      ['aprovadas', c.aprovado || 0, 'prontas para sair'], ['no ar na semana', noAr, 'publicadas de ' + dataBR(ini) + ' a ' + dataBR(fim)]]
+      .forEach(([r, n, s]) => nums.appendChild(el('div', 'es-vidro es-num', '<div class="es-rot">' + r + '</div><div class="es-num-n">' + n + '</div><div class="es-card-s">' + s + '</div>')));
+    hero.appendChild(nums);
+    inner.appendChild(hero);
 
-    // os 7 dias
+    // os 7 dias, com a capa grande de cada post
+    inner.appendChild(el('div', 'es-sec-rot', '<span class="es-rot">agenda</span>' + (diaPost != null ? '<span class="es-card-s">dia fixo de postar: ' + DIAS[diaPost] + '</span>' : '')));
     const grade = el('div', 'es-dias');
     dias.forEach(d => {
       const k = iso(d);
       const fixo = d.getDay() === diaPost;
-      const col = el('div', 'es-dia' + (k === h ? ' hoje' : '') + (fixo ? ' fixo' : ''));
-      col.appendChild(el('div', 'es-dia-h', '<span>' + DIAS[d.getDay()].slice(0, 3) + '</span><b>' + d.getDate() + '</b>'
-        + (fixo ? '<em>dia de postar</em>' : '')));
+      const col = el('div', 'es-vidro es-dia' + (k === h ? ' hoje' : '') + (fixo ? ' fixo' : ''));
+      col.appendChild(el('div', 'es-dia-h', '<span>' + DIAS[d.getDay()] + '</span><b>' + d.getDate() + '</b>'));
+      const corpo = el('div', 'es-dia-c');
       const doDia = dados.pecas.filter(p => p.dataISO === k);
-      if (!doDia.length) col.appendChild(el('div', 'es-vazio', fixo && k >= h ? 'livre' : '·'));
       doDia.forEach(p => {
-        const b = el('button', 'es-dia-p et-' + p.etapa, (p.capa ? '<img src="' + src(p, p.capa) + '" alt="">' : '')
-          + '<div><div class="es-dia-t">' + esc(p.titulo) + '</div><div class="es-card-s">' + esc(p.etapaNome) + '</div></div>');
+        const b = el('button', 'es-dia-p et-' + p.etapa, '<div class="es-dia-capa">' + (p.capa ? '<img src="' + src(p, p.capa) + '" alt="" loading="lazy">' : '')
+          + (p.imgs.length > 1 ? '<span class="es-qt">' + p.imgs.length + '</span>' : '') + '</div>'
+          + '<div class="es-dia-t">' + esc(p.titulo) + '</div><span class="es-pill et-' + p.etapa + '">' + esc(p.etapaNome) + '</span>');
         b.onclick = () => irPara('posts', p.id);
-        col.appendChild(b);
+        corpo.appendChild(b);
       });
+      if (!doDia.length) corpo.appendChild(el('div', 'es-slot', fixo && k >= h ? 'dia de postar · livre' : fixo ? 'dia de postar' : ''));
+      col.appendChild(corpo);
       grade.appendChild(col);
     });
     inner.appendChild(grade);
 
     const semData = dados.pecas.filter(p => p.etapa !== 'publicado' && !p.dataISO);
     if (semData.length) {
-      inner.appendChild(el('div', 'mc-cob-h', 'Sem data ainda <span>' + semData.length + '</span>'));
+      inner.appendChild(el('div', 'es-sec-rot', '<span class="es-rot">sem data ainda · ' + semData.length + '</span><span class="es-card-s">a data vem da linha "data:" do status.txt da peça</span>'));
       const fila = el('div', 'es-faixa-fila');
       semData.forEach(p => fila.appendChild(cartao(p, true, () => irPara('posts', p.id))));
       inner.appendChild(fila);
-      inner.appendChild(el('div', 'mc-form-note', 'A data vem da linha "data:" do status.txt da peça. Para marcar, peça ao Claude ("essa sai quinta").'));
     }
   }
 
@@ -218,7 +241,7 @@
 
   function abaPosts(inner) {
     const wrap = el('div', 'es-posts');
-    const lado = el('div', 'es-lista');
+    const lado = el('div', 'es-vidro es-lista');
     const filtros = el('div', 'es-filtros');
     [['todos', 'Todos'], ...dados.etapas.map(e => [e.id, e.nome])].forEach(([id, nome]) => {
       const b = el('button', 'es-filtro' + (filtro === id ? ' on' : ''), esc(nome));
@@ -231,7 +254,7 @@
     lista.forEach(p => {
       const b = el('button', 'es-item' + (p.id === aberta ? ' on' : ''),
         '<div class="es-item-capa">' + (p.capa ? '<img src="' + src(p, p.capa) + '" alt="" loading="lazy">' : '') + '</div>'
-        + '<div><div class="es-card-t">' + esc(p.titulo) + '</div><div class="es-selos"><span class="es-selo et-' + p.etapa + '">' + esc(p.etapaNome) + '</span>'
+        + '<div><div class="es-card-t">' + esc(p.titulo) + '</div><div class="es-selos"><span class="es-pill et-' + p.etapa + '">' + esc(p.etapaNome) + '</span>'
         + (p.vids.length ? '<span class="es-selo anim">▶ vivo</span>' : '') + (p.imgs.length ? '<span class="es-selo">' + p.imgs.length + ' slides</span>' : '') + '</div></div>');
       b.onclick = () => { aberta = p.id; render(); };
       lado.appendChild(b);
@@ -239,7 +262,7 @@
     wrap.appendChild(lado);
 
     const p = dados.pecas.find(x => x.id === aberta);
-    const dir = el('div', 'es-prev');
+    const dir = el('div', 'es-vidro es-prev');
     if (!p) {
       dir.appendChild(el('div', 'es-escolha', '<div class="es-prox-t">Escolha um post</div><div class="es-card-s">Clique numa peça da lista para ver como ela sai no celular.</div>'));
     } else {
@@ -292,10 +315,9 @@
     // o que ainda não saiu fica em cima: sem data no topo, depois a data mais distante
     const fila = dados.pecas.filter(p => p.etapa !== 'publicado').sort((a, b) => desc(a.dataISO || '9999', b.dataISO || '9999') || b.atualizado - a.atualizado);
     const pub = dados.pecas.filter(p => p.etapa === 'publicado').sort((a, b) => desc(a.dataISO || '', b.dataISO || '') || b.atualizado - a.atualizado);
-    const wrap = el('div', 'es-feed');
+    const wrap = el('div', 'es-vidro es-feed');
     wrap.appendChild(el('div', 'es-feed-perfil', '<img class="es-feed-av" src="/logo.png" alt=""><div><div class="es-prox-t">' + esc(conta()) + '</div>'
       + '<div class="es-card-s"><b>' + pub.length + '</b> publicadas pelo OS · <b>' + fila.length + '</b> na fila</div></div>'));
-    wrap.appendChild(el('div', 'mc-form-note', 'As peças com borda tracejada ainda não saíram: é assim que o perfil fica quando elas entrarem. Só aparece o que passou pelo OS.'));
     const grade = el('div', 'es-feed-grade');
     [...fila, ...pub].forEach(p => {
       const b = el('button', 'es-feed-i' + (p.etapa !== 'publicado' ? ' fila' : ''),
@@ -308,39 +330,57 @@
     });
     if (!fila.length && !pub.length) grade.appendChild(el('div', 'es-vazio', 'nenhuma peça ainda'));
     wrap.appendChild(grade);
-    inner.appendChild(wrap);
+    const duas = el('div', 'es-feed-wrap');
+    duas.appendChild(wrap);
+    duas.appendChild(el('div', 'es-feed-lado', '<h2>Como o seu perfil vai ficar</h2>'
+      + '<p>Em cima, com borda tracejada na cor da marca, as peças que ainda vão sair, da data mais distante para a mais perto. Embaixo, o que já foi publicado pelo OS.</p>'
+      + '<p>Olhe a grade como um todo: capas parecidas lado a lado cansam. Se duas seguidas ficaram com a mesma cara, peça ao Claude para trocar a capa de uma.</p>'
+      + '<p class="es-card-s">Só aparece o que passou pelo OS. Clique numa capa para ver a peça no celular.</p>'));
+    inner.appendChild(duas);
   }
 
   // ---------- tela ----------
   function render(doTopo) {
-    const inner = $('#es-inner');
-    if (!inner) return;
+    const raiz = $('#es-inner');
+    if (!raiz) return;
     const B = window.BRAND || {};
     const sc = $('#es-scroll');
     const rolagem = sc && !doTopo ? sc.scrollTop : 0;
-    inner.innerHTML = '';
-    const top = el('div', 'mc-top');
-    const back = el('button', 'mc-back', '<span class="mc-back-arrow">&#9666;</span><div><div><span class="mc-back-name">' + esc(B.nome || 'Cara da IA')
-      + '</span><span class="mc-back-os">Estúdio</span></div><div class="mc-back-sub">voltar pro grafo do cérebro</div></div>');
-    back.onclick = fecharTela;
-    top.appendChild(back);
-    const dir = el('div', 'mc-top-right');
-    const bMc = el('button', 'act', 'Mission Control');
-    bMc.onclick = () => { fecharTela(); window.MissionControl && window.MissionControl.open(); };
-    const bAt = el('button', 'act', 'Atualizar');
-    bAt.onclick = () => carregar().then(() => render());
-    dir.appendChild(bMc); dir.appendChild(bAt);
-    if (dados && dados.geradoEm) dir.appendChild(el('div', 'mc-clock', '<div class="mc-clock-d">' + esc(String(dados.geradoEm).slice(11, 16)) + '</div><div class="mc-clock-s">relendo a cada 8 s</div>'));
-    top.appendChild(dir);
-    inner.appendChild(top);
+    const root = $('#es-root');
+    if (root && dados && dados.perfil && dados.perfil.cor) root.style.setProperty('--es-marca', dados.perfil.cor);
+    raiz.innerHTML = '';
 
+    // barra do topo, no jeito do Estúdio de conteúdo: marca, abas com ícone, ações
+    const topo = el('div', 'es-topo');
+    const marca = el('button', 'es-marca', '<img src="/logo.png" alt=""><div><div class="es-marca-n">' + esc(B.nome || 'Cara da IA') + ' · Estúdio</div>'
+      + '<div class="es-marca-s">' + (dados && dados.perfil && dados.perfil.conta ? '@' + esc(dados.perfil.conta) : 'conteúdo das redes') + '</div></div>');
+    marca.title = 'Voltar pro grafo do cérebro';
+    marca.onclick = fecharTela;
+    topo.appendChild(marca);
     const abas = el('div', 'es-abas');
+    const c = (dados && dados.contagem) || {};
     ABAS.forEach(([id, nome]) => {
-      const b = el('button', 'es-aba' + (aba === id ? ' on' : ''), nome);
+      const n = id === 'posts' ? (c.aprovar || 0) : 0;
+      const b = el('button', 'es-aba' + (aba === id ? ' on' : ''), ICO[id] + '<span>' + nome + '</span>' + (n ? '<i class="es-cont">' + n + '</i>' : ''));
+      if (n) b.title = n + ' para aprovar';
       b.onclick = () => irPara(id);
       abas.appendChild(b);
     });
-    inner.appendChild(abas);
+    topo.appendChild(abas);
+    const dir = el('div', 'es-topo-dir');
+    if (dados && dados.geradoEm) dir.appendChild(el('div', 'es-relogio', '<b>' + esc(String(dados.geradoEm).slice(11, 16)) + '</b><span>relendo a cada 8 s</span>'));
+    const bAt = el('button', 'es-btn', 'Atualizar');
+    bAt.onclick = () => carregar().then(() => render());
+    const bMc = el('button', 'es-btn', 'Mission Control');
+    bMc.onclick = () => { fecharTela(); window.MissionControl && window.MissionControl.open(); };
+    const bX = el('button', 'es-btn fant', '✕');
+    bX.title = 'Fechar (Esc)';
+    bX.onclick = fecharTela;
+    dir.appendChild(bAt); dir.appendChild(bMc); dir.appendChild(bX);
+    topo.appendChild(dir);
+    raiz.appendChild(topo);
+    const inner = el('div', 'es-main');
+    raiz.appendChild(inner);
 
     if (!dados) { inner.appendChild(el('div', 'mc-empty', 'lendo as peças...')); return; }
     if (dados.erro) { inner.appendChild(el('div', 'mc-warn', '<div>&#9888;</div><div>' + esc(dados.erro) + '</div>')); return; }
