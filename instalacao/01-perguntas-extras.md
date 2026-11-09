@@ -102,6 +102,12 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
     do Instagram (vai na prévia de celular e no Feed) se ele tem um dia fixo de postar (vai marcado na
     aba Semana) e qual é a cor principal da marca (acende o Estúdio). Guia em
     [02-ferramentas.md](02-ferramentas.md), "Criador de carrosséis e Estúdio Social".
+13h. **Quer agendar, publicar e responder o direct das suas redes direto do painel?** Só se ele tem
+    (ou vai comprar) o pacote **Estúdio de Conteúdo**, que é de outro autor e não vem no kit. Com ele,
+    a tecla E abre o estúdio dentro do painel: semana, pauta, posts com prévia de celular, feed,
+    conversas (o "comenta QUERO, recebe no direct" sem ManyChat), resultados e ajustes. Publica no
+    Instagram e no TikTok pelo Zernio, que é grátis. Guia em
+    [estudio-de-conteudo/LEIA.md](estudio-de-conteudo/LEIA.md).
 14. **Como você monta um orçamento ou proposta hoje?** Modelo no Word, Canva, PDF, sistema.
     Quanto tempo leva. Quem aprova o preço.
     - Se é manual e repetitivo: sugira o **PandaDoc** (modelo com campos, preenchido

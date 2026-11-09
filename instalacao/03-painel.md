@@ -94,6 +94,11 @@ Confira junto com o cliente:
   existe, ele aparece na coluna da etapa dele (guia em 02-ferramentas.md, "Criador de carrosséis e
   Estúdio Social").
 
+- **Estúdio de Conteúdo (se entrou a 13h):** tecla **E** abre o estúdio dentro do painel, no visual
+  dele, com **Peças** (o Estúdio Social acima) e **◂ OS** no canto; Esc volta. Sem o pacote
+  instalado, a tecla E continua abrindo o Estúdio Social. Guia em
+  [estudio-de-conteudo/LEIA.md](estudio-de-conteudo/LEIA.md).
+
 Se entraram os opcionais:
 - **Voz:** o botão 🎙 FALAR (tecla V) aparece sempre; ele só responde se o segundo cérebro tiver
   `bin/conversar.py` e `bin/assistente.json` (guia da voz em 02-ferramentas.md). Teste digitando

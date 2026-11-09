@@ -133,7 +133,15 @@ def cmd_gravar_token(a):
     print("Teste com: python3 bin/instagram.py status")
 
 
+LIMITE_VIDEO = 100 * 1024 * 1024  # vídeo em carrossel: MP4 (H.264 + AAC), até 60 s; teto conservador de 100 MB
+
+
+def eh_video(url: str) -> bool:
+    return urllib.parse.urlparse(url).path.lower().endswith((".mp4", ".mov"))
+
+
 def conferir_imagem(url: str) -> str:
+    """Confere um slide: JPEG até 8 MB ou, desde 09/11/2026 (carrossel vivo), MP4 até 100 MB."""
     if not url.startswith("https://"):
         return "precisa ser um link https público"
     for tentativa in range(4):  # logo depois do deploy, a CDN da Vercel pode responder 404 por alguns segundos
@@ -147,8 +155,12 @@ def conferir_imagem(url: str) -> str:
             if tentativa == 3:
                 return f"não abriu ({getattr(e, 'code', '') or getattr(e, 'reason', e)})"
             time.sleep(10)
+    if eh_video(url):
+        if "video" not in tipo:
+            return f"termina em .mp4 mas não veio como vídeo (Content-Type: {tipo or 'vazio'})"
+        return "passa de 100 MB" if tamanho > LIMITE_VIDEO else ""
     if "jpeg" not in tipo:
-        return f"não é JPEG (Content-Type: {tipo or 'vazio'})"
+        return f"não é JPEG nem MP4 (Content-Type: {tipo or 'vazio'})"
     if tamanho > 8 * 1024 * 1024:
         return "passa de 8 MB"
     return ""
@@ -193,7 +205,7 @@ def registrar(item: dict):
 def cmd_publicar(a):
     imagens = a.imagens
     if not 2 <= len(imagens) <= 20:
-        sys.exit("carrossel precisa de 2 a 20 imagens.")
+        sys.exit("carrossel precisa de 2 a 20 slides (JPEG ou MP4).")
     legenda = Path(a.legenda_arquivo).read_text().strip()
     problemas = []
     if len(legenda) > LIMITE_LEGENDA:
@@ -217,7 +229,7 @@ def cmd_publicar(a):
         print("PRÉVIA (nada foi publicado)")
         print(f"Slides: {len(imagens)}")
         for i, url in enumerate(imagens, 1):
-            print(f"  {i:02d}. {url}")
+            print(f"  {i:02d}. {'vídeo ' if eh_video(url) else 'imagem'} {url}")
         if colab:
             print(f"Colaborador: {', '.join('@' + c for c in colab)} (convite aceito no app dessa conta)")
         if marcar:
@@ -236,8 +248,11 @@ def cmd_publicar(a):
     ig = config()["IG_USER_ID"]
     filhos = []
     for i, url in enumerate(imagens):
-        p = {"image_url": url, "is_carousel_item": "true"}
-        if marcar and i == 0:
+        if eh_video(url):
+            p = {"media_type": "VIDEO", "video_url": url, "is_carousel_item": "true"}
+        else:
+            p = {"image_url": url, "is_carousel_item": "true"}
+        if marcar and i == 0 and not eh_video(url):
             p["user_tags"] = json.dumps([{"username": marcar, "x": 0.5, "y": 0.5}])
         filhos.append(chamar("POST", f"/{ig}/media", p)["id"])
     for f in filhos:
@@ -265,7 +280,8 @@ def main():
     g.add_argument("--conta", help="usuário do Instagram que publica (obrigatório se o token alcança mais de uma)")
     g.set_defaults(f=cmd_gravar_token)
     e = s.add_parser("publicar")
-    e.add_argument("--imagens", nargs="+", required=True, help="links https públicos dos JPEGs, na ordem")
+    e.add_argument("--imagens", "--midias", dest="imagens", nargs="+", required=True,
+                   help="links https públicos dos slides, na ordem: JPEG ou MP4 (carrossel vivo)")
     e.add_argument("--legenda-arquivo", required=True)
     e.add_argument("--colaborador", action="append", help="conta convidada como colaboradora (até 3)")
     e.add_argument("--marcar", help="conta marcada no slide 01")

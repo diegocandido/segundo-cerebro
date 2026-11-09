@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.6 (2026-11-09)
+Estúdio de Conteúdo dentro do painel (opcional, pergunta 13h): quem tem o pacote Estúdio de Conteúdo abre pela tecla E, no visual do painel, a semana, a pauta, os posts com prévia de celular, o feed, as conversas com resposta automática no direct sem ManyChat, os resultados e os ajustes, publicando no Instagram e no TikTok pelo Zernio. Sem o pacote, a tecla E segue abrindo o Estúdio Social. Carrossel vivo: os vídeos agora podem ser publicados pelo bin/instagram.py, além do app do Instagram.
+
 ## 1.5 (2026-11-09)
 O verificador do painel (bin/checar.js) não para mais quando uma nota do apps.json vem com título e caminho: aceita os dois formatos e só avisa se a nota não existir no OS.
 

@@ -1,0 +1,71 @@
+/* tema-os.css: o estúdio vestido com o visual do painel do OS.
+   Carregado só quando a tela abre dentro do painel do OS (iframe), pelo script do index.html.
+   O painel é escuro, azul-noite, com acento lavanda (#808AFF), DM Sans no texto, Space Grotesk
+   nos títulos e botões "duros": borda clara de 2px, canto reto e sombra deslocada na cor do acento.
+   A cor da marca (Ajustes → Sua marca) continua valendo para o que o Claude cria (capa, carrossel);
+   aqui ela só deixa de pintar a tela. */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root.no-os, :root.no-os[data-theme="light"] {
+  --marca: #808AFF !important;
+  --marca-clara: #A9B0FF;
+  --marca-suave: rgba(128, 138, 255, 0.14);
+  --marca-borda: rgba(128, 138, 255, 0.45);
+  --fundo: #0B0C16;
+  --superficie: rgba(21, 24, 34, 0.85);
+  --superficie-2: rgba(21, 24, 34, 0.55);
+  --vidro: linear-gradient(180deg, rgba(24, 27, 40, 0.82), rgba(15, 17, 26, 0.92));
+  --linha: rgba(128, 138, 255, 0.18);
+  --linha-forte: rgba(128, 138, 255, 0.32);
+  --texto: #E5E8EF;
+  --texto-2: #989FAB;
+  --texto-3: #5E6678;
+  --ok: #4ADE80; --aviso: #F5B342; --erro: #F87171; --roxo: #A78BFA;
+  --sombra: 0 16px 48px -18px rgba(0, 0, 8, 0.7);
+  --sombra-alta: 0 16px 48px rgba(0, 0, 8, 0.7);
+  --brilho: 0.22;
+  --raio: 12px;
+  --f-titulo: 'Space Grotesk', 'DM Sans', system-ui, sans-serif;
+  --f-texto: 'DM Sans', system-ui, -apple-system, sans-serif;
+  color-scheme: dark;
+}
+
+/* fundo: o mesmo azul-noite do grafo, com o brilho lavanda e a grade fina */
+.no-os body { background: var(--fundo); }
+
+/* barra superior: marca do OS, abas e os botões de volta */
+.no-os .topo { background: rgba(11, 12, 22, 0.88); border-bottom: 1px solid var(--linha); }
+.no-os .marca-logo { background: transparent; border: 2px solid var(--texto); border-radius: 0; box-shadow: 3px 3px 0 var(--marca); color: var(--texto); font-family: var(--f-titulo); }
+.no-os .marca-nome { font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: .06em; font-size: 15px; }
+.no-os .marca-nome::after { content: " · Estúdio"; color: var(--marca); }
+.no-os .marca-sub { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; }
+.no-os .abas { background: transparent; border: 0; gap: 4px; padding: 0; }
+.no-os .aba { border-radius: 0; text-transform: uppercase; letter-spacing: .12em; font-size: 11.5px; padding: 8px 12px; border: 1px solid transparent; }
+.no-os .aba:hover { color: var(--texto); border-color: var(--linha); }
+.no-os .aba[aria-selected="true"] { background: rgba(21, 24, 34, 0.9); color: var(--texto); border: 2px solid var(--texto); box-shadow: 3px 3px 0 var(--marca); }
+.no-os .aba .cont { border-radius: 0; }
+
+/* botões no jeito do painel */
+.no-os .btn { border-radius: 0; border: 2px solid var(--linha-forte); background: rgba(21, 24, 34, 0.9); text-transform: uppercase; letter-spacing: .1em; font-size: 12px; font-weight: 600; }
+.no-os .btn:hover { border-color: var(--texto); }
+.no-os .btn.prim { background: rgba(21, 24, 34, 0.9); color: var(--texto); border: 2px solid var(--texto); box-shadow: 4px 4px 0 var(--marca); }
+.no-os .btn.prim:hover { box-shadow: 2px 2px 0 var(--marca); transform: translate(2px, 2px); }
+.no-os .btn.os-btn { padding: 6px 12px; font-size: 11px; letter-spacing: .14em; }
+.no-os .seg { border-radius: 0; }
+.no-os .seg button { border-radius: 0; }
+.no-os .seg button[aria-pressed="true"] { background: var(--marca); color: #0B0C16; }
+
+/* cartões, colunas e campos */
+.no-os .cartao, .no-os .dia, .no-os .ideia, .no-os .pauta-col, .no-os .auto, .no-os .rede-op, .no-os .conta-l, .no-os .coment { border-color: var(--linha); }
+.no-os .rotulo { color: var(--marca); letter-spacing: .16em; }
+.no-os h1, .no-os h2, .no-os h3 { font-family: var(--f-titulo); letter-spacing: -0.01em; }
+.no-os input[type="text"], .no-os input[type="password"], .no-os input[type="url"], .no-os input[type="datetime-local"], .no-os input[type="time"], .no-os textarea, .no-os select {
+  background: rgba(21, 24, 34, 0.45); border-color: var(--linha); }
+.no-os dialog { border: 1px solid var(--linha-forte); background: #12141F; }
+.no-os dialog::backdrop { background: rgba(5, 6, 12, 0.6); }
+.no-os .chip-demo { border-radius: 0; text-transform: uppercase; letter-spacing: .12em; font-size: 10.5px; }
+.no-os .toast { border-radius: 0; border: 2px solid var(--texto); box-shadow: 4px 4px 0 var(--marca); }
+
+/* barra de rolagem fina, como no painel */
+.no-os ::-webkit-scrollbar { width: 6px; height: 6px; }
+.no-os ::-webkit-scrollbar-thumb { background: var(--linha-forte); border-radius: 3px; }

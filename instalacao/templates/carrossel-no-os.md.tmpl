@@ -79,8 +79,9 @@ sem {{DONO}} aprovar.
 Com o JPEG aprovado, `python3 bin/carrossel_vivo.py <pasta-da-publicação>` gera um MP4 em loop por
 slide, em `<pasta>/mp4/`, no mesmo visual. Só entrega se terminar com "TODOS OS LOOPS E QUADROS 0
 FECHAM". Mostrar os 5 MP4 a {{DONO}} e esperar o "aprovado". O projeto de trabalho fica fora do OS,
-em `~/.carrossel-vivo/projetos/`. Publicar os vídeos é pelo app do Instagram, na ordem, depois do
-"pode postar", sem música do Instagram por cima.
+em `~/.carrossel-vivo/projetos/`. Publicar os vídeos, na ordem e sem música do Instagram por cima,
+só depois do "pode postar": com o Instagram ligado, `bin/instagram.py publicar --midias <links dos .mp4>`
+(prévia sem `--confirmo`, post com `--confirmo`); sem ele, pelo app do Instagram.
 
 ## Estúdio Social (só se a pergunta 13g entrou)
 Toda peça mora numa subpasta de `{{AREA_SOCIAL}}/carrosseis/`, com o nome `AAAA-MM-DD-tema`, e é

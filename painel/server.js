@@ -23,6 +23,8 @@
    Estúdio Social:
      GET  /api/estudio          as peças de rede social e a etapa de cada uma (so leitura)
      GET  /api/estudio/midia?id=&f=  imagem ou video de uma peca (so as midias listadas dela)
+   Estúdio de Conteúdo (opcional):
+     GET  /api/estudio-app      sobe o Estudio de Conteudo se preciso e devolve o endereco da tela
    Livro-caixa:
      GET  /api/caixa[?mes=AAAA-MM]  entradas, saidas, saldo e lancamentos do mes (so leitura)
 */
@@ -37,6 +39,7 @@ const ingest = require('./ingest');
 const asaas = require('./asaas');
 const gestao = require('./gestao');
 const caixa = require('./caixa');
+const estudioApp = require('./estudio-app'); // Estúdio de Conteúdo (opcional)
 const estudio = require('./estudio');
 
 // Rede de segurança: ferramenta pessoal always-on não deve morrer por um erro
@@ -376,6 +379,12 @@ const handle = async (req, res) => {
     if (p === '/api/gestao/whatsapp' && req.method === 'GET') {
       try { return sendJSON(res, { mensagens: await gestao.whatsappMensagens(url.searchParams.get('chatid')) }); }
       catch (e) { return sendJSON(res, { error: e.message }, 400); }
+    }
+
+    // Estúdio de Conteúdo (tecla E, opcional): garante o programa no ar e devolve o endereço da tela.
+    if (p === '/api/estudio-app' && req.method === 'GET') {
+      try { return sendJSON(res, await estudioApp.garantir(PORT)); }
+      catch (e) { return sendJSON(res, { instalado: true, erro: e.message }, 500); }
     }
 
     // Estúdio Social (tecla E): as peças de rede social e a etapa de cada uma. Só leitura.

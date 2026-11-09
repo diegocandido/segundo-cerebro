@@ -456,10 +456,8 @@
     root.id = 'es-root';
     root.innerHTML = '<div id="es-scroll"><div id="es-inner"></div></div>';
     document.body.appendChild(root);
-    const fab = el('button', 'fab', '✦ ESTÚDIO');
-    fab.id = 'fab-estudio';
-    fab.onclick = () => estaAberta() ? fecharTela() : abrir();
-    document.body.appendChild(fab);
+    // o botão ✦ ESTÚDIO e a tecla E agora abrem o Estúdio de Conteúdo (_estudio-app.js);
+    // estas peças abrem pelo botão "Peças" de lá, pela faixa do Mission Control e pelo ✦ ESTÚDIO quando o estúdio não está instalado.
     addEventListener('keydown', e => {
       const digitando = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
       if (e.key === 'Escape' && estaAberta()) {
@@ -480,8 +478,8 @@
         }
         return;
       }
-      if (!digitando && !e.metaKey && !e.ctrlKey && !e.altKey && (e.key === 'e' || e.key === 'E')) {
-        e.preventDefault(); e.stopPropagation(); estaAberta() ? fecharTela() : abrir();
+      if (estaAberta() && !digitando && !e.metaKey && !e.ctrlKey && !e.altKey && (e.key === 'e' || e.key === 'E')) {
+        e.preventDefault(); e.stopPropagation(); fecharTela(); // E fecha as peças; abrir é com o Estúdio
       }
     }, true);
   });

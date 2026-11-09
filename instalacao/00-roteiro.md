@@ -100,6 +100,9 @@ Acrescente, se o cliente aprovou:
   [scripts/carrossel_jpeg.py](scripts/carrossel_jpeg.py), pelo guia
   [templates/carrossel-no-os.md.tmpl](templates/carrossel-no-os.md.tmpl). Um carrossel de teste
   com tema real, aprovado por ele, vira o modelo; o slide de CTA, com a oferta dele, fica fixo.
+- O Estúdio de Conteúdo dentro do painel (pergunta 13h), só se o cliente tem o pacote: instalar o
+  pacote, a marca e rodar [estudio-de-conteudo/aplicar-integracao.py](estudio-de-conteudo/aplicar-integracao.py),
+  pelo guia em [estudio-de-conteudo/LEIA.md](estudio-de-conteudo/LEIA.md).
 - O carrossel vivo (pergunta 13f), só depois do carrossel de teste aprovado: o instalador
   [carrossel-vivo/instalar.sh](carrossel-vivo/instalar.sh) e o script
   [scripts/carrossel_vivo.py](scripts/carrossel_vivo.py), pelo guia em

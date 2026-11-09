@@ -66,6 +66,7 @@ Kit-OS-Cara-da-IA/
 │   ├── scripts/            whatsapp.py (Uazapi), instagram.py (Meta), voz (conversar, falar, ouvir, falar_resposta,
 │   │                       assistente.json.example), livro_caixa.py, carrossel_jpeg.py, carrossel_vivo.py e sync-github.sh
 │   ├── carrossel-vivo/     instalador da skill de carrosséis e do carrossel vivo (baixa do autor), ajustes e a ponte vivo.js
+│   ├── estudio-de-conteudo/ guia, tema e script que ligam o Estúdio de Conteúdo (pacote à parte, Zernio) ao painel
 │   ├── demo-os/            segundo cérebro de demonstração (só exemplo), usado pela prévia do painel
 │   ├── comandos/reuniao.md.tmpl
 │   └── templates/          rotina Morning Brief, seção do painel no COMO-USAR, o WhatsApp e o Instagram no OS,
