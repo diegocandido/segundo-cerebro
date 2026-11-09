@@ -82,7 +82,8 @@ function checarCerebro(cfgs) {
   if (apps) for (const a of apps.apps || []) {
     if (!['live', 'sugerido', 'a-definir'].includes(a.status)) aviso('apps.json: ' + a.id + ' com status "' + a.status + '"', 'use live, sugerido ou a-definir');
     for (const n of (a.detalhes && a.detalhes.notas) || []) {
-      if (!fs.existsSync(path.join(abs, n))) aviso('apps.json: a nota "' + n + '" de ' + a.id + ' não existe no OS', 'crie a nota ou tire da lista');
+      const np = typeof n === 'string' ? n : (n && n.path); // a nota vem como {label, path}; aceita texto também
+      if (np && !fs.existsSync(path.join(abs, np))) aviso('apps.json: a nota "' + np + '" de ' + a.id + ' não existe no OS', 'crie a nota ou tire da lista');
     }
     const chave = a.detalhes && a.detalhes.chave;
     if (a.status === 'live' && chave && !fs.existsSync(casa(chave))) aviso(a.label + ' está live mas a chave ' + chave + ' não foi gravada', 'o cliente grava pelo script do painel, no terminal');
