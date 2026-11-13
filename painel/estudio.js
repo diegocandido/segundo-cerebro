@@ -14,7 +14,12 @@
    "data: 2026-11-07", "rede: Instagram", "link: https://...", "titulo: ..."); "etapa: descartado" (ou arquivado) tira a peça do quadro; sem ele, é deduzida dos arquivos.
    Peça cuja legenda.txt bate com um post do histórico do bin/instagram.py
    (missionControl.publicadosLog, padrão Social/publicados-instagram.jsonl) vira Publicado sozinha,
-   com o link e a data do post. */
+   com o link e a data do post.
+
+   Com o Estúdio de Conteúdo instalado (estudio-app.js), este quadro vira a Produção dele:
+   enviar() copia os slides e a legenda de uma peça para a pasta "postar" do Estúdio de Conteúdo, que
+   transforma em post sozinho, e marca a peça com "etapa: no estudio" no status.txt. Agendar e
+   publicar ficam todos no Estúdio de Conteúdo. */
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -22,13 +27,16 @@ const os = require('os');
 const crypto = require('crypto');
 const scan = require('./scan');
 const M = require('./mission');
+const estudioApp = require('./estudio-app'); // pasta do Estúdio de Conteúdo
 
 const ROOT = scan.ROOT;
 const PADRAO = ['Social/carrosseis', '~/.carrossel-vivo/projetos'];
 const IMG = /\.(png|jpe?g|webp)$/i;
 const VID = /\.mp4$/i;
-const ETAPAS = ['criando', 'aprovar', 'aprovado', 'publicado'];
-const NOMES = { criando: 'Em criação', aprovar: 'Para aprovar', aprovado: 'Aprovado', publicado: 'Publicado' };
+const ETAPAS = ['criando', 'aprovar', 'aprovado', 'estudio', 'publicado'];
+const NOMES = { criando: 'Em criação', aprovar: 'Para aprovar', aprovado: 'Aprovado', estudio: 'No Estúdio', publicado: 'Publicado' };
+// o Estúdio de Conteúdo está instalado? Então o quadro é a Produção dele
+function temConteudo() { try { return fs.existsSync(path.join(estudioApp.pasta(), 'server.mjs')); } catch { return false; } }
 
 function dirs() {
   let lista = M.mcOpt('carrosseisDirs');
@@ -131,6 +139,7 @@ function peca(base, i, nome, hist) {
   const m = midia(pasta);
   let etapa = (st.etapa || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   if (/publicad|postad/.test(etapa)) etapa = 'publicado';
+  else if (/estudio|enviad/.test(etapa)) etapa = 'estudio'; // já foi para o Estúdio de Conteúdo
   else if (/^aprovad/.test(etapa)) etapa = 'aprovado';
   else if (/aprovar|revis/.test(etapa)) etapa = 'aprovar';
   else if (/cria|rascunho|copy|design/.test(etapa)) etapa = 'criando';
@@ -152,7 +161,8 @@ function peca(base, i, nome, hist) {
     capa: m.imgs[0] || m.folha || '', imgs: m.imgs, vids: m.vids, slidesHtml,
     legenda,
     temBrief: fs.existsSync(path.join(pasta, 'BRIEF.md')),
-    atualizado, agora: etapa !== 'publicado' && Date.now() - atualizado < 10 * 60 * 1000,
+    enviado: st.enviado || '',
+    atualizado, agora: etapa !== 'publicado' && etapa !== 'estudio' && Date.now() - atualizado < 10 * 60 * 1000,
     onde: path.join(base.rel, nome),
   };
 }
@@ -174,6 +184,11 @@ function resumo() {
   });
   pecas.sort((a, b) => b.atualizado - a.atualizado);
   const contagem = Object.fromEntries(ETAPAS.map(e => [e, pecas.filter(p => p.etapa === e).length]));
+  // com o Estúdio de Conteúdo, a última coluna é "No Estúdio" (enviadas e publicadas);
+  // sem ele, o quadro segue com as 4 colunas de sempre
+  const conteudo = temConteudo();
+  const colunas = conteudo ? ['criando', 'aprovar', 'aprovado', 'estudio'] : ['criando', 'aprovar', 'aprovado', 'publicado'];
+  for (const p of pecas) p.coluna = conteudo ? (p.etapa === 'publicado' ? 'estudio' : p.etapa) : (p.etapa === 'estudio' ? 'publicado' : p.etapa);
   // perfil da prévia (abas Posts e Feed), o dia fixo de postar (aba Semana, 1 = segunda ... 6 = sábado) e a
   // cor da marca que acende a tela: vêm do workspace.json (missionControl.estudioConta, estudioDiaPost e
   // estudioCor), não do código
@@ -184,7 +199,7 @@ function resumo() {
     diaPost: Number.isInteger(dia) && dia >= 1 && dia <= 6 ? dia : null,
     cor: /^#[0-9a-f]{6}$/i.test(cor) ? cor : '',
   };
-  return { geradoEm: M.nowISO(), perfil, fontes, etapas: ETAPAS.map(e => ({ id: e, nome: NOMES[e] })), contagem, pecas };
+  return { geradoEm: M.nowISO(), perfil, fontes, conteudo, etapas: colunas.map(e => ({ id: e, nome: NOMES[e] })), contagem, pecas };
 }
 
 // caminho de um arquivo de mídia, só se ele for uma das mídias listadas daquela peça
@@ -200,4 +215,44 @@ function arquivo(id, rel) {
   return abs.startsWith(pasta + path.sep) && fs.existsSync(abs) ? abs : null;
 }
 
-module.exports = { resumo, arquivo };
+// manda a peça para a pasta "postar" do Estúdio de Conteúdo: slides numerados (01, 02...) e a
+// legenda.txt numa subpasta com o título da peça, que o estúdio importa sozinho como um post sem data.
+// formato "vivo" usa os MP4 do carrossel vivo; senão, as imagens. Grava "etapa: no estudio" no status.txt.
+function enviar(id, formato, forcar) {
+  if (!temConteudo()) throw new Error('O Estúdio de Conteúdo não está instalado neste computador.');
+  const m = String(id || '').match(/^(\d+):([^/\\]+)$/);
+  const base = m && dirs()[Number(m[1])];
+  if (!base) throw new Error('peça não encontrada');
+  const pasta = path.join(base.abs, m[2]);
+  if (!fs.existsSync(pasta)) throw new Error('peça não encontrada');
+  const st = status(pasta);
+  if (/estudio|enviad/.test((st.etapa || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()) && !forcar) {
+    throw new Error('Esta peça já foi para o Estúdio' + (st.enviado ? ' em ' + st.enviado : '') + '.');
+  }
+  const md = midia(pasta);
+  const vivo = formato === 'vivo' && md.vids.length > 0;
+  const arquivos = vivo ? md.vids : md.imgs;
+  if (!arquivos.length) throw new Error('A peça ainda não tem ' + (formato === 'vivo' ? 'os vídeos do carrossel vivo' : 'imagens prontas') + '.');
+  const legenda = ler(path.join(pasta, 'legenda.txt'), 2200).trim();
+  const nome = (st.titulo || titulo(pasta, m[2])).normalize('NFC').replace(/[\/\\:*?"<>|\u0000-\u001f]/g, ' ').replace(/^[.~\s]+/, '').replace(/\s+/g, ' ').trim().slice(0, 80) || m[2];
+  const postar = path.join(estudioApp.pasta(), 'postar');
+  fs.mkdirSync(postar, { recursive: true });
+  let destino = path.join(postar, nome);
+  for (let n = 2; fs.existsSync(destino); n++) destino = path.join(postar, nome + ' ' + n);
+  // monta numa pasta oculta (o estúdio ignora nome com ponto) e só então renomeia: ele nunca pega a cópia pela metade
+  const tmp = path.join(postar, '.os-' + Date.now());
+  fs.mkdirSync(tmp);
+  try {
+    arquivos.forEach((rel, i) => fs.copyFileSync(path.join(pasta, rel), path.join(tmp, String(i + 1).padStart(2, '0') + path.extname(rel).toLowerCase())));
+    if (legenda) fs.writeFileSync(path.join(tmp, 'legenda.txt'), legenda + '\n', 'utf8');
+    fs.renameSync(tmp, destino);
+  } catch (e) { fs.rmSync(tmp, { recursive: true, force: true }); throw e; }
+  // status.txt: troca (ou acrescenta) as linhas etapa e enviado, mantém o resto
+  const quando = M.nowISO().slice(0, 16).replace('T', ' ');
+  const arq = path.join(pasta, 'status.txt');
+  const linhas = ler(arq, 20000).split(/\r?\n/).filter(l => l.trim() && !/^\s*(etapa|enviado)\s*:/i.test(l));
+  fs.writeFileSync(arq, ['etapa: no estudio', 'enviado: ' + quando, ...linhas].join('\n') + '\n', 'utf8');
+  return { ok: true, formato: vivo ? 'vivo' : 'estatico', arquivos: arquivos.length, legenda: !!legenda, titulo: path.basename(destino), enviado: quando };
+}
+
+module.exports = { resumo, arquivo, enviar };

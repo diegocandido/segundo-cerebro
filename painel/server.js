@@ -27,6 +27,8 @@
    Estúdio Social:
      GET  /api/estudio          as peças de rede social e a etapa de cada uma (so leitura)
      GET  /api/estudio/midia?id=&f=  imagem ou video de uma peca (so as midias listadas dela)
+     POST /api/estudio/enviar   {id, formato: estatico|vivo}: manda a peca para a pasta postar do
+                                Estudio de Conteudo, onde ela vira post sem data (so com o estudio instalado)
    Estúdio de Conteúdo (opcional):
      GET  /api/estudio-app      sobe o Estudio de Conteudo se preciso e devolve o endereco da tela
    LinkedIn (opcional, pelo Zernio do Estúdio de Conteúdo):
@@ -404,6 +406,13 @@ const handle = async (req, res) => {
     if (p === '/api/estudio' && req.method === 'GET') {
       try { return sendJSON(res, estudio.resumo()); }
       catch (e) { return sendJSON(res, { error: e.message }, 500); }
+    }
+    // Manda uma peça pronta para o Estúdio de Conteúdo (pasta "postar"), onde ela vira post para agendar
+    if (p === '/api/estudio/enviar' && req.method === 'POST') {
+      let body = {};
+      try { body = JSON.parse(await readBody(req)); } catch { return sendJSON(res, { error: 'Bad JSON' }, 400); }
+      try { return sendJSON(res, estudio.enviar(body.id, body.formato, body.forcar === true)); }
+      catch (e) { return sendJSON(res, { error: e.message }, 400); }
     }
     if (p === '/api/estudio/midia' && req.method === 'GET') {
       const abs = estudio.arquivo(url.searchParams.get('id'), url.searchParams.get('f'));

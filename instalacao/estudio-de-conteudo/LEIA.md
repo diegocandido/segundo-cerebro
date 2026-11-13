@@ -22,6 +22,9 @@ o Estúdio Social (o quadro das peças), como antes.
    `missionControl.estudioApp` do `config/workspace.json`. Reinicie o painel.
 5. **Testar:** tecla **E**. Tem que abrir a Semana do estúdio no visual do painel, com **Peças** e
    **◂ OS** no canto direito; Esc volta para o grafo. Em modo demonstração nada é publicado.
+   Clique em **Peças**: abre a Produção (Em criação, Para aprovar, Aprovado, No Estúdio). Numa peça
+   pronta, a Prévia mostra **Mandar para o Estúdio**; enviada, ela aparece em Posts do estúdio em
+   alguns segundos, sem data.
 6. **Publicar de verdade (quando o cliente quiser):** ele cria a conta no zernio.com, cola a chave em
    Ajustes → Contas (nunca no chat) e clica em Conectar no Instagram. O login abre na janela inteira e
    volta sozinho para o painel, já em Ajustes.

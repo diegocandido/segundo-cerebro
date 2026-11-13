@@ -11,7 +11,13 @@
    (missionControl.estudioConta e estudioDiaPost).
 
    Também desenha a faixa "Estúdio Social" no Mission Control (window.Estudio.faixa).
-   Só leitura: aprovar, agendar e postar continuam no Claude, com o "pode postar" do dono. */
+   Só leitura: aprovar, agendar e postar continuam no Claude, com o "pode postar" do dono.
+
+   Com o Estúdio de Conteúdo instalado (dados.conteudo), esta tela vira a PRODUÇÃO dele: só as
+   abas Produção (o quadro) e Prévia, e a última coluna é "No Estúdio". Na Prévia de uma peça pronta,
+   o botão "Mandar para o Estúdio" copia os slides e a legenda para a pasta postar do Estúdio de
+   Conteúdo (POST /api/estudio/enviar), onde ela vira post para agendar. Semana, Feed, agenda e
+   publicação ficam todos no Estúdio de Conteúdo. */
 'use strict';
 (function () {
   let dados = null;
@@ -31,6 +37,10 @@
     feed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>',
   };
   const ABAS = [['quadro', 'Quadro'], ['semana', 'Semana'], ['posts', 'Posts'], ['feed', 'Feed']];
+  const ABAS_PRODUCAO = [['quadro', 'Produção'], ['posts', 'Prévia']]; // com o Estúdio de Conteúdo
+  const producao = () => !!(dados && dados.conteudo);
+  const abasDaTela = () => producao() ? ABAS_PRODUCAO : ABAS;
+  let envio = {}; // resultado do último "Mandar para o Estúdio", por peça
   const DIAS = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 
   const $ = s => document.querySelector(s);
@@ -82,7 +92,7 @@
     c.innerHTML = '<div class="es-capa">' + capa + '</div>'
       + '<div class="es-card-b"><div class="es-card-t">' + esc(p.titulo) + '</div>'
       + (mini ? '<div class="es-card-s">' + esc(p.etapaNome) + ' · ' + esc(quando(p.atualizado)) + '</div>'
-        : '<div class="es-selos">' + selos.join('') + '</div><div class="es-card-s">' + (p.data ? esc(p.data) + ' · ' : '') + 'mexido ' + esc(quando(p.atualizado)) + '</div>')
+        : '<div class="es-selos">' + selos.join('') + '</div><div class="es-card-s">' + (p.etapa === 'estudio' ? 'enviada ' + esc(p.enviado || '') : (p.data ? esc(p.data) + ' · ' : '') + 'mexido ' + esc(quando(p.atualizado))) + '</div>')
       + '</div>';
     c.onclick = aoClicar || (() => { if (mini) abrir(p.id); else irPara('posts', p.id); });
     return c;
@@ -93,7 +103,7 @@
     const quadro = el('div', 'es-quadro');
     for (const et of dados.etapas) {
       const col = el('div', 'es-vidro es-col');
-      const lista = dados.pecas.filter(x => x.etapa === et.id);
+      const lista = dados.pecas.filter(x => (x.coluna || x.etapa) === et.id);
       col.appendChild(el('div', 'es-col-h', esc(et.nome) + '<span>' + lista.length + '</span>'));
       if (!lista.length) col.appendChild(el('div', 'es-vazio', '·'));
       for (const x of lista) col.appendChild(cartao(x));
@@ -249,7 +259,7 @@
       filtros.appendChild(b);
     });
     lado.appendChild(filtros);
-    const lista = dados.pecas.filter(p => filtro === 'todos' || p.etapa === filtro);
+    const lista = dados.pecas.filter(p => filtro === 'todos' || (p.coluna || p.etapa) === filtro);
     if (!lista.length) lado.appendChild(el('div', 'es-vazio', 'nada aqui'));
     lista.forEach(p => {
       const b = el('button', 'es-item' + (p.id === aberta ? ' on' : ''),
@@ -291,7 +301,8 @@
         som.onclick = () => dir.querySelectorAll('video').forEach(v => { v.muted = false; v.currentTime = 0; v.play(); });
         info.appendChild(som);
       }
-      info.appendChild(el('div', 'mc-form-note', 'Para aprovar, pedir ajuste, marcar a data ou postar, fale com o Claude ("aprovado", "troca a capa", "sai quinta", "pode postar"). O Estúdio só mostra.'));
+      if (producao()) info.appendChild(blocoEnviar(p));
+      else info.appendChild(el('div', 'mc-form-note', 'Para aprovar, pedir ajuste, marcar a data ou postar, fale com o Claude ("aprovado", "troca a capa", "sai quinta", "pode postar"). O Estúdio só mostra.'));
       corpo.appendChild(info);
       dir.appendChild(corpo);
       if (p.imgs.length) {
@@ -307,6 +318,46 @@
     }
     wrap.appendChild(dir);
     inner.appendChild(wrap);
+  }
+
+  // ---------- Mandar para o Estúdio de Conteúdo ----------
+  function blocoEnviar(p) {
+    const box = el('div', 'es-enviar');
+    const r = envio[p.id];
+    const abrirEstudio = () => { fecharTela(); if (window.EstudioApp) setTimeout(() => window.EstudioApp.abrir(), 250); };
+    if (r && r.ok) {
+      box.innerHTML = '<div class="es-enviar-ok">Enviada para o Estúdio: ' + r.arquivos + (r.formato === 'vivo' ? ' vídeo(s)' : ' slide(s)') + (r.legenda ? ' com a legenda' : ', sem legenda') + '.</div>'
+        + '<div class="mc-form-note">Em alguns segundos ela aparece em Posts do Estúdio, sem data. Lá você confere e agenda.</div>';
+      const b = el('button', 'act', 'Abrir o Estúdio'); b.onclick = abrirEstudio; box.appendChild(b);
+      return box;
+    }
+    if (p.etapa === 'estudio' || p.etapa === 'publicado') {
+      box.innerHTML = '<div class="mc-form-note">' + (p.etapa === 'estudio' ? 'Esta peça já está no Estúdio' + (p.enviado ? ' (enviada ' + esc(p.enviado) + ')' : '') + '. Agendar e publicar é por lá.' : 'Esta peça já foi publicada.') + '</div>';
+      const b = el('button', 'act', 'Abrir o Estúdio'); b.onclick = abrirEstudio; box.appendChild(b);
+      return box;
+    }
+    if (p.etapa === 'criando' || (!p.imgs.length && !p.vids.length)) {
+      box.innerHTML = '<div class="mc-form-note">Ainda em criação. Quando os slides estiverem prontos, ela pode ir para o Estúdio. Ajustes: fale com o Claude ("troca a capa").</div>';
+      return box;
+    }
+    const usarVivo = vivo && p.vids.length > 0;
+    const qt = usarVivo ? p.vids.length + ' vídeo(s) do carrossel vivo' : p.imgs.length + ' slide(s)';
+    const b = el('button', 'act es-enviar-b', p.etapa === 'aprovar' ? 'Aprovar e mandar para o Estúdio' : 'Mandar para o Estúdio');
+    b.onclick = async () => {
+      if (!confirm('Mandar "' + p.titulo + '" para o Estúdio de Conteúdo?\n\nVão ' + qt + (p.legenda ? ' e a legenda' : ' (sem legenda)') + '. Ela entra em Posts sem data: nada é agendado nem publicado sem você.')) return;
+      b.disabled = true; b.textContent = 'Enviando...';
+      try {
+        const res = await fetch('/api/estudio/enviar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: p.id, formato: usarVivo ? 'vivo' : 'estatico' }) });
+        const j = await res.json();
+        if (!res.ok || j.error) throw new Error(j.error || 'HTTP ' + res.status);
+        envio[p.id] = j;
+        await carregar();
+      } catch (e) { envio[p.id] = null; alert('Não deu para enviar: ' + e.message); }
+      render();
+    };
+    box.appendChild(el('div', 'mc-form-note', 'Vão ' + qt + (p.legenda ? ' e a legenda' : ' (sem legenda.txt)') + (p.vids.length && p.imgs.length ? '. Troque Estático/Vivo acima para escolher.' : '.') + ' Para pedir ajuste antes, fale com o Claude.'));
+    box.appendChild(b);
+    return box;
   }
 
   // ---------- aba Feed ----------
@@ -352,14 +403,14 @@
 
     // barra do topo, no jeito do Estúdio de conteúdo: marca, abas com ícone, ações
     const topo = el('div', 'es-topo');
-    const marca = el('button', 'es-marca', '<img src="/logo.png" alt=""><div><div class="es-marca-n">' + esc(B.nome || 'Cara da IA') + ' · Estúdio</div>'
+    const marca = el('button', 'es-marca', '<img src="/logo.png" alt=""><div><div class="es-marca-n">' + esc(B.nome || 'Cara da IA') + (producao() ? ' · Produção' : ' · Estúdio') + '</div>'
       + '<div class="es-marca-s">' + (dados && dados.perfil && dados.perfil.conta ? '@' + esc(dados.perfil.conta) : 'conteúdo das redes') + '</div></div>');
     marca.title = 'Voltar pro grafo do cérebro';
     marca.onclick = fecharTela;
     topo.appendChild(marca);
     const abas = el('div', 'es-abas');
     const c = (dados && dados.contagem) || {};
-    ABAS.forEach(([id, nome]) => {
+    abasDaTela().forEach(([id, nome]) => {
       const n = id === 'posts' ? (c.aprovar || 0) : 0;
       const b = el('button', 'es-aba' + (aba === id ? ' on' : ''), ICO[id] + '<span>' + nome + '</span>' + (n ? '<i class="es-cont">' + n + '</i>' : ''));
       if (n) b.title = n + ' para aprovar';
@@ -371,6 +422,12 @@
     if (dados && dados.geradoEm) dir.appendChild(el('div', 'es-relogio', '<b>' + esc(String(dados.geradoEm).slice(11, 16)) + '</b><span>relendo a cada 8 s</span>'));
     const bAt = el('button', 'es-btn', 'Atualizar');
     bAt.onclick = () => carregar().then(() => render());
+    if (producao()) { // volta para o Estúdio de Conteúdo
+      const bEs = el('button', 'es-btn', '✦ Estúdio');
+      bEs.title = 'Voltar para o Estúdio de Conteúdo (agenda, posts, feed)';
+      bEs.onclick = () => { fecharTela(); if (window.EstudioApp) setTimeout(() => window.EstudioApp.abrir(), 250); };
+      dir.appendChild(bEs);
+    }
     const bMc = el('button', 'es-btn', 'Mission Control');
     bMc.onclick = () => { fecharTela(); window.MissionControl && window.MissionControl.open(); };
     const bX = el('button', 'es-btn fant', '✕');
@@ -390,6 +447,7 @@
       inner.appendChild(el('div', 'mc-warn', '<div>✦</div><div><b>Nenhuma peça ainda.</b> Peça um carrossel ao Claude ("faz um carrossel sobre ...") e ele aparece aqui, '
         + 'na coluna Em criação, e vai andando até Publicado. O Estúdio procura em ' + onde + '.</div>'));
     }
+    if (!abasDaTela().some(([id]) => id === aba)) aba = 'quadro'; // Semana e Feed não existem na Produção
     if (aba === 'posts' && !dados.pecas.find(x => x.id === aberta) && dados.pecas.length) aberta = dados.pecas[0].id;
     ({ quadro: abaQuadro, semana: abaSemana, posts: abaPosts, feed: abaFeed }[aba] || abaQuadro)(inner);
     if (sc) sc.scrollTop = rolagem;
@@ -405,7 +463,7 @@
       const ativos = (d.pecas || []).filter(p => p.etapa !== 'publicado');
       const h = el('div', 'mc-h es-faixa-h');
       const c = d.contagem || {};
-      h.innerHTML = 'Estúdio Social<span class="mc-h-note">' + (c.criando || 0) + ' em criação · ' + (c.aprovar || 0) + ' para aprovar · ' + (c.aprovado || 0) + ' aprovada(s)</span>';
+      h.innerHTML = (d.conteudo ? 'Produção do Estúdio' : 'Estúdio Social') + '<span class="mc-h-note">' + (c.criando || 0) + ' em criação · ' + (c.aprovar || 0) + ' para aprovar · ' + (c.aprovado || 0) + ' aprovada(s)' + (d.conteudo ? ' · ' + (c.estudio || 0) + ' no Estúdio' : '') + '</span>';
       const ver = el('button', 'act', 'Abrir o Estúdio (E)');
       ver.onclick = () => abrir();
       h.appendChild(ver);

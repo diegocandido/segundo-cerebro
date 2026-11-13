@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.14 (2026-11-13)
+Para quem tem o Estúdio de Conteúdo, os dois estúdios viraram um só. A tecla E abre o Estúdio de Conteúdo, o único lugar com agenda, posts, feed e publicação. O botão Peças abre a Produção: o quadro das peças que o Claude faz (Em criação, Para aprovar, Aprovado, No Estúdio). Numa peça pronta, Mandar para o Estúdio leva os slides, ou os vídeos do carrossel vivo, e a legenda para lá, e ela aparece em Posts sem data, para você agendar. Sem o Estúdio de Conteúdo, nada muda.
+
 ## 1.13 (2026-11-13)
 O ritual da manhã agora organiza os e-mails. Com o Gmail ligado, o briefing separa as conversas não lidas em cinco grupos: responder hoje, responder na semana, esperando o outro, só ler e pode arquivar. Continua só de leitura: nada é respondido nem arquivado sem o seu ok.
 

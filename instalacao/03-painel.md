@@ -106,10 +106,15 @@ Confira junto com o cliente:
   existe, ele aparece na coluna da etapa dele (guia em 02-ferramentas.md, "Criador de carrosséis e
   Estúdio Social").
 
-- **Estúdio de Conteúdo (se entrou a 13h):** tecla **E** abre o estúdio dentro do painel, no visual
-  dele, com **Peças** (o Estúdio Social acima) e **◂ OS** no canto; Esc volta. Sem o pacote
-  instalado, a tecla E continua abrindo o Estúdio Social. Guia em
-  [estudio-de-conteudo/LEIA.md](estudio-de-conteudo/LEIA.md).
+- **Estúdio de Conteúdo (se entrou a 13h):** os dois estúdios viram um só. A tecla **E** abre o
+  Estúdio de Conteúdo dentro do painel, no visual dele, com **Peças** e **◂ OS** no canto; Esc volta.
+  É o único lugar com agenda, posts, feed e publicação. **Peças** abre a **Produção**: o Estúdio
+  Social acima, só com as abas Produção (o quadro) e Prévia, e as colunas Em criação, Para aprovar,
+  Aprovado e No Estúdio. Na Prévia de uma peça pronta, **Mandar para o Estúdio** (com confirmação)
+  copia os slides, ou os vídeos do carrossel vivo, e a legenda para a pasta `postar` do estúdio, que
+  vira post sem data em Posts; o cliente agenda por lá. A peça passa para No Estúdio e não é
+  enviada duas vezes. Sem o pacote instalado, a tecla E continua abrindo o Estúdio Social com as 4
+  abas. Guia em [estudio-de-conteudo/LEIA.md](estudio-de-conteudo/LEIA.md).
 
 Se entraram os opcionais:
 - **Voz:** "Falar com o OS" no MENU (tecla V); o botão de enviar aparece enquanto grava; ele só responde se o segundo cérebro tiver

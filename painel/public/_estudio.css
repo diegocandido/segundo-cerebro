@@ -108,6 +108,12 @@ body.mc-open #fab-estudio { display: none !important; }
 .es-pill.et-aprovar { color: var(--es-aviso); border-color: color-mix(in srgb, var(--es-aviso) 40%, transparent); }
 .es-pill.et-aprovado { color: var(--es-marca-clara); background: var(--es-marca-suave); border-color: color-mix(in srgb, var(--es-marca) 40%, transparent); }
 .es-pill.et-publicado { color: var(--es-ok); border-color: color-mix(in srgb, var(--es-ok) 35%, transparent); }
+/* peça que já foi para o Estúdio de Conteúdo, e o bloco "Mandar para o Estúdio" da Prévia */
+.es-pill.et-estudio { color: var(--es-ok); border-color: color-mix(in srgb, var(--es-ok) 35%, transparent); }
+.es-enviar { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.es-enviar .act { align-self: flex-start; }
+.es-enviar-b { font-weight: 700; }
+.es-enviar-ok { color: var(--es-ok); font-weight: 600; }
 
 /* ---------- Semana ---------- */
 .es-ola { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin: 8px 0 20px; }
