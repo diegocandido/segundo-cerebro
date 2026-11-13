@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.8 (2026-11-12)
+O painel agora pode ser instalado como app pelo Chrome: clique no ícone de instalar da barra de endereço e ele ganha janela própria, ícone no Dock ou na barra de tarefas, com o nome e o logo da sua marca, e atalhos para Tarefas, Mission Control e Gestão. Novo passo opcional no macOS: o painel liga sozinho quando você entra no computador e volta se cair.
+
 ## 1.7 (2026-11-12)
 Quadro de Tarefas no painel (tecla T): um projeto por cliente ou frente e três colunas, A fazer, Fazendo e Feito. Digite e Enter para criar, arraste o cartão para mudar de coluna e clique para editar prazo, prioridade, projeto e descrição. As tarefas ficam no próprio painel, junto com as do Mission Control, e funcionam sem internet. O Claude também lê e cria tarefas pelo bin/tarefas.py, sempre com a sua confirmação antes de criar ou mover. O briefing da manhã pode trazer as tarefas atrasadas e as de hoje.
 

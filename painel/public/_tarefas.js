@@ -317,5 +317,13 @@
     }, true);
   });
 
+  // atalhos do app instalado: /?abrir=tarefas|mission|gestao
+  addEventListener('load', () => setTimeout(() => {
+    const alvo = new URLSearchParams(location.search).get('abrir');
+    if (alvo === 'tarefas') abrir();
+    else if (alvo === 'mission' && window.MissionControl) window.MissionControl.open();
+    else if (alvo === 'gestao' && window.Gestao) window.Gestao.abrir();
+  }, 300));
+
   window.Tarefas = { abrir, fechar };
 })();

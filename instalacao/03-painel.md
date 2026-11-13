@@ -120,7 +120,25 @@ Se entraram os opcionais:
 O servidor precisa estar rodando para o painel abrir. Ofereça ao cliente uma destas, e só faça
 com o "pode":
 - Um comando curto no terminal (alias) para subir o painel.
-- No macOS, um app no Atalhos ou um item de login que rode `node .../server.js`.
+- **App do Chrome:** com o painel aberto no Chrome, o ícone de instalar no fim da barra de endereço
+  (ou menu ⋮, Transmitir, salvar e compartilhar, Instalar página como app) cria um app com o nome e
+  o logo da marca, janela própria e ícone no Dock ou na barra de tarefas. O botão direito no ícone
+  traz os atalhos Tarefas, Mission Control e Gestão. O app é só a janela: o servidor precisa estar
+  no ar. Com logo próprio, use um PNG quadrado de 512px para o ícone ficar nítido.
+- **Ligar sozinho no macOS (opcional):** um item de login que sobe o servidor quando o cliente
+  entra no computador e o religa se cair. Preencha
+  [templates/painel-inicio-automatico.plist.tmpl](templates/painel-inicio-automatico.plist.tmpl)
+  (caminho do `node`, de `which node`, e da pasta do painel), grave em
+  `~/Library/LaunchAgents/com.os.painel.plist` e ligue com
+  `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.os.painel.plist`. Antes, feche
+  qualquer servidor do painel que esteja aberto, para a porta estar livre. Confira com
+  `curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5210/` (tem que dar 200). Reiniciar:
+  `launchctl kickstart -k gui/$(id -u)/com.os.painel`. Desligar:
+  `launchctl bootout gui/$(id -u)/com.os.painel`. Se o segundo cérebro mora em Mesa, Documentos
+  ou Downloads, o macOS pode pedir permissão de acesso na primeira vez. Com isso ligado, troque
+  no `.claude/launch.json` a entrada do painel por `{"name": "painel", "url": "http://localhost:5210", "port": 5210}`,
+  para o app do Claude só abrir a aba no servidor que já está no ar. No Windows e no Linux, use o
+  agendador do sistema para rodar `node server.js` no login.
 
 ## Notas de segurança (não remova)
 

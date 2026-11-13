@@ -44,6 +44,7 @@ testa o servidor de verdade. Painel em branco quase sempre é algo que ele mostr
 | `server.js` | Servidor HTTP e API (só `127.0.0.1`, recusa pedidos de outros sites) |
 | `scan.js` | Lê o segundo cérebro e monta o grafo |
 | `mission.js`, `ingest.js` | Tarefas e pendências do diário do Mission Control |
+| `public/icon-192.png`, `public/icon-512.png` | Ícones padrão do app instalado pelo Chrome (o manifesto sai do `server.js`, com a marca do `config/brand.json`) |
 | `bin/tarefas.js` | As tarefas pelo terminal: leitura livre, escrita só com `--confirmo` |
 | `asaas.js` | Leitura das cobranças e criação de cobrança em duas etapas |
 | `gestao.js` | Os números da tela Gestão (só leitura; cada fonte falha sozinha) |

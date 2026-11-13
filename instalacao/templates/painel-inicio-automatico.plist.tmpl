@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Item de login do macOS que mantém o painel no ar. Troque os três caminhos entre chaves. -->
+<plist version="1.0"><dict>
+<key>Label</key><string>com.os.painel</string>
+<key>ProgramArguments</key><array><string>{CAMINHO DO NODE, de which node}</string><string>{PASTA DO PAINEL}/server.js</string></array>
+<key>WorkingDirectory</key><string>{PASTA DO PAINEL}</string>
+<key>EnvironmentVariables</key><dict><key>PATH</key><string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string></dict>
+<key>RunAtLoad</key><true/>
+<key>KeepAlive</key><true/>
+<key>ThrottleInterval</key><integer>30</integer>
+<key>StandardOutPath</key><string>{PASTA DO USUÁRIO}/Library/Logs/os-painel.log</string>
+<key>StandardErrorPath</key><string>{PASTA DO USUÁRIO}/Library/Logs/os-painel.err</string>
+</dict></plist>

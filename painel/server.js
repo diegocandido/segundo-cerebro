@@ -211,6 +211,7 @@ const handle = async (req, res) => {
   try {
     // static
     if (p === '/' || p === '/index.html') return serveStatic(res, 'index.html');
+    if (p === '/manifest.json') return sendJSON(res, manifesto());
     if (!p.startsWith('/api/')) {
       const file = p.replace(/^\/+/, '');
       const abs = path.resolve(PUBLIC, file);
@@ -508,6 +509,20 @@ function brand() {
   for (const k of Object.keys(BRAND_PADRAO)) if (typeof b[k] === 'string' && b[k].trim()) out[k] = b[k].trim().slice(0, 80);
   if (!within(PUBLIC, path.resolve(PUBLIC, out.logo)) || !fs.existsSync(path.resolve(PUBLIC, out.logo))) out.logo = BRAND_PADRAO.logo;
   return out;
+}
+/* Manifesto do app instalado pelo Chrome (Instalar pagina como app), com a marca do cliente.
+   Com o logo padrao usa os icones prontos; com logo proprio usa o arquivo dele (PNG quadrado,
+   de preferencia 512px). */
+function manifesto() {
+  const b = brand();
+  const icones = b.logo === BRAND_PADRAO.logo
+    ? [{ src: 'icon-192.png', sizes: '192x192', type: 'image/png' }, { src: 'icon-512.png', sizes: '512x512', type: 'image/png' }]
+    : [{ src: b.logo, sizes: '192x192', type: 'image/png' }, { src: b.logo, sizes: '512x512', type: 'image/png' }];
+  return {
+    name: b.tituloAba, short_name: (b.nome + ' ' + b.sufixo).trim(), start_url: '/', scope: '/', display: 'standalone',
+    background_color: '#0B0C16', theme_color: '#0B0C16', lang: 'pt-BR', icons: icones,
+    shortcuts: [{ name: 'Tarefas', url: '/?abrir=tarefas' }, { name: 'Mission Control', url: '/?abrir=mission' }, { name: 'Gestão', url: '/?abrir=gestao' }],
+  };
 }
 const escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
