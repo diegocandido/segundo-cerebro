@@ -58,7 +58,7 @@
     if (!falha(b)) out.push({ id: 'agenda', titulo: 'Hoje', grande: String(b.agenda.length), sub: 'compromisso(s) · ' + b.emails.length + ' e-mail(s) pedindo resposta',
       extra: b.geradoEm ? 'resumo das ' + String(b.geradoEm).slice(11, 16) : 'sem resumo da manhã ainda' });
     const t = d.tarefas;
-    if (!falha(t)) out.push({ id: 'tarefas', titulo: 'Tarefas', grande: String(t.abertas), sub: 'abertas no Mission Control',
+    if (!falha(t)) out.push({ id: 'tarefas', titulo: 'Tarefas', grande: String(t.abertas), sub: 'abertas no painel',
       alerta: t.atrasadas > 0, extra: t.atrasadas + ' atrasada(s) · ' + t.paraHoje + ' para hoje' });
     return out;
   }
@@ -130,7 +130,7 @@
         + grupo('Follow-ups <span>' + b.followups.length + '</span>', b.followups.map(f => linha(ddmm(f.due), esc(f.deal), esc((f.contact || {}).email || ''))).join('') || vazio('nenhum'));
     }
     if (id === 'tarefas') {
-      return vazio('As tarefas ficam no Mission Control.') + '<div class="mc-modal-act"><button class="act" data-acao="mission">Abrir o Mission Control</button></div>';
+      return vazio('As tarefas ficam na tela Tarefas (tecla T), por projeto e em quadro.') + '<div class="mc-modal-act"><button class="act" data-acao="tarefas">Abrir as Tarefas</button><button class="act" data-acao="mission">Abrir o Mission Control</button></div>';
     }
     return '';
   }
@@ -186,6 +186,7 @@
       det.querySelectorAll('[data-nota]').forEach(n => n.onclick = () => viewer(n.dataset.nota));
       det.querySelectorAll('[data-chat]').forEach(n => n.onclick = () => abrirConversa(n.dataset.chat, n.dataset.nome));
       det.querySelectorAll('[data-acao]').forEach(n => n.onclick = () => {
+        if (n.dataset.acao === 'tarefas') { fechar(); if (window.Tarefas) window.Tarefas.abrir(); return; }
         const MC = window.MissionControl;
         if (!MC) return;
         fechar();

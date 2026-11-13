@@ -64,7 +64,7 @@ Kit-OS-Cara-da-IA/
 │   ├── 02-ferramentas.md   guia de cada ferramenta (ligar, testar, como fica no painel)
 │   ├── 03-painel.md        como copiar, configurar e subir o painel
 │   ├── scripts/            whatsapp.py (Uazapi), instagram.py (Meta), voz (conversar, falar, ouvir, falar_resposta,
-│   │                       assistente.json.example), livro_caixa.py, carrossel_jpeg.py, carrossel_vivo.py e sync-github.sh
+│   │                       assistente.json.example), livro_caixa.py, tarefas.py (tarefas do painel), carrossel_jpeg.py, carrossel_vivo.py e sync-github.sh
 │   ├── carrossel-vivo/     instalador da skill de carrosséis e do carrossel vivo (baixa do autor), ajustes e a ponte vivo.js
 │   ├── estudio-de-conteudo/ guia, tema e script que ligam o Estúdio de Conteúdo (pacote à parte, Zernio) ao painel
 │   ├── demo-os/            segundo cérebro de demonstração (só exemplo), usado pela prévia do painel

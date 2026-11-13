@@ -14,6 +14,10 @@
      PATCH /api/todo            muda status / prazo / adiamento
      DELETE /api/todo?id=       descarta tarefa
      POST /api/mission/ingest   ingere pendencias do diario (idempotente)
+   Tarefas (tecla T), no mesmo store dos to-dos:
+     GET  /api/tarefas          projetos e tarefas
+     POST /api/projeto          cria projeto; PATCH renomeia ou arquiva; DELETE ?id= apaga
+                                (as tarefas dele ficam sem projeto)
    Voz:
      POST /api/conversar        audio (audio/*) ou {texto}; transcreve no computador, pergunta
                                 ao Claude no segundo cerebro (so consulta) e fala a resposta
@@ -428,6 +432,28 @@ const handle = async (req, res) => {
         todos: mission.readStore().items,
         meta: { now: mission.nowISO(), today: mission.today(), woke },
       });
+    }
+
+    // ---------- Tarefas (tecla T): projetos e kanban em cima do mesmo store dos to-dos ----------
+    if (p === '/api/tarefas' && req.method === 'GET') {
+      try { mission.wakeSnoozed(); } catch { }
+      const st = mission.readStore();
+      return sendJSON(res, { projects: st.projects, items: st.items, today: mission.today() });
+    }
+    if (p === '/api/projeto' && (req.method === 'POST' || req.method === 'PATCH')) {
+      let body = {};
+      try { body = JSON.parse(await readBody(req)); } catch { return sendJSON(res, { error: 'Bad JSON' }, 400); }
+      try {
+        if (req.method === 'POST') return sendJSON(res, { ok: true, project: mission.addProject(body) }, 201);
+        if (!body.id) return sendJSON(res, { error: 'id obrigatorio' }, 400);
+        return sendJSON(res, { ok: true, project: mission.updateProject(body.id, body) });
+      } catch (e) { return sendJSON(res, { error: e.message }, /nao encontrado/.test(e.message) ? 404 : 400); }
+    }
+    if (p === '/api/projeto' && req.method === 'DELETE') {
+      const id = url.searchParams.get('id');
+      if (!id) return sendJSON(res, { error: 'id obrigatorio' }, 400);
+      try { return sendJSON(res, { ok: true, project: mission.deleteProject(id) }); }
+      catch (e) { return sendJSON(res, { error: e.message }, /nao encontrado/.test(e.message) ? 404 : 400); }
     }
 
     // adiciona tarefa manual

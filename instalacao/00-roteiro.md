@@ -168,7 +168,7 @@ três perguntas de aceitação só com o OS, `doctor`, ritual de fechar o dia). 
   [templates/como-usar-painel.md.tmpl](templates/como-usar-painel.md.tmpl).
 - **Termine no visual.** Suba o painel do cliente (se não estiver no ar), confira de novo com
   `node bin/checar.js`, abra no navegador e passe com ele pelo grafo (o OS dele, com as áreas dele),
-  o Mission Control (tarefas e o Morning Brief), a Gestão e o Estúdio Social. Se ele fez o
+  o Mission Control (tarefas e o Morning Brief), o quadro de Tarefas (tecla T), a Gestão e o Estúdio Social. Se ele fez o
   carrossel de teste, ele tem que aparecer no Estúdio, na coluna certa. A sessão acaba com o
   painel aberto e funcionando na tela dele.
 - Diga em três linhas o que fazer amanhã.

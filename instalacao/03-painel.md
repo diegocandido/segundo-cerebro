@@ -77,6 +77,12 @@ Confira junto com o cliente:
 - Clicar num ícone de ferramenta abre o painel dela; a chave aparece como "gravada" ou "não
   encontrada".
 - Tecla **M** abre o Mission Control; tecla **C** abre as cobranças (se o Asaas estiver ligado).
+- Tecla **T** (ou o botão TAREFAS) abre o quadro de tarefas: um projeto por cliente ou frente e
+  três colunas (A fazer, Fazendo, Feito). Crie com ele um projeto e uma tarefa de teste, arraste
+  para Fazendo e conclua. A mesma tarefa aparece no Mission Control. Pelo terminal, a partir do
+  OS: `python3 bin/tarefas.py projetos` (copie [scripts/tarefas.py](scripts/tarefas.py) para o
+  `bin/` do OS; ele acha o painel na pasta ao lado). O Claude lê à vontade e só cria ou move
+  tarefa com `--confirmo`, depois do "pode" do cliente.
 - Tecla **G** (ou o botão GESTÃO) abre a tela Gestão: cards com cobranças, propostas, WhatsApp,
   clientes, social, agenda e tarefas; clicar num card abre o detalhe dentro do painel. No painel de cada
   ferramenta, o botão "Abrir no painel" leva para a seção dela (campo `painel` do `apps.json`).

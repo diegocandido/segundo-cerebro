@@ -21,6 +21,10 @@ vez. Formato em `templates/diario.md.tmpl`.
 ### 3. Propagar o que não é do diário
 - Decisão que **muda o rumo** de algo: ofereça registrar via `/{decidir}`.
 - Padrão que se repetiu ou erro que ensinou algo: ofereça uma linha em `memory/aprendizados.md`.
+- {Se o cliente tem o painel:} tarefa de execução que surgiu no dia (algo a fazer, com prazo):
+  ofereça criar no quadro de Tarefas do painel, com
+  `python3 bin/tarefas.py criar "título" --projeto NOME --prazo AAAA-MM-DD --confirmo`, só depois
+  do "pode". No diário, cite a tarefa em vez de repetir o detalhe.
 - Evento com {entidade}: **reescreva o topo do `estado.md` dela agora**, não depois. É o único
   momento em que a informação está fresca.
 

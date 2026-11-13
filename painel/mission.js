@@ -55,7 +55,8 @@ function mirrorRel() { return mcOpt('mirrorPath'); }
 const INBOX_HEAD = '## Caixa de entrada';
 
 const STATUSES = new Set(['open', 'doing', 'done', 'snoozed']);
-const SOURCES = new Set(['manual', 'diario', 'memory', 'call']);
+const SOURCES = new Set(['manual', 'diario', 'memory', 'call', 'import']);
+const PRIORITIES = new Set(['low', 'medium', 'high', 'urgent']);
 
 // ---------- basicos ----------
 function nowISO() {
@@ -125,12 +126,13 @@ function readMission() {
 }
 
 // ---------- store de to-dos ----------
-function emptyStore() { return { version: 1, items: [] }; }
+function emptyStore() { return { version: 1, items: [], projects: [] }; }
 
 function readStore() {
   const s = readJSON(TODOS_FILE, null);
   if (!s || !Array.isArray(s.items)) return emptyStore();
-  return { version: s.version || 1, items: s.items };
+  // projects: os projetos da tela Tarefas (tecla T). Cada tarefa aponta para um pelo campo project.
+  return { version: s.version || 1, items: s.items, projects: Array.isArray(s.projects) ? s.projects : [] };
 }
 
 /* mutate: read -> aplica -> write, com protecao contra escrita concorrente.
@@ -167,9 +169,10 @@ function laneOf(t, hoje) {
   return 'later';
 }
 
-function lineOf(t) {
+function lineOf(t, projName) {
   const box = t.status === 'done' ? 'x' : ' ';
   const bits = [];
+  if (projName) bits.push(projName);
   if (t.due) bits.push('vence ' + t.due.slice(8, 10) + '/' + t.due.slice(5, 7));
   if (t.origin && t.origin.label) bits.push('origem: ' + t.origin.label);
   if (t.origin && t.origin.client) bits.push('[[' + t.origin.client + ']]');
@@ -182,6 +185,8 @@ function renderMirror(store, keepInbox) {
   const hoje = today();
   const lanes = { late: [], today: [], later: [], noDate: [], snoozed: [], done: [] };
   for (const t of store.items) lanes[laneOf(t, hoje)].push(t);
+  const projNames = new Map((store.projects || []).map(p => [p.id, p.name]));
+  const line = t => lineOf(t, t.project ? projNames.get(t.project) : '');
 
   const L = [];
   L.push('---');
@@ -216,7 +221,7 @@ function renderMirror(store, keepInbox) {
     if (!lanes[k].length) continue;
     L.push('## ' + label + ' (' + lanes[k].length + ')');
     L.push('');
-    for (const t of lanes[k]) L.push(lineOf(t));
+    for (const t of lanes[k]) L.push(line(t));
     L.push('');
   }
   if (lanes.done.length) {
@@ -225,7 +230,7 @@ function renderMirror(store, keepInbox) {
       .slice(0, 20);
     L.push('## Concluídas (últimas ' + recentes.length + ')');
     L.push('');
-    for (const t of recentes) L.push(lineOf(t));
+    for (const t of recentes) L.push(line(t));
     L.push('');
   }
   const abertas = store.items.filter(t => t.status !== 'done').length;
@@ -319,6 +324,9 @@ function normalizeItem(raw) {
     related: Array.isArray(raw.related) ? raw.related : [],
     goal: raw.goal != null ? raw.goal : null,
     due: raw.due || null,
+    project: raw.project || null,
+    notes: raw.notes ? String(raw.notes).slice(0, 8000) : '',
+    priority: PRIORITIES.has(raw.priority) ? raw.priority : 'medium',
     snooze_until: raw.snooze_until || null,
     needs_review: !!raw.needs_review,
     created_at: raw.created_at || ts,
@@ -329,6 +337,7 @@ function normalizeItem(raw) {
 
 function addManual(payload) {
   return mutate(store => {
+    if (payload.project && !(store.projects || []).some(p => p.id === payload.project)) throw new Error('projeto nao encontrado: ' + payload.project);
     const item = normalizeItem({ ...payload, source: 'manual', needs_review: false });
     store.items.push(item);
     return item;
@@ -351,6 +360,15 @@ function updateTodo(id, patch) {
       it.title = t.slice(0, 300);
     }
     if (patch.due !== undefined) it.due = patch.due || null;
+    if (patch.project !== undefined) {
+      if (patch.project && !(store.projects || []).some(p => p.id === patch.project)) throw new Error('projeto nao encontrado: ' + patch.project);
+      it.project = patch.project || null;
+    }
+    if (patch.notes !== undefined) it.notes = String(patch.notes || '').slice(0, 8000);
+    if (patch.priority !== undefined) {
+      if (!PRIORITIES.has(patch.priority)) throw new Error('prioridade invalida: ' + patch.priority);
+      it.priority = patch.priority;
+    }
     if (patch.snooze_until !== undefined) {
       it.snooze_until = patch.snooze_until || null;
       if (it.snooze_until) it.status = 'snoozed';
@@ -368,6 +386,84 @@ function deleteTodo(id) {
     if (i < 0) throw new Error('tarefa nao encontrada: ' + id);
     const [gone] = store.items.splice(i, 1);
     return gone;
+  });
+}
+
+// ---------- projetos (tela Tarefas, tecla T) ----------
+const PROJ_CORES = ['#808AFF', '#43C07A', '#FF6B2C', '#E5533D', '#E0B341', '#3FB6D3', '#C77DFF', '#8A93A6'];
+function projName(raw) {
+  const n = String(raw || '').trim().slice(0, 80);
+  if (!n) throw new Error('nome do projeto obrigatorio');
+  return n;
+}
+function addProject(payload) {
+  return mutate(store => {
+    const name = projName(payload && payload.name);
+    if (store.projects.some(p => slug(p.name) === slug(name))) throw new Error('ja existe um projeto com esse nome');
+    const proj = {
+      id: 'p_' + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-3),
+      name, color: (payload && payload.color) || PROJ_CORES[store.projects.length % PROJ_CORES.length],
+      archived: false, created_at: nowISO(),
+    };
+    store.projects.push(proj);
+    return proj;
+  });
+}
+function updateProject(id, patch) {
+  return mutate(store => {
+    const p = store.projects.find(x => x.id === id);
+    if (!p) throw new Error('projeto nao encontrado: ' + id);
+    if (patch.name !== undefined) {
+      const name = projName(patch.name);
+      if (store.projects.some(x => x.id !== id && slug(x.name) === slug(name))) throw new Error('ja existe um projeto com esse nome');
+      p.name = name;
+    }
+    if (patch.color !== undefined && /^#[0-9a-fA-F]{6}$/.test(patch.color)) p.color = patch.color;
+    if (patch.archived !== undefined) p.archived = !!patch.archived;
+    return p;
+  });
+}
+/* Apagar projeto nunca apaga tarefa: as dele ficam sem projeto. */
+function deleteProject(id) {
+  return mutate(store => {
+    const i = store.projects.findIndex(x => x.id === id);
+    if (i < 0) throw new Error('projeto nao encontrado: ' + id);
+    const [gone] = store.projects.splice(i, 1);
+    let soltas = 0;
+    for (const t of store.items) if (t.project === id) { t.project = null; t.updated_at = nowISO(); soltas++; }
+    return { ...gone, soltas };
+  });
+}
+
+/* importTasks: traz projetos e tarefas de outro sistema, uma vez ou varias (idempotente).
+   Projeto casa pelo nome; tarefa casa pela dedupe_key. Diferente do mergeIngested, titulo
+   repetido em projetos diferentes entra, e o status de origem (inclusive concluida) vale.
+   Tarefa que ja esta aqui nunca e alterada.
+   payload: { projects: [{ key, name }], tasks: [{ dedupe_key, title, project_key, status, due, notes, priority, created_at, done_at, origin }] } */
+function importTasks(payload) {
+  return mutate(store => {
+    const byName = new Map(store.projects.map(p => [slug(p.name), p]));
+    const keyToId = new Map();
+    let projetos = 0;
+    for (const p of (payload.projects || [])) {
+      const name = projName(p.name);
+      let alvo = byName.get(slug(name));
+      if (!alvo) {
+        alvo = { id: 'p_' + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-3), name,
+          color: PROJ_CORES[store.projects.length % PROJ_CORES.length], archived: false, created_at: nowISO() };
+        store.projects.push(alvo); byName.set(slug(name), alvo); projetos++;
+      }
+      keyToId.set(String(p.key), alvo.id);
+    }
+    const byKey = new Set(store.items.map(i => i.dedupe_key));
+    let added = 0, skipped = 0;
+    for (const c of (payload.tasks || [])) {
+      if (!c || !c.title || !c.dedupe_key || byKey.has(c.dedupe_key)) { skipped++; continue; }
+      const item = normalizeItem({ ...c, id: undefined, source: 'import', needs_review: false,
+        project: c.project_key != null ? (keyToId.get(String(c.project_key)) || null) : null });
+      store.items.push(item); byKey.add(item.dedupe_key); added++;
+    }
+    return { projetos, added, skipped };
   });
 }
 
@@ -417,4 +513,5 @@ module.exports = {
   nowISO, today, slug, titleKey, atomicWriteJSON,
   readMission, readStore, addManual, updateTodo, deleteTodo, mergeIngested, wakeSnoozed,
   writeMirror, readInbox, absorbInbox, mirrorPath, renderMirror,
+  addProject, updateProject, deleteProject, importTasks,
 };

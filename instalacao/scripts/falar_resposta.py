@@ -8,9 +8,9 @@ caracteres numa frase inteira e fala pela ElevenLabs no modelo Flash (bin/falar.
 começa em 1 a 2 segundos e gasta metade do crédito. Sem chave ou sem internet, cai na voz do
 macOS. Volta na hora: a fala segue em segundo plano. Uma resposta nova interrompe a anterior.
 
-Para silenciar sem mexer em nada:  touch ~/.local/share/conversar/sem-voz
-Para voltar a falar:               rm ~/.local/share/conversar/sem-voz
-Para calar a fala atual:           pkill afplay; pkill -f "say -v"
+Fica quieta sozinha quando algum app de reunião está gravando do microfone (bin/microfone.py:
+Zoom, Teams, Meet, Granola...). Para silenciar à mão, com ou sem prazo: bin/voz.py
+(silenciar, silenciar 2h, falar, status).
 """
 import json
 import os
@@ -20,13 +20,14 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from microfone import apps_gravando  # noqa: E402
 from ouvir import linhas_faladas, pronunciavel  # noqa: E402
+from voz import silenciada  # noqa: E402
 
 FALAR = Path(__file__).resolve().parent / "falar.py"
 LIMITE = 700  # caracteres por resposta (~40 s); o resto fica só na tela, para poupar crédito
 
 DADOS = Path.home() / ".local/share/conversar"
-SEM_VOZ = DADOS / "sem-voz"
 PID = DADOS / "fala-resposta.pid"
 
 
@@ -71,7 +72,7 @@ def calar_anterior() -> None:
 
 
 def main() -> None:
-    if SEM_VOZ.exists():
+    if silenciada() or apps_gravando():  # silêncio pedido, ou reunião em andamento
         return
     try:
         entrada = json.load(sys.stdin)

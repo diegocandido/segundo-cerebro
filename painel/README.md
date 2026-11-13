@@ -8,6 +8,9 @@ Servidor local, sem dependências, que lê a pasta de um segundo cérebro em mar
 - **O Mission Control (tecla M):** tarefas (manuais e puxadas das pendências do diário) e o
   Morning Brief (agenda, e-mails, follow-ups, onde parei), escrito por uma rotina em
   `state/mission.json`.
+- **Tarefas (tecla T):** um projeto por cliente ou frente e um quadro com três colunas (A fazer,
+  Fazendo, Feito). Criar com Enter, arrastar para mudar de coluna, clicar para editar prazo,
+  prioridade, projeto e descrição. Usa o mesmo armazenamento do Mission Control.
 - **Cobranças do Asaas (tecla C):** vencidas, a vencer e recebidas, só leitura; e o botão Nova
   cobrança, com prévia e confirmação.
 - **Gestão (tecla G):** os números da operação em cards (cobranças, propostas, WhatsApp, clientes,
@@ -41,6 +44,7 @@ testa o servidor de verdade. Painel em branco quase sempre é algo que ele mostr
 | `server.js` | Servidor HTTP e API (só `127.0.0.1`, recusa pedidos de outros sites) |
 | `scan.js` | Lê o segundo cérebro e monta o grafo |
 | `mission.js`, `ingest.js` | Tarefas e pendências do diário do Mission Control |
+| `bin/tarefas.js` | As tarefas pelo terminal: leitura livre, escrita só com `--confirmo` |
 | `asaas.js` | Leitura das cobranças e criação de cobrança em duas etapas |
 | `gestao.js` | Os números da tela Gestão (só leitura; cada fonte falha sozinha) |
 | `estudio.js` | O Estúdio Social: lê as pastas das peças (`missionControl.carrosseisDirs`) e serve só as imagens e vídeos delas |

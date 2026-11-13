@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.7 (2026-11-12)
+Quadro de Tarefas no painel (tecla T): um projeto por cliente ou frente e três colunas, A fazer, Fazendo e Feito. Digite e Enter para criar, arraste o cartão para mudar de coluna e clique para editar prazo, prioridade, projeto e descrição. As tarefas ficam no próprio painel, junto com as do Mission Control, e funcionam sem internet. O Claude também lê e cria tarefas pelo bin/tarefas.py, sempre com a sua confirmação antes de criar ou mover. O briefing da manhã pode trazer as tarefas atrasadas e as de hoje.
+
 ## 1.6 (2026-11-09)
 Estúdio de Conteúdo dentro do painel (opcional, pergunta 13h): quem tem o pacote Estúdio de Conteúdo abre pela tecla E, no visual do painel, a semana, a pauta, os posts com prévia de celular, o feed, as conversas com resposta automática no direct sem ManyChat, os resultados e os ajustes, publicando no Instagram e no TikTok pelo Zernio. Sem o pacote, a tecla E segue abrindo o Estúdio Social. Carrossel vivo: os vídeos agora podem ser publicados pelo bin/instagram.py, além do app do Instagram.
 
