@@ -1,6 +1,33 @@
 {
-  "_note": "Copie para config/apps.json e deixe só as ferramentas que o cliente usa de fato (entrevista). 'status': 'live' quando está ligada e testada, 'sugerido' quando o cliente ainda vai adotar, 'a-definir' quando a solução ainda não foi escolhida. 'detalhes' alimenta o painel que abre ao clicar no ícone; troque todo *(preencher)* pelo que o cliente respondeu e apague o que não se aplica. 'chave' é só o caminho do arquivo: o painel confere se existe, nunca lê. 'notas' são caminhos de notas DENTRO do segundo cérebro do cliente, que precisam existir. 'painel' (cobrancas, whatsapp, agenda, clientes, propostas ou tarefas) faz o clique no ícone abrir essa seção da tela Gestão, dentro do próprio painel.",
+  "_note": "Copie para config/apps.json e deixe só as ferramentas que o cliente usa de fato (entrevista). 'status': 'live' quando está ligada e testada, 'sugerido' quando o cliente ainda vai adotar, 'a-definir' quando a solução ainda não foi escolhida. 'detalhes' alimenta o painel que abre ao clicar no ícone; troque todo *(preencher)* pelo que o cliente respondeu e apague o que não se aplica. 'chave' é só o caminho do arquivo: o painel confere se existe, nunca lê. 'notas' são caminhos de notas DENTRO do segundo cérebro do cliente, que precisam existir. 'painel' (cobrancas, whatsapp, agenda, clientes, propostas ou tarefas) faz o clique no ícone abrir essa seção da tela Gestão, dentro do próprio painel. 'tela' diz que tela do painel abre ao clicar no ícone (tarefas, estudio, mission ou uma seção da Gestão: agenda, whatsapp, cobrancas, clientes, propostas); sem 'tela', o clique abre a ficha da ferramenta. Alt+clique sempre abre a ficha.",
   "apps": [
+    {
+      "id": "app:tarefas",
+      "label": "Tarefas",
+      "kind": "cli",
+      "access": "claude",
+      "status": "live",
+      "desc": "Projetos e quadro de tarefas, no próprio painel (tecla T)",
+      "links": [
+        "bin/tarefas.py"
+      ],
+      "iconSlug": "",
+      "detalhes": {
+        "papel": "Dono das tarefas de execução: um projeto por cliente ou frente e um quadro com A fazer, Fazendo e Feito. Mora no painel, junto com as tarefas do Mission Control.",
+        "acesso": "Lê; cria e move só com --confirmo, depois do \"pode\" (no painel, o clique confirma)",
+        "conexao": "Tela Tarefas do painel (tecla T) e script bin/tarefas.py. Não usa chave nem internet.",
+        "usadoPor": [
+          "Briefing da manhã: tarefas atrasadas e de hoje",
+          "Fechamento do dia: oferece criar as tarefas novas"
+        ],
+        "regras": [
+          "Estado e diário não guardam tarefa de execução: só apontam para ela."
+        ],
+        "notas": [],
+        "links": [],
+        "tela": "tarefas"
+      }
+    },
     {
       "id": "app:gcal",
       "label": "Google Calendar",
@@ -28,7 +55,8 @@
             "url": "https://calendar.google.com"
           }
         ],
-        "painel": "agenda"
+        "painel": "agenda",
+        "tela": "agenda"
       }
     },
     {
@@ -59,7 +87,8 @@
             "url": "https://mail.google.com"
           }
         ],
-        "painel": "agenda"
+        "painel": "agenda",
+        "tela": "agenda"
       }
     },
     {
@@ -90,7 +119,8 @@
             "url": "https://tldv.io/app/meetings"
           }
         ],
-        "painel": "clientes"
+        "painel": "clientes",
+        "tela": "clientes"
       }
     },
     {
@@ -128,7 +158,8 @@
             "url": "https://www.asaas.com/login"
           }
         ],
-        "painel": "cobrancas"
+        "painel": "cobrancas",
+        "tela": "cobrancas"
       }
     },
     {
@@ -166,7 +197,8 @@
             "url": "https://docs.uazapi.com"
           }
         ],
-        "painel": "whatsapp"
+        "painel": "whatsapp",
+        "tela": "whatsapp"
       }
     },
     {
@@ -203,7 +235,8 @@
             "label": "Apps na Meta",
             "url": "https://developers.facebook.com/apps"
           }
-        ]
+        ],
+        "tela": "estudio"
       }
     },
     {
@@ -235,7 +268,8 @@
             "url": "https://app.pandadoc.com"
           }
         ],
-        "painel": "propostas"
+        "painel": "propostas",
+        "tela": "propostas"
       }
     }
   ]

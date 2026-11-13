@@ -74,8 +74,10 @@ cliente: o grafo precisa estar desenhado no centro da tela e o console do navega
 Confira junto com o cliente:
 - O topo mostra o nome e o logo dele.
 - O grafo mostra as áreas do OS como departamentos e as ferramentas no anel de Aplicações.
-- Clicar num ícone de ferramenta abre o painel dela; a chave aparece como "gravada" ou "não
-  encontrada".
+- Clicar num ícone de ferramenta vai direto para a tela dela no painel (campo `tela` do
+  `apps.json`: `tarefas`, `estudio`, `mission` ou uma seção da Gestão). Ferramenta sem tela abre a
+  ficha dela. **Alt+clique** abre a ficha de qualquer uma; nela a chave aparece como "gravada" ou
+  "não encontrada".
 - Tecla **M** abre o Mission Control; tecla **C** abre as cobranças (se o Asaas estiver ligado).
 - Tecla **T** (ou o botão TAREFAS) abre o quadro de tarefas: um projeto por cliente ou frente e
   três colunas (A fazer, Fazendo, Feito). Crie com ele um projeto e uma tarefa de teste, arraste

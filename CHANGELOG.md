@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.9 (2026-11-12)
+Clicar num ícone do anel de Aplicações agora leva direto para a tela daquela ferramenta no painel: Tarefas abre o quadro, Instagram abre o Estúdio Social, WhatsApp, agenda e cobranças abrem a seção certa da Gestão. Alt+clique abre a ficha da ferramenta, com chave, regras e links. Novos ícones de Tarefas, Granola e Instagram, e a ferramenta Tarefas no modelo de aplicações.
+
 ## 1.8 (2026-11-12)
 O painel agora pode ser instalado como app pelo Chrome: clique no ícone de instalar da barra de endereço e ele ganha janela própria, ícone no Dock ou na barra de tarefas, com o nome e o logo da sua marca, e atalhos para Tarefas, Mission Control e Gestão. Novo passo opcional no macOS: o painel liga sozinho quando você entra no computador e volta se cair.
 

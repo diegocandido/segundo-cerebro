@@ -1233,8 +1233,19 @@ window.BrainCore = (function () {
 
   /* Painel da ferramenta: o que ela faz no OS, quem usa, regras, chave e links.
      Conteudo em config/apps.json -> detalhes; o status da chave vem de /api/apps/status. */
+  /* Tela do painel que cada ferramenta abre: tarefas, estudio, mission ou uma secao da Gestao. */
+  function abrirTela(tela) {
+    if (tela === 'tarefas' && window.Tarefas) { window.Tarefas.abrir(); return true; }
+    if (tela === 'estudio' && window.Estudio) { window.Estudio.abrir(); return true; }
+    if (tela === 'mission' && window.MissionControl) { window.MissionControl.open(); return true; }
+    if (window.Gestao && tela) { window.Gestao.abrir(tela); return true; }
+    return false;
+  }
+  addEventListener('pointerdown', e => { window.__altClique = e.altKey; }, true);
   function selectApp(n, card) {
     const d = n.detalhes, c = colorOf(n);
+    // clicar no icone vai direto para a tela da ferramenta; Alt+clique abre a ficha dela
+    if (d.tela && !window.__altClique) { setTimeout(() => { select(null); abrirTela(d.tela); }, 0); return; }
     const h = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const lista = (titulo, itens) => itens && itens.length
       ? `<div class="card-sub">${titulo}</div><ul class="app-list">${itens.map(i => `<li>${h(i)}</li>`).join('')}</ul>` : '';
@@ -1242,7 +1253,9 @@ window.BrainCore = (function () {
     const links = (d.links || []).filter(x => /^https:\/\//.test(x.url))
       .map(x => `<a class="app-link ext" href="${h(x.url)}" target="_blank" rel="noopener">${h(x.label)} ↗</a>`).join('');
     const SECOES = { cobrancas: 'Cobranças', whatsapp: 'Conversas', agenda: 'Agenda e e-mails', clientes: 'Clientes e reuniões', propostas: 'Propostas', tarefas: 'Tarefas' };
-    const noPainel = SECOES[d.painel] ? `<button class="mc-primary app-painel" data-painel="${h(d.painel)}">Abrir no painel: ${SECOES[d.painel]}</button>` : '';
+    const TELAS = { ...SECOES, estudio: 'Estúdio Social', mission: 'Mission Control' };
+    const alvo = d.tela || d.painel;
+    const noPainel = TELAS[alvo] ? `<button class="mc-primary app-painel" data-painel="${h(alvo)}">Abrir no painel: ${TELAS[alvo]}</button>` : '';
     const acoes = (d.acoes || []).map(a => a === 'cobrancas' ? '<button class="act" data-app="cobrancas">Ver cobranças</button>'
       : a === 'nova-cobranca' ? '<button class="act" data-app="nova-cobranca">Nova cobrança</button>' : '').join('');
     card.classList.add('app-card');
@@ -1269,7 +1282,7 @@ window.BrainCore = (function () {
     card.querySelector('#card-close').onclick = () => select(null);
     card.querySelector('[data-act="fly"]').onclick = () => flyToNode(n);
     card.querySelectorAll('[data-nota]').forEach(b => b.onclick = () => openViewer(d.notas[+b.dataset.nota].path));
-    card.querySelectorAll('[data-painel]').forEach(b => b.onclick = () => { if (window.Gestao) { select(null); window.Gestao.abrir(b.dataset.painel); } });
+    card.querySelectorAll('[data-painel]').forEach(b => b.onclick = () => { select(null); abrirTela(b.dataset.painel); });
     card.querySelectorAll('[data-app]').forEach(b => b.onclick = () => {
       const MC = window.MissionControl;
       if (!MC) return;
