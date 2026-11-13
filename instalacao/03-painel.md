@@ -79,13 +79,17 @@ Confira junto com o cliente:
   ficha dela. **Alt+clique** abre a ficha de qualquer uma; nela a chave aparece como "gravada" ou
   "não encontrada".
 - Tecla **M** abre o Mission Control; tecla **C** abre as cobranças (se o Asaas estiver ligado).
-- Tecla **T** (ou o botão TAREFAS) abre o quadro de tarefas: um projeto por cliente ou frente e
+- O **☰ MENU** do topo abre com a seção Funcionalidades: cada tela do painel com a tecla dela
+  (Tarefas, Mission Control, Gestão, Estúdio, Cobranças, Livro-caixa, Kit, Falar). Não há botões
+  no canto inferior direito; o de voz só aparece enquanto grava ou pensa. Item de tela que não foi
+  instalada não aparece.
+- Tecla **T** (ou o MENU) abre o quadro de tarefas: um projeto por cliente ou frente e
   três colunas (A fazer, Fazendo, Feito). Crie com ele um projeto e uma tarefa de teste, arraste
   para Fazendo e conclua. A mesma tarefa aparece no Mission Control. Pelo terminal, a partir do
   OS: `python3 bin/tarefas.py projetos` (copie [scripts/tarefas.py](scripts/tarefas.py) para o
   `bin/` do OS; ele acha o painel na pasta ao lado). O Claude lê à vontade e só cria ou move
   tarefa com `--confirmo`, depois do "pode" do cliente.
-- Tecla **G** (ou o botão GESTÃO) abre a tela Gestão: cards com cobranças, propostas, WhatsApp,
+- Tecla **G** (ou o MENU) abre a tela Gestão: cards com cobranças, propostas, WhatsApp,
   clientes, social, agenda e tarefas; clicar num card abre o detalhe dentro do painel. No painel de cada
   ferramenta, o botão "Abrir no painel" leva para a seção dela (campo `painel` do `apps.json`).
   Card de ferramenta que não está ligada aparece com o aviso de indisponível, e os outros seguem.
@@ -94,7 +98,7 @@ Confira junto com o cliente:
   `missionControl.socialCalendar` do `config/workspace.json`). Teste com um post na tabela Publicados:
   o card conta os dos últimos 30 dias e abre o link.
 
-- Tecla **E** (ou o botão ✦ ESTÚDIO) abre o Estúdio Social; o Mission Control mostra a faixa
+- Tecla **E** (ou o MENU) abre o Estúdio Social; o Mission Control mostra a faixa
   "Estúdio Social" no alto. Ele tem 4 abas: **Quadro** (as peças por etapa), **Semana** (o próximo
   post, os números e os 7 dias, com o dia de postar marcado), **Posts** (a prévia em tela de celular,
   com slides, carrossel vivo e legenda) e **Feed** (como o perfil fica com as próximas peças). A
@@ -108,7 +112,7 @@ Confira junto com o cliente:
   [estudio-de-conteudo/LEIA.md](estudio-de-conteudo/LEIA.md).
 
 Se entraram os opcionais:
-- **Voz:** o botão 🎙 FALAR (tecla V) aparece sempre; ele só responde se o segundo cérebro tiver
+- **Voz:** "Falar com o OS" no MENU (tecla V); o botão de enviar aparece enquanto grava; ele só responde se o segundo cérebro tiver
   `bin/conversar.py` e `bin/assistente.json` (guia da voz em 02-ferramentas.md). Teste digitando
   uma pergunta no quadro; o navegador pede o microfone na primeira gravação (no Chrome ou Safari;
   painéis embutidos costumam bloquear o microfone).

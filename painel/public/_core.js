@@ -1238,6 +1238,7 @@ window.BrainCore = (function () {
     if (tela === 'tarefas' && window.Tarefas) { window.Tarefas.abrir(); return true; }
     if (tela === 'estudio' && window.Estudio) { window.Estudio.abrir(); return true; }
     if (tela === 'mission' && window.MissionControl) { window.MissionControl.open(); return true; }
+    if (tela === 'caixa' && window.MissionControl) { window.MissionControl.openCaixa(); return true; }
     if (window.Gestao && tela) { window.Gestao.abrir(tela); return true; }
     return false;
   }
@@ -1253,7 +1254,7 @@ window.BrainCore = (function () {
     const links = (d.links || []).filter(x => /^https:\/\//.test(x.url))
       .map(x => `<a class="app-link ext" href="${h(x.url)}" target="_blank" rel="noopener">${h(x.label)} ↗</a>`).join('');
     const SECOES = { cobrancas: 'Cobranças', whatsapp: 'Conversas', agenda: 'Agenda e e-mails', clientes: 'Clientes e reuniões', propostas: 'Propostas', tarefas: 'Tarefas' };
-    const TELAS = { ...SECOES, estudio: 'Estúdio Social', mission: 'Mission Control' };
+    const TELAS = { ...SECOES, estudio: 'Estúdio Social', mission: 'Mission Control', caixa: 'Livro-caixa' };
     const alvo = d.tela || d.painel;
     const noPainel = TELAS[alvo] ? `<button class="mc-primary app-painel" data-painel="${h(alvo)}">Abrir no painel: ${TELAS[alvo]}</button>` : '';
     const acoes = (d.acoes || []).map(a => a === 'cobrancas' ? '<button class="act" data-app="cobrancas">Ver cobranças</button>'

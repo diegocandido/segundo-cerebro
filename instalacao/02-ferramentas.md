@@ -279,7 +279,7 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
 - **Entende os dois formatos:** projeto da skill (`resultados/estatico/slide-NN.png`,
   `resultados/slide-NN.mp4`) e o carrossel do modelo de 5 slides do Kit (`jpeg/`, `mp4/`). Os dois
   aparecem no mesmo quadro.
-- **No painel:** botão ✦ ESTÚDIO e tecla **E**; faixa "Estúdio Social" no alto do Mission Control
+- **No painel:** Estúdio no MENU e tecla **E**; faixa "Estúdio Social" no alto do Mission Control
   com as peças em produção; card na tela Gestão. Só leitura: aprovar e postar continuam no Claude.
 
 ---

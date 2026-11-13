@@ -1,0 +1,14 @@
+/* Funcionalidades no MENU do topo (_atalhos.js) */
+#menu-funcoes { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.mf-lista { display: flex; flex-direction: column; gap: 4px; }
+.mf-item { display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; cursor: pointer;
+  font: 500 12.5px 'DM Sans', sans-serif; color: var(--ink); padding: 7px 9px; border-radius: 8px;
+  background: transparent; border: 1px solid transparent; transition: border-color .15s, background-color .15s; }
+.mf-item:hover { background: var(--hover); border-color: var(--border); color: var(--accent); }
+.mf-item kbd { font: 600 10px 'JetBrains Mono', monospace; color: var(--faint); padding: 1px 6px; border-radius: 5px; border: 1px solid var(--border); }
+
+/* os botões soltos do canto inferior direito saem: tudo está no MENU */
+#fab-tarefas, #fab-estudio, #fab-gestao, #fab-mission { display: none !important; }
+/* a voz só aparece enquanto grava ou pensa (mostra o estado e o Enviar) */
+#fab-voz { display: none; }
+#fab-voz[data-estado="gravando"], #fab-voz[data-estado="pensando"] { display: block; bottom: 22px !important; }

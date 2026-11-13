@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.11 (2026-11-13)
+As telas do painel agora ficam no MENU do topo, na seção Funcionalidades, cada uma com a sua tecla: Tarefas, Mission Control, Gestão, Estúdio, Cobranças, Livro-caixa e Falar com o OS. Os botões do canto inferior direito saíram, e o de voz só aparece enquanto grava. O anel de Aplicações ganhou o atalho do Livro-caixa, e o modelo de aplicações passou a pedir só ferramentas que têm tela, uma por tela.
+
 ## 1.10 (2026-11-13)
 Quando uma camada (como Aplicações) ou uma área do grafo está desligada na legenda, o painel agora mostra um aviso embaixo, com o que está escondido e o botão Mostrar tudo. O filtro fica guardado no navegador e no app instalado, e antes parecia que as aplicações tinham sumido.
 

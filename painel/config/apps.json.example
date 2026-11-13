@@ -1,5 +1,5 @@
 {
-  "_note": "Copie para config/apps.json e deixe só as ferramentas que o cliente usa de fato (entrevista). 'status': 'live' quando está ligada e testada, 'sugerido' quando o cliente ainda vai adotar, 'a-definir' quando a solução ainda não foi escolhida. 'detalhes' alimenta o painel que abre ao clicar no ícone; troque todo *(preencher)* pelo que o cliente respondeu e apague o que não se aplica. 'chave' é só o caminho do arquivo: o painel confere se existe, nunca lê. 'notas' são caminhos de notas DENTRO do segundo cérebro do cliente, que precisam existir. 'painel' (cobrancas, whatsapp, agenda, clientes, propostas ou tarefas) faz o clique no ícone abrir essa seção da tela Gestão, dentro do próprio painel. 'tela' diz que tela do painel abre ao clicar no ícone (tarefas, estudio, mission ou uma seção da Gestão: agenda, whatsapp, cobrancas, clientes, propostas); sem 'tela', o clique abre a ficha da ferramenta. Alt+clique sempre abre a ficha.",
+  "_note": "Copie para config/apps.json e deixe só as ferramentas que o cliente usa de fato (entrevista). 'status': 'live' quando está ligada e testada, 'sugerido' quando o cliente ainda vai adotar, 'a-definir' quando a solução ainda não foi escolhida. 'detalhes' alimenta o painel que abre ao clicar no ícone; troque todo *(preencher)* pelo que o cliente respondeu e apague o que não se aplica. 'chave' é só o caminho do arquivo: o painel confere se existe, nunca lê. 'notas' são caminhos de notas DENTRO do segundo cérebro do cliente, que precisam existir. 'painel' (cobrancas, whatsapp, agenda, clientes, propostas ou tarefas) faz o clique no ícone abrir essa seção da tela Gestão, dentro do próprio painel. 'tela' diz que tela do painel abre ao clicar no ícone (tarefas, estudio, mission, caixa ou uma seção da Gestão: agenda, whatsapp, cobrancas, clientes, propostas); sem 'tela', o clique abre a ficha da ferramenta. Alt+clique sempre abre a ficha. O anel funciona como atalho: deixe só ferramentas que têm tela, uma por tela.",
   "apps": [
     {
       "id": "app:tarefas",
@@ -270,6 +270,32 @@
         ],
         "painel": "propostas",
         "tela": "propostas"
+      }
+    },
+    {
+      "id": "app:caixa",
+      "label": "Livro-caixa",
+      "kind": "cli",
+      "access": "claude",
+      "status": "live",
+      "desc": "Fluxo de caixa: entradas, saídas e saldo do mês (tecla L)",
+      "links": [
+        "bin/livro_caixa.py"
+      ],
+      "iconSlug": "",
+      "detalhes": {
+        "papel": "O fluxo de caixa da empresa: despesas e recebimentos do dia a dia, com entradas, saídas e saldo de cada mês. Opcional: apague esta entrada se o livro-caixa não entrou na instalação.",
+        "acesso": "Lê; lança só depois do ok do dono",
+        "conexao": "Script bin/livro_caixa.py e a tela Livro-caixa do painel (tecla L).",
+        "usadoPor": [
+          "Pedidos no chat: lançar uma despesa, ver o mês"
+        ],
+        "regras": [
+          "Lançar só depois do ok do dono."
+        ],
+        "notas": [],
+        "links": [],
+        "tela": "caixa"
       }
     }
   ]
