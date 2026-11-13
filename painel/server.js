@@ -27,6 +27,7 @@
    Estúdio Social:
      GET  /api/estudio          as peças de rede social e a etapa de cada uma (so leitura)
      GET  /api/estudio/midia?id=&f=  imagem ou video de uma peca (so as midias listadas dela)
+     POST /api/pauta            {id, status?, prazo?}: aprova, descarta ou da prazo a uma ideia da pauta (Social/pauta)
      POST /api/estudio/enviar   {id, formato: estatico|vivo}: manda a peca para a pasta postar do
                                 Estudio de Conteudo, onde ela vira post sem data (so com o estudio instalado)
    Estúdio de Conteúdo (opcional):
@@ -433,6 +434,13 @@ const handle = async (req, res) => {
     if (p === '/api/estudio' && req.method === 'GET') {
       try { return sendJSON(res, estudio.resumo()); }
       catch (e) { return sendJSON(res, { error: e.message }, 500); }
+    }
+    // Pauta: aprovar, descartar ou dar prazo a uma ideia (nota em Social/pauta do segundo cérebro)
+    if (p === '/api/pauta' && req.method === 'POST') {
+      let body = {};
+      try { body = JSON.parse(await readBody(req)); } catch { return sendJSON(res, { error: 'Bad JSON' }, 400); }
+      try { return sendJSON(res, estudio.pautaMudar(body.id, { status: body.status, ...(body.prazo !== undefined ? { prazo: body.prazo } : {}) })); }
+      catch (e) { return sendJSON(res, { error: e.message }, 400); }
     }
     // Manda uma peça pronta para o Estúdio de Conteúdo (pasta "postar"), onde ela vira post para agendar
     if (p === '/api/estudio/enviar' && req.method === 'POST') {

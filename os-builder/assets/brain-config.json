@@ -15,7 +15,7 @@
 
   "tipos_validos": [
     "indice", "decisao", "diario", "prioridades", "processo",
-    "cliente", "evento", "conteudo", "recurso", "snapshot"
+    "cliente", "evento", "conteudo", "recurso", "snapshot", "pauta"
   ],
 
   "exige_frontmatter": ["clientes/", "memory/decisoes/", "memory/diario/", "conteudo/"],

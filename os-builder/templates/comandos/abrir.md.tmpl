@@ -25,6 +25,11 @@ Você é o chefe de gabinete de {Nome}. Monte o briefing da manhã dele.
 0. **Tarefas do painel:** `python3 bin/tarefas.py pendentes` traz as tarefas abertas atrasadas e
    as de hoje, de todos os projetos. Entram no "Precisa de você hoje". Só leitura neste ritual.
 {Fim painel}
+{Pauta de conteúdo:}
+0. **Pauta:** `python3 bin/pauta.py listar --status sugerida,aprovada,producao`. Sugerida esperando o ok de
+   {Nome} há 3 dias ou mais, ou ideia com prazo vencido, entra em "Precisa de você hoje" (uma linha cada).
+   {Se ligou o Notion:} depois espelhe no Notion pelo `/pauta-notion`; se o Notion falhar, diga e siga.
+{Fim pauta}
 {E-mail:}
 0. **E-mail organizado:** pelo conector de e-mail, busque (a) as conversas não lidas dos últimos
    3 dias, fora de promoções e redes sociais; (b) as conversas em que a última mensagem é de

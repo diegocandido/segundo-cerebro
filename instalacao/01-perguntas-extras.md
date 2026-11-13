@@ -102,6 +102,10 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
     do Instagram (vai na prévia de celular e no Feed) se ele tem um dia fixo de postar (vai marcado na
     aba Semana) e qual é a cor principal da marca (acende o Estúdio). Guia em
     [02-ferramentas.md](02-ferramentas.md), "Criador de carrosséis e Estúdio Social".
+    - **E a pauta?** Pergunte se ele quer receber sugestões de post para aprovar. Se sim, entra a **pauta de
+      conteúdo**: cada sugestão vira uma nota no OS e aparece no quadro (colunas Sugeridas e Aprovadas, com
+      Aprovar, Prazo e Descartar). Pergunte também se ele usa o **Notion**: se sim, a pauta ganha uma cópia
+      lá, para consultar e aprovar fora do painel. Guia em [pauta.md](pauta.md).
 13h. **Quer agendar, publicar e responder o direct das suas redes direto do painel?** Só se ele tem
     (ou vai comprar) o pacote **Estúdio de Conteúdo**, que é de outro autor e não vem no kit. Com ele,
     a tecla E abre o estúdio dentro do painel: semana, pauta, posts com prévia de celular, feed,

@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.16 (2026-11-13)
+Pauta de conteúdo (opcional): cada sugestão de post vira uma nota no seu segundo cérebro e aparece no quadro do painel, nas colunas Sugeridas e Aprovadas, com os botões Aprovar, Prazo e Descartar. Aprovada, ela vira peça e segue o quadro até a agenda. Se você usa o Notion, a pauta ganha uma cópia lá e o que você aprovar no Notion volta para o painel. Também: dentro do painel, o nome e o @ da marca no topo do Estúdio de Conteúdo não vazam mais por baixo do logo.
+
 ## 1.15 (2026-11-13)
 Nova tela Mensagens (tecla D), opcional para quem tem o Estúdio de Conteúdo: o direct do Instagram dentro do painel. Você vê as conversas, abre cada uma como um chat e clica em Sugerir resposta: a IA lê a conversa e o seu segundo cérebro e escreve a resposta na sua voz, para você revisar e editar. Nada é enviado sem o seu clique em Enviar. Abrir uma conversa não mostra visto para a pessoa.
 

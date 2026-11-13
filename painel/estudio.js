@@ -19,7 +19,12 @@
    Com o Estúdio de Conteúdo instalado (estudio-app.js), este quadro vira a Produção dele:
    enviar() copia os slides e a legenda de uma peça para a pasta "postar" do Estúdio de Conteúdo, que
    transforma em post sozinho, e marca a peça com "etapa: no estudio" no status.txt. Agendar e
-   publicar ficam todos no Estúdio de Conteúdo. */
+   publicar ficam todos no Estúdio de Conteúdo.
+
+   Pauta: se o segundo cérebro tem a pasta da pauta (bin/pauta-config.json -> "pasta", padrão
+   Social/pauta, uma nota por ideia, criada pelo bin/pauta.py), o quadro ganha antes de tudo as colunas
+   Sugeridas e Aprovadas. pautaMudar() troca o status ou o prazo de uma ideia (botões do painel). Ideia
+   aprovada que já virou peça (linha "pauta: <id>" no status.txt da peça) sai da coluna: a peça segue. */
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -34,8 +39,68 @@ const PADRAO = ['Social/carrosseis', '~/.carrossel-vivo/projetos'];
 const IMG = /\.(png|jpe?g|webp)$/i;
 const VID = /\.mp4$/i;
 const ETAPAS = ['criando', 'aprovar', 'aprovado', 'estudio', 'publicado'];
-const NOMES = { criando: 'Em criação', aprovar: 'Para aprovar', aprovado: 'Aprovado', estudio: 'No Estúdio', publicado: 'Publicado' };
+const NOMES = { sugerida: 'Sugeridas', aprovada: 'Aprovadas', criando: 'Em criação', aprovar: 'Para aprovar', aprovado: 'Aprovado', estudio: 'No Estúdio', publicado: 'Publicado' };
 // o Estúdio de Conteúdo está instalado? Então o quadro é a Produção dele
+// ---------- pauta (Social/pauta, uma nota por ideia) ----------
+const PAUTA_STATUS = ['sugerida', 'aprovada', 'producao', 'publicada', 'descartada'];
+function pautaDir() {
+  let rel = 'Social/pauta';
+  try { rel = JSON.parse(fs.readFileSync(path.join(ROOT, 'bin', 'pauta-config.json'), 'utf8')).pasta || rel; } catch { }
+  return path.join(ROOT, rel);
+}
+function pautaLerArq(arq) {
+  const txt = fs.readFileSync(arq, 'utf8');
+  const m = txt.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+  if (!m) return null;
+  const fm = {};
+  for (const l of m[1].split('\n')) {
+    const i = l.indexOf(':'); if (i < 0) continue;
+    let v = l.slice(i + 1).trim();
+    if (v.startsWith('[') && v.endsWith(']')) v = v.slice(1, -1).split(',').map(x => x.trim()).filter(Boolean);
+    else if (v.length > 1 && v[0] === '"' && v[v.length - 1] === '"') v = v.slice(1, -1).replace(/\\"/g, '"');
+    fm[l.slice(0, i).trim()] = v;
+  }
+  return { fm, corpo: m[2], cab: m[1] };
+}
+function pautaLer() {
+  const dir = pautaDir();
+  if (!fs.existsSync(dir)) return null;
+  const out = [];
+  for (const f of listar(dir, /\.md$/)) {
+    let r; try { r = pautaLerArq(path.join(dir, f)); } catch { continue; }
+    if (!r || r.fm.tipo !== 'pauta') continue;
+    const g = r.corpo.match(/\*\*Gancho:\*\*\s*(.+)/);
+    out.push({
+      id: f.replace(/\.md$/, ''), titulo: r.fm.titulo || f, status: r.fm.status || 'sugerida', formato: r.fm.formato || '',
+      redes: Array.isArray(r.fm.redes) ? r.fm.redes : [], prazo: dataISO(r.fm.prazo), sugerida: r.fm.sugerida || '',
+      origem: r.fm.origem || '', gancho: g ? g[1].trim() : (r.fm.resumo || ''), roteiro: r.fm.roteiro || '', notion: r.fm.notion || '',
+      peca: r.fm.peca || '',
+    });
+  }
+  return out;
+}
+// troca status e/ou prazo na nota da ideia, mantendo o resto do frontmatter e o corpo
+function pautaMudar(id, mud) {
+  if (!/^[\w.-]{1,120}$/.test(String(id || ''))) throw new Error('ideia inválida');
+  const arq = path.join(pautaDir(), id + '.md');
+  if (!fs.existsSync(arq)) throw new Error('ideia não encontrada');
+  if (mud.status && !PAUTA_STATUS.includes(mud.status)) throw new Error('status inválido');
+  if (mud.prazo && !/^\d{4}-\d{2}-\d{2}$/.test(mud.prazo)) throw new Error('prazo no formato AAAA-MM-DD');
+  const r = pautaLerArq(arq);
+  if (!r) throw new Error('nota da ideia sem frontmatter');
+  let linhas = r.cab.split('\n');
+  const pôr = (k, v) => {
+    const i = linhas.findIndex(l => l.startsWith(k + ':'));
+    if (v === null) { if (i >= 0) linhas.splice(i, 1); return; }
+    if (i >= 0) linhas[i] = k + ': ' + v; else linhas.splice(Math.max(1, linhas.findIndex(l => l.startsWith('resumo:'))), 0, k + ': ' + v);
+  };
+  if (mud.status) pôr('status', mud.status);
+  if (mud.prazo !== undefined) pôr('prazo', mud.prazo || null);
+  pôr('atualizado', M.nowISO().slice(0, 10));
+  fs.writeFileSync(arq, '---\n' + linhas.join('\n') + '\n---\n' + r.corpo, 'utf8');
+  return { ok: true, id, status: mud.status || r.fm.status, prazo: mud.prazo !== undefined ? mud.prazo : (r.fm.prazo || '') };
+}
+
 function temConteudo() { try { return fs.existsSync(path.join(estudioApp.pasta(), 'server.mjs')); } catch { return false; } }
 
 function dirs() {
@@ -161,7 +226,7 @@ function peca(base, i, nome, hist) {
     capa: m.imgs[0] || m.folha || '', imgs: m.imgs, vids: m.vids, slidesHtml,
     legenda,
     temBrief: fs.existsSync(path.join(pasta, 'BRIEF.md')),
-    enviado: st.enviado || '',
+    enviado: st.enviado || '', pauta: st.pauta || '',
     atualizado, agora: etapa !== 'publicado' && etapa !== 'estudio' && Date.now() - atualizado < 10 * 60 * 1000,
     onde: path.join(base.rel, nome),
   };
@@ -187,7 +252,12 @@ function resumo() {
   // com o Estúdio de Conteúdo, a última coluna é "No Estúdio" (enviadas e publicadas);
   // sem ele, o quadro segue com as 4 colunas de sempre
   const conteudo = temConteudo();
-  const colunas = conteudo ? ['criando', 'aprovar', 'aprovado', 'estudio'] : ['criando', 'aprovar', 'aprovado', 'publicado'];
+  const colunasPecas = conteudo ? ['criando', 'aprovar', 'aprovado', 'estudio'] : ['criando', 'aprovar', 'aprovado', 'publicado'];
+  // pauta: ideias sugeridas e aprovadas entram antes das peças; a aprovada que já virou peça sai (a peça segue)
+  const todasIdeias = pautaLer();
+  const comPeca = new Set(pecas.map(p => p.pauta).filter(Boolean));
+  const ideias = todasIdeias ? todasIdeias.filter(i => i.status === 'sugerida' || ((i.status === 'aprovada' || i.status === 'producao') && !comPeca.has(i.id))) : null;
+  const colunas = ideias ? ['sugerida', 'aprovada', ...colunasPecas] : colunasPecas;
   for (const p of pecas) p.coluna = conteudo ? (p.etapa === 'publicado' ? 'estudio' : p.etapa) : (p.etapa === 'estudio' ? 'publicado' : p.etapa);
   // perfil da prévia (abas Posts e Feed), o dia fixo de postar (aba Semana, 1 = segunda ... 6 = sábado) e a
   // cor da marca que acende a tela: vêm do workspace.json (missionControl.estudioConta, estudioDiaPost e
@@ -199,7 +269,8 @@ function resumo() {
     diaPost: Number.isInteger(dia) && dia >= 1 && dia <= 6 ? dia : null,
     cor: /^#[0-9a-f]{6}$/i.test(cor) ? cor : '',
   };
-  return { geradoEm: M.nowISO(), perfil, fontes, conteudo, etapas: colunas.map(e => ({ id: e, nome: NOMES[e] })), contagem, pecas };
+  if (ideias) { contagem.sugerida = ideias.filter(i => i.status === 'sugerida').length; contagem.aprovada = ideias.length - contagem.sugerida; }
+  return { geradoEm: M.nowISO(), perfil, fontes, conteudo, pauta: ideias, etapas: colunas.map(e => ({ id: e, nome: NOMES[e] })), contagem, pecas };
 }
 
 // caminho de um arquivo de mídia, só se ele for uma das mídias listadas daquela peça
@@ -255,4 +326,4 @@ function enviar(id, formato, forcar) {
   return { ok: true, formato: vivo ? 'vivo' : 'estatico', arquivos: arquivos.length, legenda: !!legenda, titulo: path.basename(destino), enviado: quando };
 }
 
-module.exports = { resumo, arquivo, enviar };
+module.exports = { resumo, arquivo, enviar, pautaMudar };

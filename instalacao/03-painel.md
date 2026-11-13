@@ -116,6 +116,12 @@ Confira junto com o cliente:
   enviada duas vezes. Sem o pacote instalado, a tecla E continua abrindo o Estúdio Social com as 4
   abas. Guia em [estudio-de-conteudo/LEIA.md](estudio-de-conteudo/LEIA.md).
 
+- **Pauta (se entrou na 13g):** o quadro da Produção começa com as colunas **Sugeridas** e **Aprovadas**,
+  lidas de `Social/pauta/` do OS (uma nota por ideia, `bin/pauta.py`). Sugerida tem Aprovar, Prazo e
+  Descartar; aprovada tem Pedir ao Claude (copia o pedido), Prazo, Voltar e Descartar. Ideia que virou peça
+  (`pauta: <id>` no `status.txt`) sai da coluna e segue como peça. Sem a pasta, as colunas não aparecem.
+  Guia em [pauta.md](pauta.md).
+
 - **Mensagens (tecla D, se entrou a 13h):** o direct do Instagram dentro do painel, pela mesma conta
   do Zernio do Estúdio de Conteúdo. À esquerda as conversas (Todas, Não lidas, busca), à direita o
   chat e a caixa de resposta. **✦ Sugerir resposta** chama o Claude Code (`claude -p`, só leitura,

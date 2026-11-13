@@ -67,6 +67,7 @@ Kit-OS-Cara-da-IA/
 │   │                       assistente.json.example), livro_caixa.py, tarefas.py (tarefas do painel), linkedin.py (LinkedIn pelo Zernio), carrossel_jpeg.py, carrossel_vivo.py e sync-github.sh
 │   ├── carrossel-vivo/     instalador da skill de carrosséis e do carrossel vivo (baixa do autor), ajustes e a ponte vivo.js
 │   ├── estudio-de-conteudo/ guia, tema e script que ligam o Estúdio de Conteúdo (pacote à parte, Zernio) ao painel
+│   ├── pauta.md            pauta de conteúdo: sugestões no OS, colunas no quadro do painel e cópia opcional no Notion
 │   ├── demo-os/            segundo cérebro de demonstração (só exemplo), usado pela prévia do painel
 │   ├── comandos/reuniao.md.tmpl
 │   └── templates/          rotina Morning Brief, seção do painel no COMO-USAR, o WhatsApp e o Instagram no OS,

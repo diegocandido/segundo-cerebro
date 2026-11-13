@@ -100,16 +100,75 @@
 
   // ---------- aba Quadro ----------
   function abaQuadro(inner) {
-    const quadro = el('div', 'es-quadro');
+    const quadro = el('div', 'es-quadro' + (dados.pauta ? ' com-pauta' : ''));
     for (const et of dados.etapas) {
-      const col = el('div', 'es-vidro es-col');
-      const lista = dados.pecas.filter(x => (x.coluna || x.etapa) === et.id);
-      col.appendChild(el('div', 'es-col-h', esc(et.nome) + '<span>' + lista.length + '</span>'));
-      if (!lista.length) col.appendChild(el('div', 'es-vazio', '·'));
-      for (const x of lista) col.appendChild(cartao(x));
+      const col = el('div', 'es-vidro es-col' + (et.id === 'sugerida' || et.id === 'aprovada' ? ' es-col-pauta' : ''));
+      if (et.id === 'sugerida' || et.id === 'aprovada') {
+        const ideias = (dados.pauta || []).filter(i => et.id === 'sugerida' ? i.status === 'sugerida' : i.status !== 'sugerida')
+          .sort((a, b) => (a.prazo || '9999').localeCompare(b.prazo || '9999') || String(b.sugerida).localeCompare(String(a.sugerida)));
+        col.appendChild(el('div', 'es-col-h', esc(et.nome) + '<span>' + ideias.length + '</span>'));
+        if (!ideias.length) col.appendChild(el('div', 'es-vazio', et.id === 'sugerida' ? 'as sugestões da pauta de segunda aparecem aqui' : '·'));
+        for (const i of ideias) col.appendChild(cartaoIdeia(i));
+      } else {
+        const lista = dados.pecas.filter(x => (x.coluna || x.etapa) === et.id);
+        col.appendChild(el('div', 'es-col-h', esc(et.nome) + '<span>' + lista.length + '</span>'));
+        if (!lista.length) col.appendChild(el('div', 'es-vazio', '·'));
+        for (const x of lista) col.appendChild(cartao(x));
+      }
       quadro.appendChild(col);
     }
     inner.appendChild(quadro);
+  }
+
+  // ---------- pauta: cartão de uma ideia (Sugeridas e Aprovadas) ----------
+  const FORMATOS = { carrossel: 'Carrossel', reel: 'Reel', reels: 'Reel', youtube: 'YouTube', linkedin: 'LinkedIn', story: 'Story', post: 'Post' };
+  async function mudarIdeia(i, mud, msgOk) {
+    try {
+      const r = await fetch('/api/pauta', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: i.id, ...mud }) });
+      const j = await r.json();
+      if (!r.ok || j.error) throw new Error(j.error || 'HTTP ' + r.status);
+      await carregar(); render();
+    } catch (e) { alert('Não deu: ' + e.message); }
+  }
+  function lerPrazo(atual) {
+    const t = prompt('Prazo (DD/MM ou AAAA-MM-DD). Vazio tira o prazo.', atual ? dataBR(atual) + '/' + atual.slice(0, 4) : '');
+    if (t === null) return undefined;
+    if (!t.trim()) return '';
+    let m = t.trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (m) return t.trim();
+    m = t.trim().match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
+    if (!m) { alert('Não entendi a data. Use DD/MM.'); return undefined; }
+    let a = m[3] ? Number(m[3]) : new Date().getFullYear(); if (a < 100) a += 2000;
+    return a + '-' + String(m[2]).padStart(2, '0') + '-' + String(m[1]).padStart(2, '0');
+  }
+  function cartaoIdeia(i) {
+    const c = el('div', 'es-ideia st-' + i.status);
+    const atrasada = i.prazo && i.prazo < hoje();
+    const pills = [i.formato ? '<span class="es-selo">' + esc(FORMATOS[i.formato] || i.formato) + '</span>' : '',
+      i.prazo ? '<span class="es-selo' + (atrasada ? ' atrasada' : '') + '">prazo ' + esc(dataBR(i.prazo)) + '</span>' : '',
+      i.status === 'producao' ? '<span class="es-selo anim">em produção</span>' : '',
+      i.origem === 'dono' ? '<span class="es-selo">sua</span>' : ''].join('');
+    c.innerHTML = '<div class="es-card-t">' + esc(i.titulo) + '</div>' + (pills ? '<div class="es-selos">' + pills + '</div>' : '')
+      + (i.gancho && i.gancho !== i.titulo ? '<div class="es-ideia-g">' + esc(i.gancho) + '</div>' : '')
+      + '<div class="es-ideia-links">' + (i.roteiro ? '<a href="' + esc(i.roteiro) + '" target="_blank" rel="noopener">roteiro ↗</a>' : '')
+      + (i.notion ? '<a href="' + esc(i.notion) + '" target="_blank" rel="noopener">Notion ↗</a>' : '') + '</div>';
+    const acoes = el('div', 'es-ideia-acoes');
+    const b = (t, cls, fn, title) => { const x = el('button', 'es-btn sm ' + (cls || ''), t); if (title) x.title = title; x.onclick = e => { e.stopPropagation(); fn(); }; acoes.appendChild(x); };
+    if (i.status === 'sugerida') {
+      b('Aprovar', 'prim', () => mudarIdeia(i, { status: 'aprovada' }));
+      b('Prazo', '', () => { const p = lerPrazo(i.prazo); if (p !== undefined) mudarIdeia(i, { prazo: p }); });
+      b('Descartar', 'fant', () => { if (confirm('Descartar "' + i.titulo + '"?')) mudarIdeia(i, { status: 'descartada' }); });
+    } else {
+      b('Pedir ao Claude', 'prim', async () => {
+        const pedido = 'Faz a peça da pauta "' + i.titulo + '" (id ' + i.id + '), seguindo o fluxo do Social.';
+        try { await navigator.clipboard.writeText(pedido); alert('Pedido copiado. Cole na conversa com o Claude:\n\n' + pedido); } catch { prompt('Copie e cole na conversa com o Claude:', pedido); }
+      }, 'Copia o pedido para colar na conversa com o Claude');
+      b('Prazo', '', () => { const p = lerPrazo(i.prazo); if (p !== undefined) mudarIdeia(i, { prazo: p }); });
+      b('Voltar', 'fant', () => mudarIdeia(i, { status: 'sugerida' }), 'Volta para Sugeridas');
+      b('Descartar', 'fant', () => { if (confirm('Descartar "' + i.titulo + '"?')) mudarIdeia(i, { status: 'descartada' }); });
+    }
+    c.appendChild(acoes);
+    return c;
   }
 
   // ---------- aba Semana ----------
@@ -463,7 +522,7 @@
       const ativos = (d.pecas || []).filter(p => p.etapa !== 'publicado');
       const h = el('div', 'mc-h es-faixa-h');
       const c = d.contagem || {};
-      h.innerHTML = (d.conteudo ? 'Produção do Estúdio' : 'Estúdio Social') + '<span class="mc-h-note">' + (c.criando || 0) + ' em criação · ' + (c.aprovar || 0) + ' para aprovar · ' + (c.aprovado || 0) + ' aprovada(s)' + (d.conteudo ? ' · ' + (c.estudio || 0) + ' no Estúdio' : '') + '</span>';
+      h.innerHTML = (d.conteudo ? 'Produção do Estúdio' : 'Estúdio Social') + '<span class="mc-h-note">' + (c.criando || 0) + ' em criação · ' + (c.aprovar || 0) + ' para aprovar · ' + (c.aprovado || 0) + ' aprovada(s)' + (d.conteudo ? ' · ' + (c.estudio || 0) + ' no Estúdio' : '') + (d.pauta ? ' · ' + (c.sugerida || 0) + ' sugestão(ões) da pauta' : '') + '</span>';
       const ver = el('button', 'act', 'Abrir o Estúdio (E)');
       ver.onclick = () => abrir();
       h.appendChild(ver);

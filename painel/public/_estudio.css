@@ -262,3 +262,19 @@ button.es-prox:hover { border-color: color-mix(in srgb, var(--es-marca) 60%, var
   .es-ola h1 { font-size: 26px; }
   .es-tel { width: 100%; flex-basis: 100%; }
 }
+
+/* pauta: colunas Sugeridas e Aprovadas antes das peças */
+.es-quadro.com-pauta { grid-template-columns: repeat(6, minmax(190px, 1fr)); overflow-x: auto; }
+.es-col-pauta { background: color-mix(in srgb, var(--es-marca) 5%, transparent); }
+.es-ideia { border: 1px solid var(--border); border-radius: 12px; padding: 10px 11px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 6px;
+  background: color-mix(in srgb, var(--input-bg) 70%, transparent); }
+.es-ideia.st-aprovada, .es-ideia.st-producao { border-color: color-mix(in srgb, var(--es-marca) 45%, transparent); }
+.es-ideia-g { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.es-ideia-links { display: flex; gap: 10px; font-size: 11.5px; }
+.es-ideia-links:empty { display: none; }
+.es-ideia-links a { color: var(--accent); text-decoration: none; }
+.es-ideia-acoes { display: flex; flex-wrap: wrap; gap: 5px; }
+.es-ideia-acoes .es-btn.sm { padding: 4px 8px; font-size: 11px; }
+.es-selo.atrasada { color: #e5533d; border-color: color-mix(in srgb, #e5533d 45%, transparent); }
+.es-btn.prim { background: var(--es-marca); border-color: var(--es-marca); color: #fff; font-weight: 700; }
+@media (max-width: 1100px) { .es-quadro.com-pauta { grid-template-columns: repeat(6, 220px); } }

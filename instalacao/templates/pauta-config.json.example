@@ -1,0 +1,20 @@
+{
+  "_leia": "Pauta de conteúdo (bin/pauta.py). pasta: onde moram as ideias, relativa ao OS. notion: o espelho que o Claude mantém pelo conector do Notion (/pauta-notion); mapa liga o status do OS ao status do banco no Notion. Sem Notion, deixe ativo como false: a pauta funciona igual no OS e no painel.",
+  "pasta": "Social/pauta",
+  "notion": {
+    "ativo": false,
+    "banco": "Pauta de conteúdo",
+    "data_source": "*(preencher: collection://... do banco criado na instalação)*",
+    "titulo": "Ideia",
+    "campo_status": "Status",
+    "mapa": {
+      "sugerida": "Sugerida",
+      "aprovada": "Aprovada",
+      "producao": "Em produção",
+      "publicada": "Publicada",
+      "descartada": "Descartada"
+    },
+    "fixos": {},
+    "fixos_dono": {}
+  }
+}
