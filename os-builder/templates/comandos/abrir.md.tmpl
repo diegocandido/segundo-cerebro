@@ -25,6 +25,19 @@ Você é o chefe de gabinete de {Nome}. Monte o briefing da manhã dele.
 0. **Tarefas do painel:** `python3 bin/tarefas.py pendentes` traz as tarefas abertas atrasadas e
    as de hoje, de todos os projetos. Entram no "Precisa de você hoje". Só leitura neste ritual.
 {Fim painel}
+{E-mail:}
+0. **E-mail organizado:** pelo conector de e-mail, busque (a) as conversas não lidas dos últimos
+   3 dias, fora de promoções e redes sociais; (b) as conversas em que a última mensagem é de
+   {Nome} e tem mais de 7 dias (proposta ou retorno sem resposta). Leia assunto, remetente e
+   trecho de até 25 conversas e abra por inteiro só as que precisarem disso para entender o
+   pedido. Classifique cada uma em um grupo, cruzando o remetente com {Entidades} e com a agenda
+   do dia: **Responder hoje** (cliente, prospect, prazo ou alguém esperando {Nome} para seguir),
+   **Responder na semana** (pede resposta, sem urgência), **Esperando o outro** (as de (b), com
+   quantos dias faz), **Só ler** (informativo, sem ação) e **Pode arquivar** (notificação
+   automática, recibo, newsletter). Se houver mais de 25 não lidas, diga quantas ficaram de fora.
+   Só leitura neste ritual: nunca responda, arquive, marque como lida nem aplique marcador sem
+   o ok de {Nome} para aquele e-mail ou aquele grupo.
+{Fim e-mail}
 {Agente remoto:}
 0. **Antes de tudo, sozinho:** `bash bin/sync-github.sh`, que traz o que o agente gravou.
    Depois leia `inbox/agente/financeiro/` e `inbox/agente/propostas/` com `status: pendente`:
@@ -48,6 +61,20 @@ Precisa de você hoje (top 3)
 
 Pendências de ontem
 - ... (do diário)
+
+{E-mail:}
+E-mail ({n} não lidas em 3 dias; só os grupos que tiverem item)
+Responder hoje
+- {remetente}, {assunto}: {o que pede} -> {sugestão}. Rascunho? (s/n)
+Responder na semana
+- {remetente}, {assunto}: {o que pede}
+Esperando o outro
+- {destinatário}, {assunto}: sem resposta há {N} dias -> cobrar? (s/n)
+Só ler
+- {remetente}: {do que se trata, em meia linha}
+Pode arquivar ({n})
+- {remetentes agrupados, ex.: "4 notificações automáticas, 2 recibos"}. Arquivo? (s/n)
+{Fim e-mail}
 
 {Bloco de números, se houver fonte externa}
 - {métrica}: {valor} ({delta})

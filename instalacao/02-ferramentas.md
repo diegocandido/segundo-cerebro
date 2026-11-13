@@ -12,6 +12,10 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
 - **Testar:** liste os eventos de hoje e os e-mails não lidos dos últimos 3 dias. Mostre ao
   cliente.
 - **No painel:** `live` quando o teste passou. Sem conector, tire do `apps.json`.
+- **No ritual da manhã:** com o Gmail ligado, mantenha o bloco `{E-mail:}` do modelo
+  `abrir.md.tmpl`. O briefing passa a separar os e-mails em cinco grupos (responder hoje,
+  responder na semana, esperando o outro, só ler, pode arquivar), sempre só de leitura. Sem
+  conector de e-mail, apague o bloco.
 
 ---
 

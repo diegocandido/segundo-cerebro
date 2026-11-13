@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.13 (2026-11-13)
+O ritual da manhã agora organiza os e-mails. Com o Gmail ligado, o briefing separa as conversas não lidas em cinco grupos: responder hoje, responder na semana, esperando o outro, só ler e pode arquivar. Continua só de leitura: nada é respondido nem arquivado sem o seu ok.
+
 ## 1.12 (2026-11-13)
 Novo, opcional para quem tem o Estúdio de Conteúdo: gestão do LinkedIn pelo Zernio. A tela LinkedIn do painel (tecla I, no MENU e no anel) mostra seguidores, posts agendados e publicados e os números de cada post. O Claude publica e agenda texto, imagens ou PDF em carrossel pelo bin/linkedin.py, sempre com prévia e a sua confirmação. No perfil pessoal, comentários e mensagens não passam pela API do LinkedIn.
 
