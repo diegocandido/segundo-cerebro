@@ -29,6 +29,8 @@
      GET  /api/estudio/midia?id=&f=  imagem ou video de uma peca (so as midias listadas dela)
    Estúdio de Conteúdo (opcional):
      GET  /api/estudio-app      sobe o Estudio de Conteudo se preciso e devolve o endereco da tela
+   LinkedIn (opcional, pelo Zernio do Estúdio de Conteúdo):
+     GET  /api/linkedin         conta, posts agendados e publicados e numeros (so leitura)
    Livro-caixa:
      GET  /api/caixa[?mes=AAAA-MM]  entradas, saidas, saldo e lancamentos do mes (so leitura)
 */
@@ -43,6 +45,7 @@ const ingest = require('./ingest');
 const asaas = require('./asaas');
 const gestao = require('./gestao');
 const caixa = require('./caixa');
+const linkedin = require('./linkedin'); // tela LinkedIn (tecla I, opcional)
 const estudioApp = require('./estudio-app'); // Estúdio de Conteúdo (opcional)
 const estudio = require('./estudio');
 
@@ -329,6 +332,11 @@ const handle = async (req, res) => {
       return sendJSON(res, { error: 'Not found' }, 404);
     }
 
+    // ---------- LinkedIn (só leitura, pelo Zernio) ----------
+    if (p === '/api/linkedin' && req.method === 'GET') {
+      try { return sendJSON(res, await linkedin.resumo()); }
+      catch (e) { return sendJSON(res, { error: e.message }, 502); }
+    }
     // ---------- livro-caixa (só leitura) ----------
     if (p === '/api/caixa' && req.method === 'GET') {
       try { return sendJSON(res, caixa.resumo(url.searchParams.get('mes'))); }

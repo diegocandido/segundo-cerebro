@@ -11,6 +11,7 @@
   const ITENS = [
     { t: 'Tarefas', k: 'T', tem: () => window.Tarefas, ir: () => window.Tarefas.abrir() },
     { t: 'Mission Control', k: 'M', tem: () => MC(), ir: () => MC().open() },
+    { t: 'LinkedIn', k: 'I', tem: () => window.LinkedIn, ir: () => window.LinkedIn.abrir() },
     { t: 'Gestão', k: 'G', tem: () => window.Gestao, ir: () => window.Gestao.abrir() },
     { t: 'Estúdio', k: 'E', tem: () => fab('fab-estudio'), ir: () => fab('fab-estudio').click() },
     { t: 'Cobranças', k: 'C', tem: () => MC() && MC().openCobrancas, ir: () => MC().openCobrancas() },

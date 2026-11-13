@@ -11,6 +11,8 @@ Servidor local, sem dependências, que lê a pasta de um segundo cérebro em mar
 - **Tarefas (tecla T):** um projeto por cliente ou frente e um quadro com três colunas (A fazer,
   Fazendo, Feito). Criar com Enter, arrastar para mudar de coluna, clicar para editar prazo,
   prioridade, projeto e descrição. Usa o mesmo armazenamento do Mission Control.
+- **LinkedIn (tecla I, opcional):** a conta, os posts agendados e publicados e os números, pelo Zernio do
+  Estúdio de Conteúdo. Só leitura; publicar fica com o Claude, pelo `bin/linkedin.py` do segundo cérebro.
 - **Cobranças do Asaas (tecla C):** vencidas, a vencer e recebidas, só leitura; e o botão Nova
   cobrança, com prévia e confirmação.
 - **Gestão (tecla G):** os números da operação em cards (cobranças, propostas, WhatsApp, clientes,

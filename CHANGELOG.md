@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.12 (2026-11-13)
+Novo, opcional para quem tem o Estúdio de Conteúdo: gestão do LinkedIn pelo Zernio. A tela LinkedIn do painel (tecla I, no MENU e no anel) mostra seguidores, posts agendados e publicados e os números de cada post. O Claude publica e agenda texto, imagens ou PDF em carrossel pelo bin/linkedin.py, sempre com prévia e a sua confirmação. No perfil pessoal, comentários e mensagens não passam pela API do LinkedIn.
+
 ## 1.11 (2026-11-13)
 As telas do painel agora ficam no MENU do topo, na seção Funcionalidades, cada uma com a sua tecla: Tarefas, Mission Control, Gestão, Estúdio, Cobranças, Livro-caixa e Falar com o OS. Os botões do canto inferior direito saíram, e o de voz só aparece enquanto grava. O anel de Aplicações ganhou o atalho do Livro-caixa, e o modelo de aplicações passou a pedir só ferramentas que têm tela, uma por tela.
 

@@ -108,6 +108,11 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
     conversas (o "comenta QUERO, recebe no direct" sem ManyChat), resultados e ajustes. Publica no
     Instagram e no TikTok pelo Zernio, que é grátis. Guia em
     [estudio-de-conteudo/LEIA.md](estudio-de-conteudo/LEIA.md).
+    - **E o LinkedIn?** Se ele posta no LinkedIn, o mesmo Zernio publica lá: com o Estúdio instalado,
+      ele conecta o LinkedIn no Zernio e o painel ganha a tela LinkedIn (tecla I), com publicar e
+      agendar pelo Claude (`bin/linkedin.py`, com prévia e "Posso publicar?") e os números de cada post.
+      Avise o limite: no perfil pessoal, comentários e mensagens não passam pela API, e os números só
+      existem para os posts publicados pelo Zernio.
 14. **Como você monta um orçamento ou proposta hoje?** Modelo no Word, Canva, PDF, sistema.
     Quanto tempo leva. Quem aprova o preço.
     - Se é manual e repetitivo: sugira o **PandaDoc** (modelo com campos, preenchido

@@ -1,5 +1,5 @@
 {
-  "_note": "Copie para config/apps.json e deixe só as ferramentas que o cliente usa de fato (entrevista). 'status': 'live' quando está ligada e testada, 'sugerido' quando o cliente ainda vai adotar, 'a-definir' quando a solução ainda não foi escolhida. 'detalhes' alimenta o painel que abre ao clicar no ícone; troque todo *(preencher)* pelo que o cliente respondeu e apague o que não se aplica. 'chave' é só o caminho do arquivo: o painel confere se existe, nunca lê. 'notas' são caminhos de notas DENTRO do segundo cérebro do cliente, que precisam existir. 'painel' (cobrancas, whatsapp, agenda, clientes, propostas ou tarefas) faz o clique no ícone abrir essa seção da tela Gestão, dentro do próprio painel. 'tela' diz que tela do painel abre ao clicar no ícone (tarefas, estudio, mission, caixa ou uma seção da Gestão: agenda, whatsapp, cobrancas, clientes, propostas); sem 'tela', o clique abre a ficha da ferramenta. Alt+clique sempre abre a ficha. O anel funciona como atalho: deixe só ferramentas que têm tela, uma por tela.",
+  "_note": "Copie para config/apps.json e deixe só as ferramentas que o cliente usa de fato (entrevista). 'status': 'live' quando está ligada e testada, 'sugerido' quando o cliente ainda vai adotar, 'a-definir' quando a solução ainda não foi escolhida. 'detalhes' alimenta o painel que abre ao clicar no ícone; troque todo *(preencher)* pelo que o cliente respondeu e apague o que não se aplica. 'chave' é só o caminho do arquivo: o painel confere se existe, nunca lê. 'notas' são caminhos de notas DENTRO do segundo cérebro do cliente, que precisam existir. 'painel' (cobrancas, whatsapp, agenda, clientes, propostas ou tarefas) faz o clique no ícone abrir essa seção da tela Gestão, dentro do próprio painel. 'tela' diz que tela do painel abre ao clicar no ícone (tarefas, estudio, mission, caixa, linkedin ou uma seção da Gestão: agenda, whatsapp, cobrancas, clientes, propostas); sem 'tela', o clique abre a ficha da ferramenta. Alt+clique sempre abre a ficha. O anel funciona como atalho: deixe só ferramentas que têm tela, uma por tela.",
   "apps": [
     {
       "id": "app:tarefas",
@@ -296,6 +296,34 @@
         "notas": [],
         "links": [],
         "tela": "caixa"
+      }
+    },
+    {
+      "id": "app:linkedin",
+      "label": "LinkedIn",
+      "kind": "cli",
+      "access": "claude",
+      "status": "live",
+      "desc": "Publicar, agendar e números do LinkedIn, pelo Zernio (tecla I)",
+      "links": [
+        "bin/linkedin.py"
+      ],
+      "iconSlug": "",
+      "detalhes": {
+        "papel": "O LinkedIn do dono, conectado no Zernio (a mesma conta do Estúdio de Conteúdo). Publica e agenda posts (texto, imagens ou PDF em carrossel) e mostra os agendados, os publicados e os números. Opcional: apague esta entrada se o Estúdio ou o LinkedIn não entraram.",
+        "acesso": "Lê; publica e agenda só com --confirmo, depois do \"Posso publicar?\"",
+        "conexao": "Script bin/linkedin.py e a tela LinkedIn do painel (tecla I), com a chave do Zernio do Estúdio.",
+        "usadoPor": [
+          "Pedidos no chat: publicar ou agendar o post da semana",
+          "Tela LinkedIn (tecla I): agendados, publicados e números"
+        ],
+        "regras": [
+          "Sempre prévia e \"Posso publicar?\" antes.",
+          "No perfil pessoal, comentários e mensagens não passam pela API, e os números só existem para posts publicados pelo Zernio."
+        ],
+        "notas": [],
+        "links": [],
+        "tela": "linkedin"
       }
     }
   ]

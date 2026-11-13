@@ -116,6 +116,11 @@ Se entraram os opcionais:
   `bin/conversar.py` e `bin/assistente.json` (guia da voz em 02-ferramentas.md). Teste digitando
   uma pergunta no quadro; o navegador pede o microfone na primeira gravação (no Chrome ou Safari;
   painéis embutidos costumam bloquear o microfone).
+- **LinkedIn (se entrou com o Estúdio, pergunta 13h):** copie [scripts/linkedin.py](scripts/linkedin.py)
+  para o `bin/` do segundo cérebro. Tecla **I** (ou o MENU) abre a tela: seguidores, agendados,
+  publicados e números. Sem o Estúdio ou sem o LinkedIn conectado no Zernio, a tela só explica o que
+  falta. Teste com `python3 bin/linkedin.py status` e uma prévia (`postar --texto-arquivo` sem
+  `--confirmo`, que não publica nada). Deixe a entrada `app:linkedin` no `apps.json` só se entrou.
 - **Livro-caixa:** tecla **L** (ou botão Livro-caixa no Mission Control). Em `workspace.json`,
   `missionControl.livroCaixa` aponta para o CSV (relativo ao segundo cérebro) e
   `agenteFinanceiroDir` para os lançamentos do agente remoto. Sem livro-caixa, a tela só avisa

@@ -65,3 +65,16 @@ body.mc-open #fab-tarefas { display: none !important; }
 #tf-toast.erro { border-color: #E5533D; color: #E5533D; }
 
 @media (max-width: 860px) { .tf-board { grid-template-columns: 1fr; } #tf-scroll { padding: 16px; } }
+
+/* ---------- LinkedIn (tecla I), mesma moldura das telas Tarefas e Gestão ---------- */
+#li-root { position: fixed; inset: 0; z-index: 72; display: none; opacity: 0; transition: opacity .22s ease;
+  font-family: 'DM Sans', sans-serif; color: var(--ink); background: var(--bg); }
+#li-root.on { display: block; }
+#li-root.in { opacity: 1; }
+#li-scroll { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 20px 26px 60px; }
+#li-inner { max-width: 1100px; margin: 0 auto; }
+.li-card { cursor: default; }
+.li-card:hover { transform: none; }
+.li-metr { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: 11px; color: var(--muted); }
+.li-metr a { color: var(--accent); text-decoration: none; }
+#li-inner .mc-form-note a { color: var(--accent); text-decoration: none; }
