@@ -116,6 +116,15 @@ Confira junto com o cliente:
   enviada duas vezes. Sem o pacote instalado, a tecla E continua abrindo o Estúdio Social com as 4
   abas. Guia em [estudio-de-conteudo/LEIA.md](estudio-de-conteudo/LEIA.md).
 
+- **Mensagens (tecla D, se entrou a 13h):** o direct do Instagram dentro do painel, pela mesma conta
+  do Zernio do Estúdio de Conteúdo. À esquerda as conversas (Todas, Não lidas, busca), à direita o
+  chat e a caixa de resposta. **✦ Sugerir resposta** chama o Claude Code (`claude -p`, só leitura,
+  dentro do segundo cérebro) e põe o texto na caixa para o cliente editar; **Enviar** só manda com o
+  clique e a confirmação. Até 24 h da última mensagem da pessoa a resposta vai normal; de 24 h a 7
+  dias vai como resposta humana; depois disso o Instagram não deixa, e a tela avisa. Abrir uma
+  conversa não marca como lida (no Instagram isso mostra "visto"). Precisa do Claude Code logado
+  neste computador. Testar: tecla D, abrir uma conversa e clicar em Sugerir resposta (não envia).
+
 Se entraram os opcionais:
 - **Voz:** "Falar com o OS" no MENU (tecla V); o botão de enviar aparece enquanto grava; ele só responde se o segundo cérebro tiver
   `bin/conversar.py` e `bin/assistente.json` (guia da voz em 02-ferramentas.md). Teste digitando

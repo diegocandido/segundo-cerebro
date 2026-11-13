@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.15 (2026-11-13)
+Nova tela Mensagens (tecla D), opcional para quem tem o Estúdio de Conteúdo: o direct do Instagram dentro do painel. Você vê as conversas, abre cada uma como um chat e clica em Sugerir resposta: a IA lê a conversa e o seu segundo cérebro e escreve a resposta na sua voz, para você revisar e editar. Nada é enviado sem o seu clique em Enviar. Abrir uma conversa não mostra visto para a pessoa.
+
 ## 1.14 (2026-11-13)
 Para quem tem o Estúdio de Conteúdo, os dois estúdios viraram um só. A tecla E abre o Estúdio de Conteúdo, o único lugar com agenda, posts, feed e publicação. O botão Peças abre a Produção: o quadro das peças que o Claude faz (Em criação, Para aprovar, Aprovado, No Estúdio). Numa peça pronta, Mandar para o Estúdio leva os slides, ou os vídeos do carrossel vivo, e a legenda para lá, e ela aparece em Posts sem data, para você agendar. Sem o Estúdio de Conteúdo, nada muda.
 

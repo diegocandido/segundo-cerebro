@@ -33,6 +33,12 @@
      GET  /api/estudio-app      sobe o Estudio de Conteudo se preciso e devolve o endereco da tela
    LinkedIn (opcional, pelo Zernio do Estúdio de Conteúdo):
      GET  /api/linkedin         conta, posts agendados e publicados e numeros (so leitura)
+   Mensagens (tecla D, opcional, com o Estudio de Conteudo e o Claude Code):
+     GET  /api/direct           conversas do direct do Instagram (Zernio)
+     GET  /api/direct/mensagens?id=&conta=  mensagens de uma conversa
+     POST /api/direct/sugerir   {id, conta}: texto da proxima resposta, pela IA; nada e enviado
+     POST /api/direct/enviar    {id, conta, texto}: manda a resposta que o dono revisou
+     POST /api/direct/lida      {id, conta}: marca a conversa como lida
    Livro-caixa:
      GET  /api/caixa[?mes=AAAA-MM]  entradas, saidas, saldo e lancamentos do mes (so leitura)
 */
@@ -48,6 +54,7 @@ const asaas = require('./asaas');
 const gestao = require('./gestao');
 const caixa = require('./caixa');
 const linkedin = require('./linkedin'); // tela LinkedIn (tecla I, opcional)
+const direct = require('./direct'); // tela Mensagens (tecla D, opcional): direct do Instagram com resposta sugerida
 const estudioApp = require('./estudio-app'); // Estúdio de Conteúdo (opcional)
 const estudio = require('./estudio');
 
@@ -332,6 +339,26 @@ const handle = async (req, res) => {
         if (p === '/api/asaas/confirmar' && req.method === 'POST') return sendJSON(res, await asaas.confirmar(body.token));
       } catch (e) { return sendJSON(res, { error: e.message }, 400); }
       return sendJSON(res, { error: 'Not found' }, 404);
+    }
+
+    // ---------- Mensagens (direct do Instagram, pelo Zernio) ----------
+    // Ler e sugerir não mandam nada; só /api/direct/enviar manda, e só quando o dono clica em Enviar.
+    if (p === '/api/direct' && req.method === 'GET') {
+      try { return sendJSON(res, await direct.conversas()); }
+      catch (e) { return sendJSON(res, { error: e.message }, 502); }
+    }
+    if (p === '/api/direct/mensagens' && req.method === 'GET') {
+      try { return sendJSON(res, await direct.mensagens(url.searchParams.get('id'), url.searchParams.get('conta'))); }
+      catch (e) { return sendJSON(res, { error: e.message }, 400); }
+    }
+    if (p.startsWith('/api/direct/') && req.method === 'POST' && ['/api/direct/sugerir', '/api/direct/enviar', '/api/direct/lida'].includes(p)) {
+      let body = {};
+      try { body = JSON.parse(await readBody(req)); } catch { return sendJSON(res, { error: 'Bad JSON' }, 400); }
+      try {
+        if (p === '/api/direct/sugerir') return sendJSON(res, await direct.sugerir(body.id, body.conta));
+        if (p === '/api/direct/enviar') return sendJSON(res, await direct.enviar(body.id, body.conta, body.texto));
+        return sendJSON(res, await direct.lida(body.id, body.conta));
+      } catch (e) { return sendJSON(res, { error: e.message }, 400); }
     }
 
     // ---------- LinkedIn (só leitura, pelo Zernio) ----------

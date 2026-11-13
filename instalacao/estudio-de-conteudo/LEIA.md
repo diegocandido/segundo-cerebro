@@ -29,6 +29,13 @@ o Estúdio Social (o quadro das peças), como antes.
    Ajustes → Contas (nunca no chat) e clica em Conectar no Instagram. O login abre na janela inteira e
    volta sozinho para o painel, já em Ajustes.
 
+## Mensagens do direct (tecla D)
+Com o estúdio instalado e a chave do Zernio em Ajustes, o painel ganha a tela **Mensagens**: as
+conversas do direct do Instagram, com **Sugerir resposta** (o Claude lê a conversa e o segundo cérebro
+e escreve na voz do cliente) e **Enviar**, que só manda com o clique dele. Precisa do Claude Code
+instalado e logado. Escreva no `Social/CLAUDE.md` do cliente a regra: a sugestão nunca sai sozinha, e
+pelo Claude também só se manda com o sim.
+
 ## Regras para escrever no Social do OS do cliente
 A skill do estúdio deixa agendar sem perguntar e manda toda ideia para a Pauta dela. Combine com o
 cliente e escreva no `Social/CLAUDE.md` dele o que vale, por exemplo:
