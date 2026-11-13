@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.10 (2026-11-13)
+Quando uma camada (como Aplicações) ou uma área do grafo está desligada na legenda, o painel agora mostra um aviso embaixo, com o que está escondido e o botão Mostrar tudo. O filtro fica guardado no navegador e no app instalado, e antes parecia que as aplicações tinham sumido.
+
 ## 1.9 (2026-11-12)
 Clicar num ícone do anel de Aplicações agora leva direto para a tela daquela ferramenta no painel: Tarefas abre o quadro, Instagram abre o Estúdio Social, WhatsApp, agenda e cobranças abrem a seção certa da Gestão. Alt+clique abre a ficha da ferramenta, com chave, regras e links. Novos ícones de Tarefas, Granola e Instagram, e a ferramenta Tarefas no modelo de aplicações.
 

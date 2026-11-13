@@ -1609,7 +1609,27 @@ window.BrainCore = (function () {
     el.innerHTML = `${S.meta.totalFiles.toLocaleString()} files · ${S.meta.mdLinks.toLocaleString()} links · scanned in ${(S.meta.scanMs / 1000).toFixed(1)}s · <b>${S.visible.filter(n => !n._hidden).length.toLocaleString()}</b> on canvas`;
   }
 
+  /* Aviso de filtro: camada ou area desligada na legenda fica guardada no navegador (e no app
+     instalado). Sem este aviso, parece que sumiu. "Mostrar tudo" religa tudo. */
+  function avisoFiltro() {
+    const st = S.st;
+    const fora = [
+      ...S.layers.filter(l => st.layers[l.key] === false).map(l => l.label),
+      ...S.departments.filter(d => st.depts[d.key] === false).map(d => d.label),
+    ];
+    let b = document.getElementById('brain-filtro');
+    if (!fora.length) { if (b) b.remove(); return; }
+    if (!b) { b = document.createElement('div'); b.id = 'brain-filtro'; document.body.appendChild(b); }
+    const h = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    b.innerHTML = '<span>Escondido pelo filtro da legenda: <b>' + fora.map(h).join(', ') + '</b></span><button class="act">Mostrar tudo</button>';
+    b.querySelector('button').onclick = () => {
+      for (const k of Object.keys(st.layers)) st.layers[k] = true;
+      for (const k of Object.keys(st.depts)) st.depts[k] = true;
+      persistSt(); rebuildLegend();
+    };
+  }
   function rebuildLegend() {
+    avisoFiltro();
     const el = document.getElementById('brain-legend');
     const st = S.st;
     const deptRows = S.departments.map(d => {
