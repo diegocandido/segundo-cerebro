@@ -75,7 +75,7 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
   combinado) e manda mensagem com a confirmação do dono. Com isso o ritual de abrir o dia e o
   `/reuniao` deixam de depender de o cliente lembrar o que foi falado no WhatsApp.
 - **O que NÃO faz neste kit:** atendimento automático, resposta sem confirmação e disparo em
-  massa. Um número por vez, sempre com o "pode mandar".
+  massa. Um número por vez, sempre com o "pode mandar". A única exceção, opcional, são os avisos do Cal.com (abaixo).
 - **Risco, dito antes (resposta 13 do bloco 5):** o Uazapi não é a API oficial da Meta; simula o
   WhatsApp Web. Uso automatizado demais pode bloquear o número. Sem o "sim" do cliente para esse
   risco, não ligue: fica `a-definir` com a necessidade registrada numa decisão.
@@ -132,6 +132,37 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
   escuta na própria máquina. Não faz parte deste kit; se o cliente precisar, é um projeto à parte
   (n8n ou servidor recebendo o webhook).
 - **No painel:** `live` depois do teste, com `chave` em `~/.uazapi.env`.
+
+### Avisos do Cal.com pelo WhatsApp (opcional, resposta 13e)
+
+- **O que resolve:** menos faltas em reunião. Quem marca pelo Cal.com recebe pelo WhatsApp do dono
+  a confirmação (dia, hora, link da reunião e link para remarcar) e lembretes antes (padrão: 24h e
+  1h). Script `bin/avisos_cal.py`, que usa o `bin/whatsapp.py` e roda sozinho a cada 5 minutos.
+- **É o único envio sem "pode mandar" deste kit**, e só entra com três "sim" do dono: aos textos
+  (aprovados uma vez), ao envio automático só para este caso e ao risco do número (o mesmo do
+  Uazapi). Registre isso numa decisão em `memory/decisoes/`, com os textos aprovados.
+- **Travas do script:** só o número que a pessoa deixou na reserva; um por vez, no máximo 10 por
+  rodada; nada entre 22h e 7h (menos o lembrete de 1h); cada aviso sai uma vez; reserva cancelada
+  não recebe nada; reservas que já existiam ao ligar não recebem confirmação.
+- **Depende do Mac ligado.** Se o dono quer aviso com o computador desligado, a mesma lógica pode
+  rodar num n8n ou servidor dele; isso é um projeto à parte.
+- **Ligar:**
+  1. **Pedir o WhatsApp na reserva:** no Cal.com, no tipo de reunião, um campo de telefone
+     obrigatório (o script lê `whatsapp`, o telefone do participante ou `attendeePhoneNumber`).
+  2. **Chave do Cal.com, pelo terminal** (nunca no chat): Cal.com > Settings > Developer > API
+     Keys; numa aba de terminal, `read -rs "k?Chave: " && printf 'CALCOM_API_KEY=%s\n' "$k" >
+     ~/.calcom.env && chmod 600 ~/.calcom.env && unset k`.
+  3. **Script e config:** copie [scripts/avisos_cal.py](scripts/avisos_cal.py) para `bin/` e
+     [scripts/avisos-cal.example.json](scripts/avisos-cal.example.json) para `bin/avisos-cal.json`.
+     Preencha `dono` e o id do tipo de reunião (o id aparece na URL do tipo de reunião no Cal.com
+     ou na API) e ajuste os textos com o dono até ele dizer "pode".
+  4. **Prévia:** `python3 bin/avisos_cal.py rodar` mostra o que sairia, sem enviar.
+  5. **Ligar a rotina:** `python3 bin/avisos_cal.py instalar` (launchd, a cada 5 min).
+- **Testar com o dono olhando:** marque uma reserva de teste no próprio Cal.com dele, com o número
+  dele, umas 2h15 à frente. A confirmação chega em até 5 minutos e o lembrete de 1h, 1h antes.
+  `python3 bin/avisos_cal.py status` mostra o registro (em `inbox/avisos-cal/`). Cancele a
+  reserva de teste no fim.
+- **Parar tudo:** `python3 bin/avisos_cal.py desligar`.
 
 ---
 

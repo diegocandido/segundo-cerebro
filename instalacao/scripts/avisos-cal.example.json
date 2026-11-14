@@ -1,0 +1,18 @@
+{
+  "_leia": "Config do bin/avisos_cal.py (confirmação e lembretes pelo WhatsApp para quem marca reunião no Cal.com). Na instalação: copie para bin/avisos-cal.json, troque o dono e o tipo de reunião (id do Cal.com) e ajuste os textos com o cliente. Mudar texto ou ligar outro tipo de reunião pede um novo ok do dono. Variáveis: {dono} {nome} {dia_semana} {data} {hora} {link} {remarcar}.",
+  "dono": "*(preencher: nome do dono)*",
+  "fuso": "America/Sao_Paulo",
+  "tipos_de_reuniao": {
+    "0000000": "*(preencher: nome do tipo de reunião no Cal.com)*"
+  },
+  "lembretes_horas": [24, 1],
+  "silencio": {"de": 22, "ate": 7},
+  "max_envios_por_rodada": 10,
+  "pular_confirmacao_se_origem": [],
+  "numeros_teste": [],
+  "textos": {
+    "confirmacao": "Oi, {nome}! Aqui é o {dono}. Sua reunião comigo está confirmada:\n📅 {dia_semana}, {data} às {hora} (horário de Brasília)\n🔗 {link}\nSe precisar trocar o horário: {remarcar}\nAté lá!",
+    "lembrete_24": "Oi, {nome}! Passando para lembrar da nossa conversa amanhã, {dia_semana}, às {hora}.\nLink: {link}\nSe o horário não fechar mais, dá para remarcar aqui em 1 minuto: {remarcar}",
+    "lembrete_1": "{nome}, daqui a 1 hora a gente se fala ({hora}). O link é este: {link}\nSe surgiu algum imprevisto, me avisa por aqui ou remarca: {remarcar}"
+  }
+}

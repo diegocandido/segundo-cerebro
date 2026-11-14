@@ -89,6 +89,8 @@ Acrescente, se o cliente aprovou:
 - O comando `/reuniao` a partir de [comandos/reuniao.md.tmpl](comandos/reuniao.md.tmpl).
 - O script `bin/whatsapp.py` a partir de [scripts/whatsapp.py](scripts/whatsapp.py), se o WhatsApp pelo
   Uazapi entrou.
+- O script `bin/avisos_cal.py` e o `bin/avisos-cal.json` a partir de [scripts/](scripts/avisos_cal.py),
+  se os avisos do Cal.com entraram (pergunta 13e), pelo guia em [02-ferramentas.md](02-ferramentas.md).
 - O script `bin/instagram.py` a partir de [scripts/instagram.py](scripts/instagram.py), se a
   publicação no Instagram entrou (pergunta 13c), pelo guia em [02-ferramentas.md](02-ferramentas.md).
 - O padrão visual das peças (pergunta 13d): o card de mapa a partir de

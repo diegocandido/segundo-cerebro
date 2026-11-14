@@ -60,6 +60,11 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
       ele)? Isso define quem cria a instância e quem guarda o Admin Token, que **nunca** fica na
       máquina do cliente.
     > Sem "sim" para o risco, o WhatsApp fica `a-definir` no painel, com a necessidade registrada.
+13e. **Se o WhatsApp entrar e você marca reunião pelo Cal.com: quer aviso automático?** Quem marca
+    recebe pelo seu WhatsApp a confirmação e lembretes (24h e 1h antes, ou os horários que você
+    preferir), com link para remarcar, para diminuir as faltas. É o único envio que sai sem o seu
+    "pode mandar" a cada mensagem: você aprova os textos uma vez. Roda com o Mac ligado.
+    > Sem os três "sim" (textos, envio automático só para isso, risco do número), fica de fora.
 
 ## Rodada 5: orçamentos (PandaDoc)
 

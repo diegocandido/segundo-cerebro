@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.18 (2026-11-14)
+Novo, opcional: avisos do Cal.com pelo WhatsApp. Quem marca reunião com você recebe a confirmação com dia, hora e link, e lembretes 24h e 1h antes, com link para remarcar, para diminuir as faltas. Você aprova os textos uma vez; tudo fica registrado no OS e dá para desligar com um comando.
+
 ## 1.17 (2026-11-14)
 As respostas faladas do Claude (opcional, hook falar_resposta.py) agora saem na voz do macOS: na hora, sem internet e sem gastar o crédito da ElevenLabs, que fica para o ritual da manhã, a assistente por voz e o ouvir.
 
