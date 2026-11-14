@@ -4,9 +4,10 @@
 Registrado no .claude/settings.json do segundo cérebro (hook Stop), roda ao fim de cada
 resposta: pega o texto que o Claude acabou de escrever, tira o markdown (mesma limpeza do
 bin/ouvir.py: links, tabelas, código, valores e datas por extenso), corta em até LIMITE
-caracteres numa frase inteira e fala pela ElevenLabs no modelo Flash (bin/falar.py --rapido):
-começa em 1 a 2 segundos e gasta metade do crédito. Sem chave ou sem internet, cai na voz do
-macOS. Volta na hora: a fala segue em segundo plano. Uma resposta nova interrompe a anterior.
+caracteres numa frase inteira e fala com a voz do macOS (bin/falar.py --local, VOZ_MAC): local,
+na hora e sem gastar o crédito da ElevenLabs, que fica para o ritual da manhã, a assistente por voz
+e o ouvir (as respostas, faladas a cada turno, esgotavam o plano). Volta na hora: a fala
+segue em segundo plano. Uma resposta nova interrompe a anterior.
 
 Fica quieta sozinha quando algum app de reunião está gravando do microfone (bin/microfone.py:
 Zoom, Teams, Meet, Granola...). Para silenciar à mão, com ou sem prazo: bin/voz.py
@@ -25,7 +26,7 @@ from ouvir import linhas_faladas, pronunciavel  # noqa: E402
 from voz import silenciada  # noqa: E402
 
 FALAR = Path(__file__).resolve().parent / "falar.py"
-LIMITE = 700  # caracteres por resposta (~40 s); o resto fica só na tela, para poupar crédito
+LIMITE = 700  # caracteres por resposta (~40 s); o resto fica só na tela
 
 DADOS = Path.home() / ".local/share/conversar"
 PID = DADOS / "fala-resposta.pid"
@@ -83,7 +84,7 @@ def main() -> None:
         return
     calar_anterior()
     DADOS.mkdir(parents=True, exist_ok=True)
-    voz = subprocess.Popen([sys.executable, str(FALAR), "--rapido"], stdin=subprocess.PIPE, text=True,
+    voz = subprocess.Popen([sys.executable, str(FALAR), "--local"], stdin=subprocess.PIPE, text=True,
                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                            start_new_session=True)  # continua falando depois que o hook sai
     voz.stdin.write(fala)

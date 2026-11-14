@@ -324,6 +324,8 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
      pelo terminal; a voz vai em `voz_elevenlabs`. Sem chave, fala com a voz do macOS.
   5. Opcional: o alias `cerebro` (`python3 .../bin/conversar.py --maos-livres`) e, para ouvir
      cada resposta do Claude, o hook Stop com `falar_resposta.py` no `.claude/settings.json`.
+     Essas respostas saem na voz do macOS (local, na hora e sem gastar crédito); a ElevenLabs fica
+     para o ritual da manhã, a assistente por voz e o `ouvir`.
 - **Testar:** `python3 bin/falar.py --checar`; `python3 bin/conversar.py --listar-mics`; uma
   pergunta pelo walkie-talkie (`python3 bin/conversar.py`, Enter grava, Enter para) e uma pelo
   botão 🎙 do painel no Chrome ou Safari.

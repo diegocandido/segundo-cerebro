@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.17 (2026-11-14)
+As respostas faladas do Claude (opcional, hook falar_resposta.py) agora saem na voz do macOS: na hora, sem internet e sem gastar o crédito da ElevenLabs, que fica para o ritual da manhã, a assistente por voz e o ouvir.
+
 ## 1.16 (2026-11-13)
 Pauta de conteúdo (opcional): cada sugestão de post vira uma nota no seu segundo cérebro e aparece no quadro do painel, nas colunas Sugeridas e Aprovadas, com os botões Aprovar, Prazo e Descartar. Aprovada, ela vira peça e segue o quadro até a agenda. Se você usa o Notion, a pauta ganha uma cópia lá e o que você aprovar no Notion volta para o painel. Também: dentro do painel, o nome e o @ da marca no topo do Estúdio de Conteúdo não vazam mais por baixo do logo.
 
