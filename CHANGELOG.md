@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.19 (2026-11-16)
+Acompanhamento de leads (opcional): cada lead vira uma nota com etapa, último e próximo contato e o próximo passo, e o bin/leads.py mostra o funil e quem tocar no dia. Com o Cal.com ligado, toda reserva nova vira lead sozinha no ritual da manhã. Nova tela Leads no painel (tecla P), com o funil em colunas e o histórico de cada lead. Avisos do Cal.com com saudação pelo horário e opção de só lembrete para a agenda dos clientes.
+
 ## 1.18 (2026-11-14)
 Novo, opcional: avisos do Cal.com pelo WhatsApp. Quem marca reunião com você recebe a confirmação com dia, hora e link, e lembretes 24h e 1h antes, com link para remarcar, para diminuir as faltas. Você aprova os textos uma vez; tudo fica registrado no OS e dá para desligar com um comando.
 

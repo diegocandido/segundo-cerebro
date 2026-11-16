@@ -223,6 +223,7 @@
     if (window.Gestao) window.Gestao.fechar();
     if (window.Tarefas) window.Tarefas.fechar();
     if (window.LinkedIn) window.LinkedIn.fechar();
+    if (window.Leads) window.Leads.fechar(); // tela Leads
     const root = $('#dm-root');
     document.body.classList.add('mc-open', 'dm-open');
     root.classList.add('on');

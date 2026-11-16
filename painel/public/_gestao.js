@@ -207,6 +207,7 @@
   // ---------- abrir / fechar ----------
   function abrir(secao) {
     if (window.MissionControl) window.MissionControl.close();
+    if (window.Leads) window.Leads.fechar();
     const root = $('#gs-root');
     document.body.classList.add('mc-open', 'gs-open');
     root.classList.add('on');

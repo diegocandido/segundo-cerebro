@@ -128,6 +128,12 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
       automaticamente, assinatura eletrônica e aviso de leitura).
 15. **Você tem uma tabela de preços ou pacotes?** Onde ela está. Sem tabela, orçamento
     automatizado não tem de onde tirar preço: vira pendência do OS.
+15b. **Quer acompanhar seus leads no OS?** Cada lead vira uma nota com etapa (agendado, não
+    compareceu, reunião feita, proposta enviada, negociando, fechou, perdido), último e próximo
+    contato e o próximo passo. O ritual da manhã lista quem tocar no dia e, com o Cal.com ligado,
+    toda reserva nova vira lead sozinha. No painel, a tela Leads (tecla P) mostra o funil. Pergunte
+    onde ficam os prospects no OS dele (pasta) e se ele já tem um CRM: com CRM em uso, o funil fica
+    lá e este item não entra.
 
 ## Rodada 6: rotina da manhã
 

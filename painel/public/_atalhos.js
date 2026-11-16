@@ -12,6 +12,7 @@
     { t: 'Tarefas', k: 'T', tem: () => window.Tarefas, ir: () => window.Tarefas.abrir() },
     { t: 'Mission Control', k: 'M', tem: () => MC(), ir: () => MC().open() },
     { t: 'Mensagens', k: 'D', tem: () => window.Mensagens, ir: () => window.Mensagens.abrir() },
+    { t: 'Leads', k: 'P', tem: () => window.Leads, ir: () => window.Leads.abrir() },
     { t: 'LinkedIn', k: 'I', tem: () => window.LinkedIn, ir: () => window.LinkedIn.abrir() },
     { t: 'Gestão', k: 'G', tem: () => window.Gestao, ir: () => window.Gestao.abrir() },
     { t: 'Estúdio', k: 'E', tem: () => fab('fab-estudio'), ir: () => fab('fab-estudio').click() },

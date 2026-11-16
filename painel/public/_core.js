@@ -1240,6 +1240,7 @@ window.BrainCore = (function () {
     if (tela === 'mission' && window.MissionControl) { window.MissionControl.open(); return true; }
     if (tela === 'caixa' && window.MissionControl) { window.MissionControl.openCaixa(); return true; }
     if (tela === 'linkedin' && window.LinkedIn) { window.LinkedIn.abrir(); return true; }
+    if (tela === 'leads' && window.Leads) { window.Leads.abrir(); return true; }
     if (window.Gestao && tela) { window.Gestao.abrir(tela); return true; }
     return false;
   }
@@ -1255,7 +1256,7 @@ window.BrainCore = (function () {
     const links = (d.links || []).filter(x => /^https:\/\//.test(x.url))
       .map(x => `<a class="app-link ext" href="${h(x.url)}" target="_blank" rel="noopener">${h(x.label)} ↗</a>`).join('');
     const SECOES = { cobrancas: 'Cobranças', whatsapp: 'Conversas', agenda: 'Agenda e e-mails', clientes: 'Clientes e reuniões', propostas: 'Propostas', tarefas: 'Tarefas' };
-    const TELAS = { ...SECOES, estudio: 'Estúdio Social', mission: 'Mission Control', caixa: 'Livro-caixa', linkedin: 'LinkedIn' };
+    const TELAS = { ...SECOES, estudio: 'Estúdio Social', mission: 'Mission Control', caixa: 'Livro-caixa', linkedin: 'LinkedIn', leads: 'Leads' };
     const alvo = d.tela || d.painel;
     const noPainel = TELAS[alvo] ? `<button class="mc-primary app-painel" data-painel="${h(alvo)}">Abrir no painel: ${TELAS[alvo]}</button>` : '';
     const acoes = (d.acoes || []).map(a => a === 'cobrancas' ? '<button class="act" data-app="cobrancas">Ver cobranças</button>'

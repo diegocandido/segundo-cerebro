@@ -78,3 +78,30 @@ body.mc-open #fab-tarefas { display: none !important; }
 .li-metr { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: 11px; color: var(--muted); }
 .li-metr a { color: var(--accent); text-decoration: none; }
 #li-inner .mc-form-note a { color: var(--accent); text-decoration: none; }
+
+/* ---------- Leads (tecla P), mesma moldura das telas Tarefas e LinkedIn ---------- */
+#ld-root { position: fixed; inset: 0; z-index: 72; display: none; opacity: 0; transition: opacity .22s ease;
+  font-family: 'DM Sans', sans-serif; color: var(--ink); background: var(--bg); }
+#ld-root.on { display: block; }
+#ld-root.in { opacity: 1; }
+#ld-scroll { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 20px 26px 60px; }
+#ld-inner { max-width: 1320px; margin: 0 auto; }
+.ld-board { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 6px; }
+.ld-board .tf-col { min-height: 90px; }
+.ld-sec { margin: 4px 0 18px; }
+.ld-hoje { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 8px; }
+.ld-fechados { margin-top: 10px; opacity: .8; }
+.ld-card { flex-direction: column; }
+.ld-card.aberto { border-color: var(--accent); }
+.ld-passo { font-size: 11.5px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.ld-det { margin-top: 9px; padding-top: 8px; border-top: 1px solid var(--border); }
+.ld-resumo { font-size: 11.5px; color: var(--muted); line-height: 1.45; margin-bottom: 6px; }
+.ld-hist-h { font-size: 9.5px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--faint); font-weight: 700; margin: 9px 0 4px; }
+.ld-hist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--muted); line-height: 1.4; }
+.ld-hist b { color: var(--ink); font-weight: 600; }
+.ld-vazio { font-size: 11px; color: var(--faint); padding: 4px 2px; }
+.ld-toggle { margin: 18px 0 0; }
+#ld-inner .li-metr a { color: var(--accent); text-decoration: none; }
+#ld-inner .mc-form-note { margin-top: 18px; }
+@media (max-width: 1100px) { .ld-board { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 860px) { .ld-board { grid-template-columns: 1fr; } #ld-scroll { padding: 16px; } }

@@ -112,7 +112,9 @@ def c_dono() -> str:
 
 def montar(texto: str, b: dict, fuso: ZoneInfo) -> str:
     ini = iso(b["start"]).astimezone(fuso)
-    return texto.format(dono=c_dono(), nome=primeiro_nome(b), dia_semana=DIAS[ini.weekday()], data=ini.strftime("%d/%m"),
+    h = datetime.now(fuso).hour
+    saud = "bom dia" if h < 12 else "boa tarde" if h < 18 else "boa noite"
+    return texto.format(saudacao=saud, dono=c_dono(), nome=primeiro_nome(b), dia_semana=DIAS[ini.weekday()], data=ini.strftime("%d/%m"),
                         hora=ini.strftime("%H:%M").replace(":00", "h") if ini.minute == 0 else ini.strftime("%Hh%M"),
                         link=b.get("meetingUrl") or b.get("location") or "(link no convite do e-mail)",
                         remarcar=f"https://cal.com/reschedule/{b['uid']}")
@@ -153,7 +155,8 @@ def pendentes(c: dict, est: dict, agora: datetime) -> list:
             continue
         enviados = est["enviados"].get(b["uid"], {})
         # confirmação: só reserva criada depois que a rotina foi ligada
-        if "confirmacao" not in enviados and criada >= desde and not silencio:
+        so_lembrete = str(b.get("eventTypeId")) in {str(x) for x in c.get("tipos_so_lembrete") or []}
+        if "confirmacao" not in enviados and criada >= desde and not silencio and not so_lembrete:
             if (b.get("metadata") or {}).get("origem") not in pular:
                 saida.append(("confirmacao", b))
         for h in sorted(c["lembretes_horas"], reverse=True):

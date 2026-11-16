@@ -619,6 +619,7 @@
   // ---------- abrir / fechar ----------
   function open() {
     if (window.Gestao) window.Gestao.fechar();
+    if (window.Leads) window.Leads.fechar();
     const root = $('#mc-root');
     document.body.classList.add('mc-open');
     root.classList.add('on');

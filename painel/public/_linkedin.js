@@ -77,6 +77,7 @@
     if (window.MissionControl) window.MissionControl.close();
     if (window.Gestao) window.Gestao.fechar();
     if (window.Tarefas) window.Tarefas.fechar();
+    if (window.Leads) window.Leads.fechar(); // tela Leads
     const root = $('#li-root');
     document.body.classList.add('mc-open', 'li-open');
     root.classList.add('on');

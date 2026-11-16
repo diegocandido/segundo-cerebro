@@ -34,6 +34,7 @@
      GET  /api/estudio-app      sobe o Estudio de Conteudo se preciso e devolve o endereco da tela
    LinkedIn (opcional, pelo Zernio do Estúdio de Conteúdo):
      GET  /api/linkedin         conta, posts agendados e publicados e numeros (so leitura)
+     GET  /api/leads            funil de leads do OS, pelo bin/leads.py (so leitura, opcional)
    Mensagens (tecla D, opcional, com o Estudio de Conteudo e o Claude Code):
      GET  /api/direct           conversas do direct do Instagram (Zernio)
      GET  /api/direct/mensagens?id=&conta=  mensagens de uma conversa
@@ -55,6 +56,7 @@ const asaas = require('./asaas');
 const gestao = require('./gestao');
 const caixa = require('./caixa');
 const linkedin = require('./linkedin'); // tela LinkedIn (tecla I, opcional)
+const leads = require('./leads'); // tela Leads (tecla P, opcional: precisa do bin/leads.py no OS)
 const direct = require('./direct'); // tela Mensagens (tecla D, opcional): direct do Instagram com resposta sugerida
 const estudioApp = require('./estudio-app'); // Estúdio de Conteúdo (opcional)
 const estudio = require('./estudio');
@@ -366,6 +368,11 @@ const handle = async (req, res) => {
     if (p === '/api/linkedin' && req.method === 'GET') {
       try { return sendJSON(res, await linkedin.resumo()); }
       catch (e) { return sendJSON(res, { error: e.message }, 502); }
+    }
+    // ---------- Leads (so leitura, pelo bin/leads.py do OS) ----------
+    if (p === '/api/leads' && req.method === 'GET') {
+      try { return sendJSON(res, await leads.resumo()); }
+      catch (e) { return sendJSON(res, { error: e.message }, 500); }
     }
     // ---------- livro-caixa (só leitura) ----------
     if (p === '/api/caixa' && req.method === 'GET') {

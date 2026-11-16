@@ -91,6 +91,10 @@ Acrescente, se o cliente aprovou:
   Uazapi entrou.
 - O script `bin/avisos_cal.py` e o `bin/avisos-cal.json` a partir de [scripts/](scripts/avisos_cal.py),
   se os avisos do Cal.com entraram (pergunta 13e), pelo guia em [02-ferramentas.md](02-ferramentas.md).
+- O script `bin/leads.py` e o `bin/leads.json` (de [scripts/leads.example.json](scripts/leads.example.json),
+  com as pastas de clientes e de prospects do OS dele), se o acompanhamento de leads entrou
+  (pergunta 15b). No ritual da manhã, o bloco `{Leads:}` do modelo; no `/reuniao`, o toque de reunião.
+  Teste com `python3 bin/leads.py novo "Lead de teste"`, `funil`, `tocar` e apague a nota de teste.
 - O script `bin/instagram.py` a partir de [scripts/instagram.py](scripts/instagram.py), se a
   publicação no Instagram entrou (pergunta 13c), pelo guia em [02-ferramentas.md](02-ferramentas.md).
 - O padrão visual das peças (pergunta 13d): o card de mapa a partir de

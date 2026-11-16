@@ -136,6 +136,9 @@ Se entraram os opcionais:
   `bin/conversar.py` e `bin/assistente.json` (guia da voz em 02-ferramentas.md). Teste digitando
   uma pergunta no quadro; o navegador pede o microfone na primeira gravação (no Chrome ou Safari;
   painéis embutidos costumam bloquear o microfone).
+- **Leads (se entrou, pergunta 15b):** com o `bin/leads.py` no OS, a tela Leads (tecla P, também no
+  MENU) já funciona: leads ativos, quem tocar hoje, próximos 7 dias e o funil em colunas, só leitura.
+  Sem o script, a tela diz que não está instalada. Teste abrindo a tela depois do lead de teste.
 - **LinkedIn (se entrou com o Estúdio, pergunta 13h):** copie [scripts/linkedin.py](scripts/linkedin.py)
   para o `bin/` do segundo cérebro. Tecla **I** (ou o MENU) abre a tela: seguidores, agendados,
   publicados e números. Sem o Estúdio ou sem o LinkedIn conectado no Zernio, a tela só explica o que

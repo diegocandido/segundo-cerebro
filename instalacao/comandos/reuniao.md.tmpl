@@ -35,7 +35,9 @@ Liste as pastas de `{{AREA_CLIENTES}}/` (do filesystem, nunca de memória).
   no mesmo passo reescreva o topo do estado do cliente e acrescente a linha no histórico.
 - **Prospect:** crie ou complete a nota em `{{PROSPECTS}}`, com quem é, dores, o que foi
   apresentado e situação. Se a nota já existir, **mescle**: acrescente o que é novo, não apague
-  nada.
+  nada. Se o acompanhamento de leads foi instalado (`bin/leads.py`), guardar a reunião é um toque:
+  `python3 bin/leads.py tocar <slug> --canal reuniao --data AAAA-MM-DD --nota "..." --etapa
+  reuniao-feita --proximo AAAA-MM-DD --passo "..."`.
 
 ## 4. Como escrever
 - Fonte no topo: data, duração, "gravada no {{GRAVADOR}}" e o link.

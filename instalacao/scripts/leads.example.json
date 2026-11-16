@@ -1,0 +1,7 @@
+{
+  "_leia": "Config do bin/leads.py (renomeie para leads.json). Pastas relativas à raiz do OS: onde moram os clientes, uma nota por lead e o índice com a seção '## Prospects'. 'ignorar': e-mails ou números (só dígitos) de reservas do Cal.com que não são lead, como os seus testes.",
+  "pasta_clientes": "Clientes",
+  "pasta_prospects": "Clientes/_prospects",
+  "indice": "Clientes/Clientes.md",
+  "ignorar": []
+}
