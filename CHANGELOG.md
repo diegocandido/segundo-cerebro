@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.20 (2026-11-18)
+Estúdio de Conteúdo dentro do painel: em telas de até 1240 px, as abas descem para uma linha própria e a aba Ajustes não some mais da barra.
+
 ## 1.19 (2026-11-16)
 Acompanhamento de leads (opcional): cada lead vira uma nota com etapa, último e próximo contato e o próximo passo, e o bin/leads.py mostra o funil e quem tocar no dia. Com o Cal.com ligado, toda reserva nova vira lead sozinha no ritual da manhã. Nova tela Leads no painel (tecla P), com o funil em colunas e o histórico de cada lead. Avisos do Cal.com com saudação pelo horário e opção de só lembrete para a agenda dos clientes.
 

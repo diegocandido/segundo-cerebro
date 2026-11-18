@@ -43,7 +43,15 @@
    e em tela estreita fica só o logo */
 .no-os .marca > div:last-child { overflow: hidden; }
 .no-os .marca-nome, .no-os .marca-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-@media (max-width: 1180px) { .no-os .marca > div:last-child { display: none; } }
+/* Dentro do painel a barra tem 7 abas, Peças, ◂ OS e o selo de demonstração. Em tela até 1240 px elas
+   não cabem numa linha só e a última aba (Ajustes) saía da tela: aí as abas descem para uma linha
+   inteira, rolando para o lado se precisar, e nada some. */
+.no-os .abas { min-width: 0; }
+.no-os .topo-dir { flex: none; }
+@media (max-width: 1240px) {
+  .no-os .topo-in { flex-wrap: wrap; row-gap: 8px; }
+  .no-os .abas { order: 3; width: 100%; overflow-x: auto; scrollbar-width: none; }
+}
 .no-os .abas { background: transparent; border: 0; gap: 4px; padding: 0; }
 .no-os .aba { border-radius: 0; text-transform: uppercase; letter-spacing: .12em; font-size: 11.5px; padding: 8px 12px; border: 1px solid transparent; }
 .no-os .aba:hover { color: var(--texto); border-color: var(--linha); }
