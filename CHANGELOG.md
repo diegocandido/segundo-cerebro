@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.22 (2026-11-21)
+Estúdio de Conteúdo: o botão ← OS agora sempre volta para a tela inicial do painel, mesmo quando o estúdio está aberto numa aba própria ou dentro de outra janela. O Esc faz o mesmo. Quem já tinha o estúdio ligado ao painel recebe a mudança ao rodar de novo o aplicar-integracao.py.
+
 ## 1.21 (2026-11-20)
 A tela Mensagens (tecla D) ganhou a aba Comentários: os posts publicados que têm comentário, inclusive os que não saíram pelo Estúdio, com o filtro Sem resposta. Em cada comentário, Sugerir resposta faz a IA ler a legenda, os outros comentários e o seu segundo cérebro e escrever a resposta na sua voz; você revisa e publica com um clique. Nada é publicado sem você.
 

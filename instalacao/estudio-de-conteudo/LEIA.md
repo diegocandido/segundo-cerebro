@@ -21,7 +21,7 @@ o Estúdio Social (o quadro das peças), como antes.
 4. **O painel:** se o estúdio não estiver em `~/estudio-conteudo/app`, grave o caminho em
    `missionControl.estudioApp` do `config/workspace.json`. Reinicie o painel.
 5. **Testar:** tecla **E**. Tem que abrir a Semana do estúdio no visual do painel, com **Peças** e
-   **◂ OS** no canto direito; Esc volta para o grafo. Em modo demonstração nada é publicado.
+   **← OS** no canto direito (volta à tela inicial do painel, mesmo com o estúdio aberto fora dele); Esc volta para o grafo. Em modo demonstração nada é publicado.
    Clique em **Peças**: abre a Produção (Em criação, Para aprovar, Aprovado, No Estúdio). Numa peça
    pronta, a Prévia mostra **Mandar para o Estúdio**; enviada, ela aparece em Posts do estúdio em
    alguns segundos, sem data.

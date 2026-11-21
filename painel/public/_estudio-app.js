@@ -62,8 +62,12 @@
   }
 
   addEventListener('message', e => {
-    if (!base || e.origin !== new URL(base).origin) return; // só a tela do estúdio fala com o painel
+    // [OS] só a tela do estúdio fala com o painel: o quadro do estúdio (mesmo se o endereço mudou de localhost para 127.0.0.1)
+    const fr = $('#ea-frame');
+    if (!(fr && e.source === fr.contentWindow) && (!base || e.origin !== new URL(base).origin)) return;
     const d = e.data || {};
+    // avisa o estúdio que o painel ouviu; sem esse aviso, o ◂ OS do estúdio navega sozinho para a tela inicial
+    if (/^estudio-/.test(d.tipo || '') && e.source) try { e.source.postMessage({ tipo: 'os-ok' }, '*'); } catch (_) {}
     if (d.tipo === 'estudio-fechar') fechar();
     else if (d.tipo === 'estudio-pecas') { fechar(); if (window.Estudio) setTimeout(() => window.Estudio.abrir(), 250); }
     else if (d.tipo === 'estudio-navegar' && /^https:\/\//.test(String(d.url || ''))) location.href = d.url;
