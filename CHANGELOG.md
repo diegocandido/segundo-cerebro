@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.21 (2026-11-20)
+A tela Mensagens (tecla D) ganhou a aba Comentários: os posts publicados que têm comentário, inclusive os que não saíram pelo Estúdio, com o filtro Sem resposta. Em cada comentário, Sugerir resposta faz a IA ler a legenda, os outros comentários e o seu segundo cérebro e escrever a resposta na sua voz; você revisa e publica com um clique. Nada é publicado sem você.
+
 ## 1.20 (2026-11-18)
 Estúdio de Conteúdo dentro do painel: em telas de até 1240 px, as abas descem para uma linha própria e a aba Ajustes não some mais da barra.
 

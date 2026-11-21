@@ -41,6 +41,9 @@
      POST /api/direct/sugerir   {id, conta}: texto da proxima resposta, pela IA; nada e enviado
      POST /api/direct/enviar    {id, conta, texto}: manda a resposta que o dono revisou
      POST /api/direct/lida      {id, conta}: marca a conversa como lida
+     GET  /api/direct/comentarios  posts publicados com comentario; /comentarios/post?post=&conta= os comentarios
+     POST /api/direct/comentarios/sugerir {post, conta, comentario}: resposta publica pela IA; nada e publicado
+     POST /api/direct/comentarios/responder {post, conta, comentario, texto}: publica a resposta revisada
    Livro-caixa:
      GET  /api/caixa[?mes=AAAA-MM]  entradas, saidas, saldo e lancamentos do mes (so leitura)
 */
@@ -353,6 +356,23 @@ const handle = async (req, res) => {
     if (p === '/api/direct/mensagens' && req.method === 'GET') {
       try { return sendJSON(res, await direct.mensagens(url.searchParams.get('id'), url.searchParams.get('conta'))); }
       catch (e) { return sendJSON(res, { error: e.message }, 400); }
+    }
+    // comentários dos posts publicados: ler e sugerir não publicam; só /api/direct/comentarios/responder publica, com o clique do dono
+    if (p === '/api/direct/comentarios' && req.method === 'GET') {
+      try { return sendJSON(res, await direct.postsComentados()); }
+      catch (e) { return sendJSON(res, { error: e.message }, 502); }
+    }
+    if (p === '/api/direct/comentarios/post' && req.method === 'GET') {
+      try { return sendJSON(res, await direct.comentariosDoPost(url.searchParams.get('post'), url.searchParams.get('conta'))); }
+      catch (e) { return sendJSON(res, { error: e.message }, 400); }
+    }
+    if ((p === '/api/direct/comentarios/sugerir' || p === '/api/direct/comentarios/responder') && req.method === 'POST') {
+      let body = {};
+      try { body = JSON.parse(await readBody(req)); } catch { return sendJSON(res, { error: 'Bad JSON' }, 400); }
+      try {
+        if (p.endsWith('/sugerir')) return sendJSON(res, await direct.sugerirComentario(body.post, body.conta, body.comentario));
+        return sendJSON(res, await direct.responderComentario(body.post, body.conta, body.comentario, body.texto));
+      } catch (e) { return sendJSON(res, { error: e.message }, 400); }
     }
     if (p.startsWith('/api/direct/') && req.method === 'POST' && ['/api/direct/sugerir', '/api/direct/enviar', '/api/direct/lida'].includes(p)) {
       let body = {};

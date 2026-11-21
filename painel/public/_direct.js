@@ -3,13 +3,22 @@
    Esquerda: as conversas (não lidas no alto, com o número). Direita: a conversa aberta, como um
    chat, e a caixa de resposta. "Sugerir resposta" pede à IA (o Claude, lendo o segundo cérebro) o
    texto da próxima mensagem na voz do dono; o texto cai na caixa para revisar e editar. Nada sai
-   sem o clique em Enviar. Relê a conversa aberta a cada 20 s e a lista a cada 60 s. */
+   sem o clique em Enviar. Relê a conversa aberta a cada 20 s e a lista a cada 60 s.
+
+   Aba Comentários: os posts publicados que têm comentário (inclusive os que não saíram pelo Estúdio),
+   os comentários de cada um com as respostas já dadas, e para cada comentário sem resposta o botão
+   Responder: "Sugerir resposta" pede à IA a resposta pública na voz do dono; "Publicar resposta" só
+   publica com o clique e a confirmação. */
 'use strict';
 (function () {
   let lista = null, erroLista = '', aberta = null, conversa = null, erroConversa = '';
   let filtro = 'todas', busca = '', sugerindo = false, enviando = false, aviso = '';
   let timerConversa = null, timerLista = null;
   const rascunho = {}; // texto da caixa, por conversa
+  let modo = 'direct';  // 'direct' ou 'comentarios'
+  let posts = null, erroPosts = '', postAberto = null, comPost = null, erroComPost = '', alvo = null, soSem = true;
+  let sugerindoCom = false, publicando = false, avisoCom = '';
+  const rascunhoCom = {}; // resposta em edição, por comentário
   const $ = s => document.querySelector(s);
   const el = (tag, cls, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
   const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -82,6 +91,148 @@
       carregarLista();
     } catch (e) { aviso = 'Não enviou: ' + e.message; }
     enviando = false; render();
+  }
+
+  // ---------- comentários ----------
+  async function carregarPosts() {
+    try { posts = await api('/api/direct/comentarios'); erroPosts = ''; } catch (e) { erroPosts = e.message; }
+    render();
+  }
+  async function carregarComPost() {
+    if (!postAberto) return;
+    const id = postAberto.postId;
+    try {
+      const j = await api('/api/direct/comentarios/post?' + new URLSearchParams({ post: postAberto.postId, conta: postAberto.conta }));
+      if (!postAberto || postAberto.postId !== id) return;
+      comPost = j; erroComPost = '';
+    } catch (e) { erroComPost = e.message; }
+    render();
+  }
+  function abrirPost(p) {
+    if (postAberto && postAberto.postId === p.postId) return;
+    postAberto = p; comPost = null; erroComPost = ''; alvo = null; avisoCom = '';
+    render(); carregarComPost();
+  }
+  async function sugerirCom() {
+    if (!alvo || sugerindoCom) return;
+    const id = alvo.id;
+    sugerindoCom = true; avisoCom = ''; render();
+    try {
+      const j = await api('/api/direct/comentarios/sugerir', { post: postAberto.postId, conta: postAberto.conta, comentario: id });
+      rascunhoCom[id] = j.texto;
+      avisoCom = 'Sugestão da IA. Revise e edite antes de publicar: a resposta fica visível para todo mundo.';
+    } catch (e) { avisoCom = 'Não deu para sugerir: ' + e.message; }
+    sugerindoCom = false; render();
+    const c = $('#dm-caixa-com'); if (c) { c.focus(); c.setSelectionRange(c.value.length, c.value.length); }
+  }
+  async function publicarCom() {
+    if (!alvo || publicando) return;
+    const texto = (rascunhoCom[alvo.id] || '').trim();
+    if (!texto) { avisoCom = 'Escreva a resposta (ou peça uma sugestão) antes de publicar.'; render(); return; }
+    if (!confirm('Publicar esta resposta ao comentário de @' + alvo.autor + '? Ela fica pública no post.\n\n' + texto)) return;
+    publicando = true; avisoCom = ''; render();
+    try {
+      await api('/api/direct/comentarios/responder', { post: postAberto.postId, conta: postAberto.conta, comentario: alvo.id, texto });
+      rascunhoCom[alvo.id] = ''; alvo = null; avisoCom = 'Resposta publicada.';
+      await carregarComPost();
+    } catch (e) { avisoCom = 'Não publicou: ' + e.message; }
+    publicando = false; render();
+  }
+
+  function colunaPosts() {
+    const lado = el('div', 'mc-card dm-lado');
+    lado.appendChild(el('div', 'dm-lado-top', '<div class="dm-lado-tit">Posts com comentário</div>'));
+    const itens = el('div', 'dm-itens');
+    itens.id = 'dm-itens';
+    if (erroPosts) itens.appendChild(el('div', 'mc-warn', '<div>&#9888;</div><div>' + esc(erroPosts) + '</div>'));
+    else if (!posts) itens.appendChild(el('div', 'mc-empty', 'lendo os posts...'));
+    else {
+      if (!posts.posts.length) itens.appendChild(el('div', 'mc-empty', 'nenhum post com comentário'));
+      posts.posts.forEach(p => {
+        const b = el('button', 'dm-item' + (postAberto && postAberto.postId === p.postId ? ' on' : ''));
+        b.innerHTML = '<div class="dm-capa">' + (p.capa ? '<img src="' + esc(p.capa) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' : '') + '</div>'
+          + '<div class="dm-item-b"><div class="dm-item-l"><b>' + esc(p.texto) + '</b></div>'
+          + '<div class="dm-item-l"><div class="dm-prev">' + p.nComentarios + ' comentário' + (p.nComentarios > 1 ? 's' : '') + ' · ' + esc(hora(p.quando)) + (p.rede === 'tiktok' ? ' · TikTok' : '') + '</div></div></div>';
+        b.onclick = () => abrirPost(p);
+        itens.appendChild(b);
+      });
+      (posts.avisos || []).forEach(a => itens.appendChild(el('div', 'dm-aviso alerta', esc(a))));
+    }
+    lado.appendChild(itens);
+    return lado;
+  }
+
+  function colunaComentarios() {
+    const dir = el('div', 'mc-card dm-conv');
+    if (!postAberto) {
+      dir.appendChild(el('div', 'dm-escolha', '<b>Escolha um post</b><span>Clique num post à esquerda para ver os comentários. Em cada comentário sem resposta, <b>Responder</b> abre a caixa com <b>Sugerir resposta</b>: a IA lê o post, o comentário e o seu segundo cérebro e escreve na sua voz. Nada é publicado sem o seu clique.</span>'));
+      return dir;
+    }
+    const p = postAberto;
+    const cab = el('div', 'dm-cab');
+    cab.innerHTML = '<div class="dm-capa grande">' + (p.capa ? '<img src="' + esc(p.capa) + '" alt="" referrerpolicy="no-referrer">' : '') + '</div>'
+      + '<div class="dm-cab-b"><b>' + esc(p.texto) + '</b><span>' + (p.minhaConta ? '@' + esc(p.minhaConta) + ' · ' : '') + esc(dataLonga(p.quando)) + ' · ' + p.curtidas + ' curtidas</span></div>'
+      + (p.link ? '<a class="act" href="' + esc(p.link) + '" target="_blank" rel="noopener">Ver o post ↗</a>' : '');
+    dir.appendChild(cab);
+    const filtros = el('div', 'dm-filtros dm-filtros-com');
+    [[true, 'Sem resposta' + (comPost ? ' · ' + comPost.semResposta : '')], [false, 'Todos']].forEach(([v, t]) => {
+      const b = el('button', 'dm-filtro' + (soSem === v ? ' on' : ''), esc(t));
+      b.onclick = () => { soSem = v; render(); };
+      filtros.appendChild(b);
+    });
+    dir.appendChild(filtros);
+    const lista = el('div', 'dm-chat');
+    lista.id = 'dm-chat';
+    if (erroComPost) lista.appendChild(el('div', 'mc-warn', '<div>&#9888;</div><div>' + esc(erroComPost) + '</div>'));
+    else if (!comPost) lista.appendChild(el('div', 'mc-empty', 'lendo os comentários...'));
+    else {
+      const vis = comPost.comentarios.filter(c => !soSem || (!c.meu && !c.respondido));
+      if (!vis.length) lista.appendChild(el('div', 'mc-empty', soSem ? 'todos os comentários já têm resposta' : 'sem comentários'));
+      vis.forEach(c => {
+        const card = el('div', 'dm-com' + (alvo && alvo.id === c.id ? ' on' : '') + (c.meu ? ' meu' : ''));
+        card.innerHTML = '<div class="dm-com-top"><b>@' + esc(c.autor) + '</b><span>' + esc(hora(c.quando)) + (c.curtidas ? ' · ♥ ' + c.curtidas : '') + (c.oculto ? ' · oculto' : '') + '</span></div>'
+          + '<div class="dm-txt">' + esc(c.texto) + '</div>'
+          + (c.respostas || []).map(r => '<div class="dm-com-resp' + (r.meu ? ' meu' : '') + '"><b>@' + esc(r.autor) + '</b> ' + esc(r.texto) + '</div>').join('');
+        if (!c.meu && !c.respondido && c.podeResponder) {
+          const b = el('button', 'act dm-com-b', alvo && alvo.id === c.id ? 'Respondendo' : 'Responder');
+          b.onclick = () => { alvo = c; avisoCom = ''; render(); const x = $('#dm-caixa-com'); if (x) x.focus(); };
+          card.appendChild(b);
+        } else if (c.respondido) card.appendChild(el('div', 'dm-com-ok', '✓ respondido'));
+        lista.appendChild(card);
+      });
+    }
+    dir.appendChild(lista);
+    if (alvo) {
+      const comp = el('div', 'dm-comp');
+      comp.appendChild(el('div', 'dm-aviso', 'Respondendo <b>@' + esc(alvo.autor) + '</b>: “' + esc(alvo.texto.slice(0, 120)) + (alvo.texto.length > 120 ? '…' : '') + '” · a resposta é pública'));
+      const caixa = el('textarea', 'dm-caixa');
+      caixa.id = 'dm-caixa-com';
+      caixa.rows = 2;
+      caixa.maxLength = 2200;
+      caixa.placeholder = sugerindoCom ? 'A IA está lendo o post, o comentário e o seu segundo cérebro...' : 'Escreva a resposta, ou clique em Sugerir resposta';
+      caixa.value = rascunhoCom[alvo.id] || '';
+      caixa.disabled = sugerindoCom || publicando;
+      caixa.oninput = () => { rascunhoCom[alvo.id] = caixa.value; };
+      caixa.onkeydown = e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); publicarCom(); } };
+      comp.appendChild(caixa);
+      const barra = el('div', 'dm-barra');
+      const bSug = el('button', 'act dm-sug', sugerindoCom ? '✦ Pensando...' : '✦ Sugerir resposta');
+      bSug.disabled = sugerindoCom || publicando;
+      bSug.onclick = sugerirCom;
+      barra.appendChild(bSug);
+      const bX = el('button', 'act', 'Cancelar');
+      bX.onclick = () => { alvo = null; avisoCom = ''; render(); };
+      barra.appendChild(bX);
+      if (avisoCom) barra.appendChild(el('span', 'dm-msg-aviso' + (/^Não/.test(avisoCom) ? ' erro' : ''), esc(avisoCom)));
+      const bPub = el('button', 'act dm-env', publicando ? 'Publicando...' : 'Publicar resposta');
+      bPub.title = 'Publicar (Cmd+Enter)';
+      bPub.disabled = sugerindoCom || publicando;
+      bPub.onclick = publicarCom;
+      barra.appendChild(bPub);
+      comp.appendChild(barra);
+      dir.appendChild(comp);
+    } else if (avisoCom) dir.appendChild(el('div', 'dm-comp', '<div class="dm-msg-aviso' + (/^Não/.test(avisoCom) ? ' erro' : '') + '">' + esc(avisoCom) + '</div>'));
+    return dir;
   }
 
   // ---------- desenho ----------
@@ -192,7 +343,7 @@
     const chatAntes = $('#dm-chat');
     const noFim = !chatAntes || chatAntes.scrollHeight - chatAntes.scrollTop - chatAntes.clientHeight < 60;
     const rolagemLista = $('#dm-itens') ? $('#dm-itens').scrollTop : 0;
-    const foco = document.activeElement && document.activeElement.id === 'dm-caixa';
+    const foco = document.activeElement && (document.activeElement.id === 'dm-caixa' || document.activeElement.id === 'dm-caixa-com') ? document.activeElement.id : '';
     const B = window.BRAND || {};
     inner.innerHTML = '';
     const top = el('div', 'mc-top');
@@ -200,21 +351,28 @@
       + '</span><span class="mc-back-os">Mensagens</span></div><div class="mc-back-sub">voltar pro grafo do cérebro</div></div>');
     back.onclick = fechar;
     top.appendChild(back);
+    const modos = el('div', 'dm-modos');
+    [['direct', 'Direct' + (lista && lista.naoLidas ? ' · ' + lista.naoLidas : '')], ['comentarios', 'Comentários']].forEach(([id, t]) => {
+      const b = el('button', 'dm-modo' + (modo === id ? ' on' : ''), esc(t));
+      b.onclick = () => { if (modo === id) return; modo = id; if (id === 'comentarios' && !posts) carregarPosts(); render(true); };
+      modos.appendChild(b);
+    });
+    top.appendChild(modos);
     const dirTop = el('div', 'mc-top-right');
     const bAt = el('button', 'act', 'Atualizar');
-    bAt.onclick = () => { carregarLista(); carregarConversa(); };
+    bAt.onclick = () => { if (modo === 'comentarios') { carregarPosts(); carregarComPost(); } else { carregarLista(); carregarConversa(); } };
     dirTop.appendChild(bAt);
     top.appendChild(dirTop);
     inner.appendChild(top);
     const grade = el('div', 'dm-grade');
-    grade.appendChild(colunaLista());
-    grade.appendChild(colunaConversa());
+    if (modo === 'comentarios') { grade.appendChild(colunaPosts()); grade.appendChild(colunaComentarios()); }
+    else { grade.appendChild(colunaLista()); grade.appendChild(colunaConversa()); }
     inner.appendChild(grade);
-    desenharItens();
+    if (modo === 'direct') desenharItens();
     const it = $('#dm-itens'); if (it) it.scrollTop = rolagemLista;
     const chat = $('#dm-chat');
-    if (chat && (rolarFim || noFim)) chat.scrollTop = chat.scrollHeight;
-    if (foco && $('#dm-caixa') && !$('#dm-caixa').disabled) $('#dm-caixa').focus();
+    if (chat && modo === 'direct' && (rolarFim || noFim)) chat.scrollTop = chat.scrollHeight;
+    if (foco && $('#' + foco) && !$('#' + foco).disabled) $('#' + foco).focus();
   }
 
   // ---------- abrir / fechar ----------
@@ -223,7 +381,7 @@
     if (window.Gestao) window.Gestao.fechar();
     if (window.Tarefas) window.Tarefas.fechar();
     if (window.LinkedIn) window.LinkedIn.fechar();
-    if (window.Leads) window.Leads.fechar(); // tela Leads
+    if (window.Leads) window.Leads.fechar();
     const root = $('#dm-root');
     document.body.classList.add('mc-open', 'dm-open');
     root.classList.add('on');
@@ -235,7 +393,7 @@
     if (aberta) carregarConversa();
     clearInterval(timerConversa); clearInterval(timerLista);
     timerConversa = setInterval(() => { if (!document.hidden) carregarConversa(true); }, 20000);
-    timerLista = setInterval(() => { if (!document.hidden) carregarLista(); }, 60000);
+    timerLista = setInterval(() => { if (!document.hidden) { carregarLista(); if (modo === 'comentarios' && !alvo) carregarComPost(); } }, 60000);
   }
   function fechar() {
     const root = $('#dm-root');

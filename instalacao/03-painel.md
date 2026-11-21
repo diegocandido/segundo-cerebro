@@ -130,6 +130,11 @@ Confira junto com o cliente:
   dias vai como resposta humana; depois disso o Instagram não deixa, e a tela avisa. Abrir uma
   conversa não marca como lida (no Instagram isso mostra "visto"). Precisa do Claude Code logado
   neste computador. Testar: tecla D, abrir uma conversa e clicar em Sugerir resposta (não envia).
+  A chave **Comentários**, no topo da mesma tela, mostra os posts publicados que têm comentário (inclusive
+  os que não saíram pelo Estúdio), com o filtro **Sem resposta**. Em cada comentário, **Responder** abre a
+  caixa com **Sugerir resposta** (a IA lê a legenda, os outros comentários e o segundo cérebro) e **Publicar
+  resposta**, com confirmação, porque a resposta é pública. Se o cliente responde também por outro perfil
+  (ex.: o pessoal, como colaborador), ponha esse @ em `missionControl.contasProprias` do `workspace.json`.
 
 Se entraram os opcionais:
 - **Voz:** "Falar com o OS" no MENU (tecla V); o botão de enviar aparece enquanto grava; ele só responde se o segundo cérebro tiver

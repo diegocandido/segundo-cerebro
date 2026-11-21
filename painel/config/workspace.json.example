@@ -60,6 +60,8 @@
     "estudioCor": "#2952E3",
     "pendingHeadingPattern": "pend[eê]ncias|pending",
     "livroCaixa": "../Financeiro/livro-caixa.csv",
-    "agenteFinanceiroDir": "inbox/agente/financeiro"
+    "agenteFinanceiroDir": "inbox/agente/financeiro",
+    "contasProprias": [],
+    "_contasProprias": "Mensagens > Comentários: outras contas do dono (sem o @) cujas respostas contam como respondido, ex.: o perfil pessoal que entra como colaborador."
   }
 }
