@@ -4,6 +4,9 @@ Cada versão nova entra no topo. `VERSAO.txt` diz qual versão é este kit; o se
 de quem instalou guarda a dele em `.kit-versao`, e é por ela que um pacote de atualização
 sabe de onde partir.
 
+## 1.24 (2026-11-24)
+Zernio pelo MCP: o caminho recomendado passa a ser o conector personalizado no app do Claude (vale no chat e no Code, sem terminal); o terminal fica como alternativa.
+
 ## 1.23 (2026-11-24)
 Redes sociais pelo MCP do Zernio (pergunta 13i): o Claude analisa o perfil e os números e cria rascunho, agenda e publica no Instagram, LinkedIn e outras, grátis e com login pela conta do Zernio; publicar só com o "pode postar", e sem ele o post vira rascunho.
 

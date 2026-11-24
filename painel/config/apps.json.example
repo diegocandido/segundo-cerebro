@@ -213,7 +213,7 @@
       "detalhes": {
         "papel": "Liga as redes do cliente (Instagram, LinkedIn, TikTok e outras, conectadas na conta dele no Zernio) ao Claude. O Claude analisa perfil e números, sugere horário e conteúdo, cria rascunho, agenda e publica.",
         "acesso": "Lê livre; publica, agenda, edita e responde só depois do \"pode postar\" ou \"pode mandar\"",
-        "conexao": "MCP do Zernio no Claude Code (claude mcp add --transport http --scope user zernio https://mcp.zernio.com/mcp), login pelo /mcp. Sem chave nesta máquina.",
+        "conexao": "Conector personalizado na conta Claude do cliente (URL https://mcp.zernio.com/mcp), login pela conta do Zernio. Sem chave nesta máquina.",
         "usadoPor": [
           "Pedidos no chat: \"como foram meus posts?\", \"agenda esse carrossel para quinta\"",
           "Pauta e carrossel: rascunho direto no Zernio"

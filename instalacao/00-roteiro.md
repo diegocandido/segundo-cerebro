@@ -106,7 +106,7 @@ Acrescente, se o cliente aprovou:
   [scripts/carrossel_jpeg.py](scripts/carrossel_jpeg.py), pelo guia
   [templates/carrossel-no-os.md.tmpl](templates/carrossel-no-os.md.tmpl). Um carrossel de teste
   com tema real, aprovado por ele, vira o modelo; o slide de CTA, com a oferta dele, fica fixo.
-- As redes pelo MCP do Zernio (pergunta 13i): o `claude mcp add` com `--scope user`, o login pelo `/mcp`
+- As redes pelo MCP do Zernio (pergunta 13i): o conector personalizado no app do Claude (login pela conta do Zernio)
   e o teste, pelo guia "Zernio pelo MCP" em [02-ferramentas.md](02-ferramentas.md); as regras entram no
   `CLAUDE.md` da área de redes, a partir de
   [templates/zernio-mcp-no-os.md.tmpl](templates/zernio-mcp-no-os.md.tmpl), com a decisão.

@@ -178,17 +178,15 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
     o que usar). Se ele já tem o Estúdio de Conteúdo, é a mesma conta do Zernio.
   - Explique o risco antes de ligar: o MCP **não tem modo só de leitura nem confirmação própria**.
     Quem segura a publicação são as regras do OS (abaixo). Sem esse "sim", não ligue.
-- **Ligar (Claude Code, que é onde o OS roda):** numa aba de terminal do cliente, de qualquer pasta:
-  ```
-  claude mcp add --transport http --scope user zernio https://mcp.zernio.com/mcp
-  ```
-  O `--scope user` deixa o Zernio disponível em todas as conversas do cliente, em qualquer pasta. Depois,
-  numa conversa do Claude Code, `/mcp`, escolha **zernio** e **Authenticate**: abre o navegador e ele
-  entra com a conta do Zernio. **Nenhuma chave passa pelo chat** (o login é OAuth). Reinicie a conversa
-  se o Zernio não aparecer.
-  - **No app do Claude (chat comum, celular):** Configurações > Conectores > Adicionar conector
-    personalizado, nome `Zernio`, URL `https://mcp.zernio.com/mcp`. Mesmo login, sem chave. Ali valem as
-    mesmas regras, mas o chat comum não lê o OS: por isso o padrão é usar pelo Claude Code.
+- **Ligar, pelo conector do app (o caminho recomendado; testado em 24/11/2026):** no app do Claude do
+  cliente, Configurações > Conectores > **Adicionar conector personalizado**, nome `Zernio`, URL
+  `https://mcp.zernio.com/mcp`, **Adicionar** e **Conectar**: abre o navegador e ele entra com a conta do
+  Zernio. **Nenhuma chave passa pelo chat** (o login é OAuth). O conector fica na conta Claude dele e
+  aparece em todas as conversas, no chat e no Code. Conversa que já estava aberta não enxerga conector
+  novo: abra outra.
+  - **Alternativa pelo terminal** (só se o conector não der): `claude mcp add --transport http --scope user
+    zernio https://mcp.zernio.com/mcp`, depois `/mcp` dentro do `claude` no terminal, **zernio** e
+    **Authenticate**. Esse servidor só aparece em conversa aberta depois do login.
   - **Alternativa com chave** (só se o login pelo navegador não funcionar): a chave nasce em
     zernio.com/dashboard/api-keys e o cliente roda, ele mesmo, no terminal,
     `claude mcp add --transport http --scope user zernio https://mcp.zernio.com/mcp --header "Authorization: Bearer <chave>"`.
@@ -208,8 +206,9 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
   e "como foram meus últimos posts no Instagram?". Depois, um **rascunho** de teste: o Claude mostra a
   prévia, cria como rascunho e o cliente confere no painel do Zernio. Publicar de verdade só quando ele
   quiser, com o "pode postar".
-- **Se der erro:** 401 ou "Couldn't register with Zernio's sign-in service": `claude mcp remove zernio
-  --scope user`, adicione de novo e refaça o `/mcp`. "No accounts connected": falta conectar a rede
+- **Se der erro:** o Zernio não aparece na conversa: abra uma conversa nova (conector novo só entra
+  em conversa nova). 401 ou "Couldn't register with Zernio's sign-in service": remova o conector (ou
+  `claude mcp remove zernio --scope user`) e adicione de novo. "No accounts connected": falta conectar a rede
   dentro do Zernio. Situação do serviço: status.zernio.com.
 - **No painel:** entra no anel de Aplicações (`app:zernio` no `apps.json`), `live` depois do teste.
   As telas do painel (Estúdio, LinkedIn) continuam usando a chave do Estúdio de Conteúdo, quando ele
