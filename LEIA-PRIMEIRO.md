@@ -40,6 +40,7 @@ O cliente não precisa de conta nem de login no GitHub.
 | tl;dv | Gravar e transcrever reuniões; o comando `/reuniao` guarda no OS o que foi combinado | Sugerida na entrevista; ligada se o cliente adotar |
 | Asaas | Cobrar por Pix, boleto ou cartão; tecla C e botão Nova cobrança no painel | Sugerido; começa sempre no sandbox |
 | WhatsApp (Uazapi) | Ler conversas e mandar mensagem com confirmação, pelo `bin/whatsapp.py` | Sugerido; só liga se o cliente aceitar o risco de bloqueio (API não oficial) |
+| Redes pelo Zernio (MCP) | O Claude analisa o perfil e os números e cria rascunho, agenda e publica no Instagram, LinkedIn, TikTok e outras, depois do "pode postar" | Opcional, pergunta 13i; grátis, login pela conta do Zernio, sem chave no chat |
 | Instagram (API oficial da Meta) | Publicar carrossel depois do "pode postar", pelo `bin/instagram.py` | Sugerido; precisa de conta profissional ligada a Página do Facebook e de um app na Meta |
 | Padrão visual das peças | Imagens de post (card de mapa, 1080x1350) no visual do cliente, a partir de um exemplo que ele manda na entrevista | Opcional, pergunta 13d; sem exemplo fica a definir |
 | Carrossel de Instagram | 5 slides no mesmo visual (capa, 3 de conteúdo, CTA fixo com a oferta do cliente), em JPEG pelo `bin/carrossel_jpeg.py` | Opcional, pergunta 13e; precisa do Chrome ou do Edge |
@@ -73,7 +74,8 @@ Kit-OS-Cara-da-IA/
 │   └── templates/          rotina Morning Brief, seção do painel no COMO-USAR, o WhatsApp e o Instagram no OS,
 │                           card de mapa no padrão visual do cliente (card-mapa.html),
 │                           carrossel de Instagram de 5 slides (carrossel/, guia carrossel-no-os.md.tmpl),
-│                           calendário editorial lido pelo card Social (calendario-social.md.tmpl)
+│                           calendário editorial lido pelo card Social (calendario-social.md.tmpl),
+│                           as regras das redes pelo MCP do Zernio (zernio-mcp-no-os.md.tmpl)
 │                           e as instruções do agente remoto
 ├── os-builder/             a skill que entrevista e constrói o segundo cérebro
 └── painel/                 o painel (Node, sem dependências), sem dados de nenhum cliente

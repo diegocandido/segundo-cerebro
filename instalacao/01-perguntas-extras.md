@@ -122,6 +122,14 @@ resolve) e deixe o cliente decidir. "Não quero" é resposta válida e vira deci
       agendar pelo Claude (`bin/linkedin.py`, com prévia e "Posso publicar?") e os números de cada post.
       Avise o limite: no perfil pessoal, comentários e mensagens não passam pela API, e os números só
       existem para os posts publicados pelo Zernio.
+13i. **Quer que o Claude leia e publique nas suas redes sociais?** O jeito mais simples é o **MCP do
+    Zernio**, grátis: ele cria a conta em zernio.com, conecta as redes lá (Instagram, LinkedIn, TikTok,
+    Facebook e outras) e o Claude passa a analisar o perfil, os números e os melhores horários, montar
+    rascunho, agendar e publicar, tudo por conversa. Não precisa de Página do Facebook nem de app na Meta
+    (a pergunta 13c), nem do Estúdio de Conteúdo (13h). Avise antes do sim: o MCP não tem trava própria
+    antes de publicar; quem segura é a regra do OS (prévia e "pode postar" para cada post, e sem o "pode"
+    vira rascunho). Sem o "sim" para essa regra, fica `sugerido`. Guia em
+    [02-ferramentas.md](02-ferramentas.md), "Zernio pelo MCP".
 14. **Como você monta um orçamento ou proposta hoje?** Modelo no Word, Canva, PDF, sistema.
     Quanto tempo leva. Quem aprova o preço.
     - Se é manual e repetitivo: sugira o **PandaDoc** (modelo com campos, preenchido

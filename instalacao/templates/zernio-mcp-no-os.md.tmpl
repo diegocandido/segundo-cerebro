@@ -1,0 +1,45 @@
+<!-- MODELO DO KIT: as redes do cliente ligadas ao Claude pelo MCP do Zernio (pergunta 13i).
+     Entra se o cliente aceitou ligar e o teste passou (guia "Zernio pelo MCP" em 02-ferramentas.md).
+     Troque cada {{...}} e apague estes comentários.
+     {{DONO}}: nome do cliente. {{AREA_SOCIAL}}: pasta de redes do OS (ex.: Social, Marketing).
+     {{REDES}}: as redes conectadas no Zernio (ex.: Instagram e LinkedIn). {{DATA}}: data da instalação.
+     Nada de travessão nos textos gerados. -->
+
+## 1. Bloco para o {{AREA_SOCIAL}}/CLAUDE.md
+
+## Redes pelo Zernio (MCP)
+
+{{REDES}} de {{DONO}} estão ligadas ao Claude pelo MCP do Zernio (conta dele em zernio.com, login
+pelo navegador, sem chave no OS). Use as ferramentas `zernio` para ler e operar as redes.
+
+- **Ler é livre:** contas, perfil, posts, números, melhores horários. Use para analisar o que funcionou
+  e sugerir conteúdo e horário.
+- **Publicar, agendar, editar ou repostar:** só depois do "pode postar" de {{DONO}} para aquele post.
+  Antes, mostre a prévia na conversa: rede, conta, texto completo, mídia e quando sai. Sem o "pode",
+  crie como **rascunho** (`is_draft: true`) e avise que está no Zernio esperando. Nunca use
+  `publish_now` sem o "pode" explícito.
+- **Nunca sem pedido explícito de {{DONO}}:** apagar post ou perfil, mexer em anúncios, WhatsApp ou
+  SMS, e repetir em lote os posts que falharam.
+- **Comentário e direct:** escreva a resposta, mostre e só envie com o "pode mandar".
+- **Mídia:** o Zernio pede link público. Arquivo do computador sobe pelo link de envio que o Zernio
+  gera; {{DONO}} abre no navegador (vale 30 minutos).
+- **Mais de uma conta na mesma rede:** o Zernio devolve a lista; pergunte qual, não escolha.
+- Todo post publicado ganha uma linha em "Publicados" no calendário editorial, no mesmo passo.
+
+## 2. Decisão: memory/decisoes/{{DATA}}-redes-pelo-zernio-mcp.md
+<!-- Crie com: python3 bin/brain.py nota --pasta memory/decisoes --tipo decisao --datado ... --corpo - -->
+
+**Data:** {{DATA}} · **Frente:** {{AREA_SOCIAL}}
+
+### Contexto
+{{DONO}} quer que o Claude analise e publique nas redes ({{REDES}}). O MCP do Zernio é grátis, liga
+pelo login da conta, sem Página do Facebook nem app na Meta, mas não tem modo só de leitura nem
+confirmação própria antes de publicar.
+
+### Decisão
+As redes ficam ligadas ao Claude pelo MCP do Zernio. Ler é livre; publicar, agendar, editar,
+responder e apagar só com o "pode" de {{DONO}} para aquela ação, e sem o "pode" o post vira rascunho.
+
+### O que faria mudar de ideia
+Uma publicação que saiu sem o "pode", o Zernio passar a cobrar ou mudar o acesso, ou {{DONO}} preferir
+publicar só pelo app de cada rede.

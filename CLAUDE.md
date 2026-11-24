@@ -26,7 +26,7 @@ Quando a pessoa disser "instalar", "começar", "montar o OS" ou parecida, siga o
    do os-builder, como o último bloco. Não contam como criar: a chave do Asaas gravada pelo
    cliente na fase 0 (arquivo na pasta pessoal dele, fora do OS) e a prévia do painel no fim da
    entrevista (cópia temporária sobre o OS de demonstração, apagada ao desligar).
-2. **Ferramenta sugerida não é ferramenta adotada.** tl;dv, Asaas, PandaDoc, o Instagram pela API da Meta e o WhatsApp pelo
+2. **Ferramenta sugerida não é ferramenta adotada.** tl;dv, Asaas, PandaDoc, o Instagram pela API da Meta, as redes pelo MCP do Zernio e o WhatsApp pelo
    Uazapi são sugestões do Cara da IA. Só entram como `live` no painel as que o cliente usa ou
    decidiu adotar e que foram testadas. As outras ficam `sugerido` ou `a-definir`, ou saem.
 3. **Chave nunca passa pelo chat.** Nenhuma chave de API é pedida, colada ou exibida na conversa.

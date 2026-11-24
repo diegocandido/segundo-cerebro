@@ -202,6 +202,42 @@
       }
     },
     {
+      "id": "app:zernio",
+      "label": "Zernio (MCP)",
+      "kind": "mcp",
+      "access": "claude",
+      "status": "sugerido",
+      "desc": "Redes sociais dentro do Claude: análise, rascunho, agenda e publicação",
+      "links": [],
+      "iconSlug": "",
+      "detalhes": {
+        "papel": "Liga as redes do cliente (Instagram, LinkedIn, TikTok e outras, conectadas na conta dele no Zernio) ao Claude. O Claude analisa perfil e números, sugere horário e conteúdo, cria rascunho, agenda e publica.",
+        "acesso": "Lê livre; publica, agenda, edita e responde só depois do \"pode postar\" ou \"pode mandar\"",
+        "conexao": "MCP do Zernio no Claude Code (claude mcp add --transport http --scope user zernio https://mcp.zernio.com/mcp), login pelo /mcp. Sem chave nesta máquina.",
+        "usadoPor": [
+          "Pedidos no chat: \"como foram meus posts?\", \"agenda esse carrossel para quinta\"",
+          "Pauta e carrossel: rascunho direto no Zernio"
+        ],
+        "regras": [
+          "Sem o \"pode postar\", o post vai como rascunho; nunca publicar na hora sem o ok.",
+          "Prévia antes: rede, conta, texto, mídia e quando sai.",
+          "Nunca apagar post ou perfil, mexer em anúncios, WhatsApp ou SMS sem pedido explícito.",
+          "O MCP não tem modo só de leitura: a trava é esta regra do OS."
+        ],
+        "notas": [],
+        "links": [
+          {
+            "label": "Abrir o Zernio",
+            "url": "https://zernio.com/dashboard"
+          },
+          {
+            "label": "Documentação do MCP",
+            "url": "https://docs.zernio.com/mcp"
+          }
+        ]
+      }
+    },
+    {
       "id": "app:instagram",
       "label": "Instagram",
       "kind": "cli",

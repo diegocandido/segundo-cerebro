@@ -166,6 +166,57 @@ instalado, campo `detalhes`. Troque todo `*(preencher)*` pelo que o cliente resp
 
 ---
 
+## Zernio pelo MCP: as redes sociais dentro do Claude (opcional, pergunta 13i)
+
+- **O que resolve:** o Claude passa a enxergar e operar as redes do cliente por conversa: lista as
+  contas, analisa o perfil e os números, sugere horário e conteúdo, monta rascunho, agenda e publica
+  no Instagram, LinkedIn, TikTok, Facebook, Threads, YouTube, Pinterest, X e Bluesky. É o jeito mais
+  simples de ligar as redes: não precisa de Página do Facebook nem de app na Meta (como o Instagram da
+  seção abaixo), nem do pacote Estúdio de Conteúdo. O MCP do Zernio é grátis.
+- **Antes, com o cliente:**
+  - Ele cria a conta em zernio.com e, **no próprio Zernio**, conecta as redes (Instagram, LinkedIn,
+    o que usar). Se ele já tem o Estúdio de Conteúdo, é a mesma conta do Zernio.
+  - Explique o risco antes de ligar: o MCP **não tem modo só de leitura nem confirmação própria**.
+    Quem segura a publicação são as regras do OS (abaixo). Sem esse "sim", não ligue.
+- **Ligar (Claude Code, que é onde o OS roda):** numa aba de terminal do cliente, de qualquer pasta:
+  ```
+  claude mcp add --transport http --scope user zernio https://mcp.zernio.com/mcp
+  ```
+  O `--scope user` deixa o Zernio disponível em todas as conversas do cliente, em qualquer pasta. Depois,
+  numa conversa do Claude Code, `/mcp`, escolha **zernio** e **Authenticate**: abre o navegador e ele
+  entra com a conta do Zernio. **Nenhuma chave passa pelo chat** (o login é OAuth). Reinicie a conversa
+  se o Zernio não aparecer.
+  - **No app do Claude (chat comum, celular):** Configurações > Conectores > Adicionar conector
+    personalizado, nome `Zernio`, URL `https://mcp.zernio.com/mcp`. Mesmo login, sem chave. Ali valem as
+    mesmas regras, mas o chat comum não lê o OS: por isso o padrão é usar pelo Claude Code.
+  - **Alternativa com chave** (só se o login pelo navegador não funcionar): a chave nasce em
+    zernio.com/dashboard/api-keys e o cliente roda, ele mesmo, no terminal,
+    `claude mcp add --transport http --scope user zernio https://mcp.zernio.com/mcp --header "Authorization: Bearer <chave>"`.
+    A chave não vai para o chat nem para o OS.
+- **Regras no OS** (bloco pronto em [templates/zernio-mcp-no-os.md.tmpl](templates/zernio-mcp-no-os.md.tmpl),
+  para o `CLAUDE.md` da área de redes do cliente, e a decisão em `memory/decisoes/`):
+  - Ler é livre: contas, perfil, posts, números, horários.
+  - **Publicar, agendar, editar e repostar só depois do "pode postar"** para aquele post, com a prévia
+    na conversa (rede, conta, texto, mídia e quando sai). Sem o "pode", o post vai como **rascunho**
+    (`is_draft: true`). Nunca `publish_now` sem o "pode" explícito.
+  - **Nunca sem pedido explícito:** apagar post ou perfil, mexer em anúncios, WhatsApp, SMS, e repetir
+    em lote os posts que falharam.
+  - Responder comentário ou direct: o Claude escreve, mostra e só envia com o "pode mandar".
+  - Mídia: o Zernio pede link público. Arquivo do computador sobe pelo link de envio que o próprio
+    Zernio gera (o cliente abre no navegador; vale 30 minutos).
+- **Testar, com o cliente olhando:** "quais contas eu tenho no Zernio?" (tem que listar as redes dele)
+  e "como foram meus últimos posts no Instagram?". Depois, um **rascunho** de teste: o Claude mostra a
+  prévia, cria como rascunho e o cliente confere no painel do Zernio. Publicar de verdade só quando ele
+  quiser, com o "pode postar".
+- **Se der erro:** 401 ou "Couldn't register with Zernio's sign-in service": `claude mcp remove zernio
+  --scope user`, adicione de novo e refaça o `/mcp`. "No accounts connected": falta conectar a rede
+  dentro do Zernio. Situação do serviço: status.zernio.com.
+- **No painel:** entra no anel de Aplicações (`app:zernio` no `apps.json`), `live` depois do teste.
+  As telas do painel (Estúdio, LinkedIn) continuam usando a chave do Estúdio de Conteúdo, quando ele
+  existe; o MCP é o caminho do Claude, não do painel.
+
+---
+
 ## Instagram (API oficial da Meta)
 
 - **O que resolve:** o OS publica carrossel no Instagram do cliente pela API oficial, depois do
